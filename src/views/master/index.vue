@@ -96,7 +96,7 @@
 </template>
 
 <script>
-  import {mapGetters,mapMutations} from 'vuex'
+  import {mapState,mapGetters,mapMutations} from 'vuex'
   import {setNumber} from '../../utils/chatUtils';
   export default {
     name: "",
@@ -120,7 +120,6 @@
       return {
         writerA: {},
         writerB: {},
-        searchItems: ['视频','作者'],
         email: '',
         searchValue: '',
         placeholder: '您可以搜索任意关键词信息',
@@ -131,6 +130,19 @@
       ...mapGetters([
         "getSearchItems",
       ]),
+      ...mapState({
+         // 箭头函数可使代码更简练
+        searchItems: state => state.searchItems,
+
+        // 传字符串参数 'count' 等同于 `state => state.count`
+        countAlias: 'searchItems',
+
+        // 为了能够使用 `this` 获取局部状态，必须使用常规函数
+        countPlusLocalState (state) {
+           console.log(state);
+        return state.searchItems
+      }
+      }),
       siteInfo() {
         if (this.$store.state.site.siteInfo == undefined) {
           return {};
@@ -207,7 +219,6 @@
       if (self.$store.state.site.siteGroupInfo == undefined) {
         self.$store.dispatch("getSiteGroupInfo");
       }
-
     }
   }
 </script>

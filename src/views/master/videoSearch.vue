@@ -124,7 +124,7 @@
 
 <script>
   import {mapMutations} from 'vuex'
-  import { setNumber} from '../../utils/chatUtils';
+  import { setNumber,HtmlDecode} from '../../utils/chatUtils';
   export default {
     name: "",
     components: {
@@ -208,6 +208,7 @@
           val.comment = setNumber(val.comment);
           val.coin = setNumber(val.coin);
           val.favorite = setNumber(val.favorite);
+          val.title = HtmlDecode(val.title);
         })
       },
       changPaging () {

@@ -48,22 +48,22 @@
                 <v-row>
                   <v-col>
                     <div class="text--darken-2">播放总数</div>
-                    <div class="text--darken-3 font-weight-bold fs_18 mt-2" v-if="videoData.view">{{videoData.view}}</div>
+                    <div class="text--darken-3 font-weight-bold fs_18 mt-2" v-if="videoData.view">{{newVideoData.view}}</div>
                     <div class="text--darken-3 font-weight-bold fs_18 mt-2" v-else="">-</div>
                   </v-col>
                   <v-col>
                     <div class="text--darken-2">获赞总数</div>
-                    <div class="text--darken-3 font-weight-bold fs_18 mt-2" v-if="videoData.like">{{videoData.like}}</div>
+                    <div class="text--darken-3 font-weight-bold fs_18 mt-2" v-if="videoData.like">{{newVideoData.like}}</div>
                     <div class="text--darken-3 font-weight-bold fs_18 mt-2" v-else="">-</div>
                   </v-col>
                   <v-col>
                     <div class="text--darken-2">投币总数</div>
-                    <div class="text--darken-3 font-weight-bold fs_18 mt-2" v-if="videoData.coin">{{videoData.coin}}</div>
+                    <div class="text--darken-3 font-weight-bold fs_18 mt-2" v-if="videoData.coin">{{newVideoData.coin}}</div>
                     <div class="text--darken-3 font-weight-bold fs_18 mt-2" v-else="">-</div>
                   </v-col>
                   <v-col>
                     <div class="text--darken-2">收藏总数</div>
-                    <div class="text--darken-3 font-weight-bold fs_18 mt-2" v-if="videoData.favorite">{{videoData.favorite}}</div>
+                    <div class="text--darken-3 font-weight-bold fs_18 mt-2" v-if="videoData.favorite">{{newVideoData.favorite}}</div>
                     <div class="text--darken-3 font-weight-bold fs_18 mt-2" v-else="">-</div>
                   </v-col>
                 </v-row>
@@ -81,22 +81,22 @@
                 <v-row>
                   <v-col>
                     <div class="text--darken-2">播放排名</div>
-                    <div class="text--darken-3 font-weight-bold fs_18 mt-2" v-if="videoData.viewRank"><span class="d-none d-sm-inline">Top </span>{{videoData.viewRank}}</div>
+                    <div class="text--darken-3 font-weight-bold fs_18 mt-2" v-if="videoData.viewRank"><span class="d-none d-sm-inline">Top </span>{{newVideoData.viewRank}}</div>
                     <div class="text--darken-3 font-weight-bold fs_18 mt-2" v-else="">-</div>
                   </v-col>
                   <v-col>
                     <div class="text--darken-2">获赞排名</div>
-                    <div class="text--darken-3 font-weight-bold fs_18 mt-2" v-if="videoData.likeRank"><span class="d-none d-sm-inline">Top </span>{{videoData.likeRank}}</div>
+                    <div class="text--darken-3 font-weight-bold fs_18 mt-2" v-if="videoData.likeRank"><span class="d-none d-sm-inline">Top </span>{{newVideoData.likeRank}}</div>
                     <div class="text--darken-3 font-weight-bold fs_18 mt-2" v-else="">-</div>
                   </v-col>
                   <v-col>
                     <div class="text--darken-2">投币排名</div>
-                    <div class="text--darken-3 font-weight-bold fs_18 mt-2" v-if="videoData.coinRank"><span class="d-none d-sm-inline">Top </span>{{videoData.coinRank}}</div>
+                    <div class="text--darken-3 font-weight-bold fs_18 mt-2" v-if="videoData.coinRank"><span class="d-none d-sm-inline">Top </span>{{newVideoData.coinRank}}</div>
                     <div class="text--darken-3 font-weight-bold fs_18 mt-2" v-else="">-</div>
                   </v-col>
                   <v-col>
                     <div class="text--darken-2">收藏排名</div>
-                    <div class="text--darken-3 font-weight-bold fs_18 mt-2" v-if="videoData.favoriteRank"><span class="d-none d-sm-inline">Top </span>{{videoData.favoriteRank}}</div>
+                    <div class="text--darken-3 font-weight-bold fs_18 mt-2" v-if="videoData.favoriteRank"><span class="d-none d-sm-inline">Top </span>{{newVideoData.favoriteRank}}</div>
                     <div class="text--darken-3 font-weight-bold fs_18 mt-2" v-else="">-</div>
                   </v-col>
                 </v-row>
@@ -174,7 +174,16 @@
         aid: 0,
         loadTime: "",
         videoData: null,
-        newVideoData: null,
+        newVideoData: {
+          view: null,
+          favorite: null,
+          coin: null,
+          like: null,
+          viewRank: null,
+          likeRank: null,
+          coinRank: null,
+          favoriteRank: null,
+        },
         getVideoRankList: {},
         mainChart: {},
         likeRateChart: {},
@@ -201,19 +210,23 @@
           console.log(r);
           if(data.success && data.data){
             self.videoData = data.data;
-            self.newVideoData = data.data;
             console.log(self.videoData);
             self.getVideoRank();
+            self.setVideo();
           }
 
         });
       },
       setVideo () {
         let self = this;
-        self.newVideoData.view = setNumber(self.newVideoData.view);
-        self.newVideoData.favorite = setNumber(self.newVideoData.favorite);
-        self.newVideoData.coin = setNumber(self.newVideoData.coin);
-        self.newVideoData.like = setNumber(self.newVideoData.like);
+        self.newVideoData.view = setNumber(self.videoData.view);
+        self.newVideoData.favorite = setNumber(self.videoData.favorite);
+        self.newVideoData.coin = setNumber(self.videoData.coin);
+        self.newVideoData.like = setNumber(self.videoData.like);
+        self.newVideoData.viewRank = setNumber(self.videoData.viewRank);
+        self.newVideoData.likeRank = setNumber(self.videoData.likeRank);
+        self.newVideoData.coinRank = setNumber(self.videoData.coinRank);
+        self.newVideoData.favoriteRank = setNumber(self.videoData.favoriteRank);
       },
       getVideoRank() {
         let self = this;
@@ -223,7 +236,7 @@
           if(data.success){
             self.getVideoRankList = data;
             self.mainChart = drawMainChart(self.getVideoRankList);
-            self.likeRateChart = drawVideoPieChart(self.newVideoData);
+            self.likeRateChart = drawVideoPieChart(self.videoData);
             console.log(self.newVideoData);
             console.log(self.likeRateChart);
           }

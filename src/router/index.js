@@ -55,7 +55,7 @@ export default new Router({
       path: "/video",
       component: Video,
       meta:{
-        title:'作者详情'
+        title:'视频详情'
       }
     },
     {

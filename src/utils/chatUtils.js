@@ -47,4 +47,15 @@ export const Throttle = (fn, t) => {
       fn.apply(this, args);
     }
   }
-}
+};
+/*
+ * 解析中文双引号
+ */
+export const HtmlDecode = (str) => {
+  var s = '';
+  if (str.length === 0) return '';
+  s = str.replace(/&amp;/g, '&');
+  s = s.replace(/&ldquo;/g, '“');
+  s = s.replace(/&rdquo;/g, '”');
+  return s;
+};
