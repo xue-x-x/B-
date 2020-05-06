@@ -98,8 +98,9 @@
 </script>
 
 <style scoped>
-  header{
+  header.v-app-bar.v-app-bar--fixed{
     border-radius: 0;
+    z-index: 100000;
   }
   .logo{
     height: 60px;
