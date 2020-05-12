@@ -220,6 +220,7 @@
         let self = this;
         self.writerList.forEach(function (val) {
           val.fans = setNumber(val.fans);
+          val.like = setNumber(val.like);
         })
       },
       changeWriterLis(n) {

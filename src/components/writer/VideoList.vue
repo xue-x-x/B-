@@ -12,7 +12,7 @@
                 <v-slide-item class="pa-2 ma-2 text-left pointer" v-for="(item,index) in newVideoList" :key="index">
                   <v-card max-width="160" width="160px" @click="goTo(item.aid)">
                     <v-img :src="item.pic" height="100px"></v-img>
-                    <div class="cards-title">{{item.title}}</div>
+                    <div class="cards-title" v-html="item.title"></div>
                     <div class="text-right"><v-icon small>mdi-play-circle-outline</v-icon> {{item.view}}</div>
                   </v-card>
                 </v-slide-item>
@@ -37,7 +37,7 @@
                 <v-slide-item class="pa-2 ma-2 text-left pointer" v-for="(item,index) in hotVideoList" :key="index">
                   <v-card max-width="160" width="160px" @click="goTo(item.aid)">
                     <v-img :src="item.pic" height="100px"></v-img>
-                    <div class="cards-title">{{item.title}}</div>
+                    <div class="cards-title" v-html="item.title"></div>
                     <div class="text-right"><v-icon small>mdi-play-circle-outline</v-icon> {{item.view}}</div>
                   </v-card>
                 </v-slide-item>

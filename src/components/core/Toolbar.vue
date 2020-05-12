@@ -5,8 +5,8 @@
           elevate-on-scroll
           scroll-target="#scrolling-techniques-7"
   >
-    <v-container mx-auto py-0>
-      <router-link to='/' class="fl d-flex align-center logo">
+    <v-container mx-auto py-0 class="wrap d-flex align-center justify-space-between">
+      <router-link to='/' class="fl logo">
         <img src="@/assets/xb-logo.png" style="width: 38px;height: 38px" alt="">
         <!--<v-img :src="require('@/assets/xb-logo.png')" contain width="38" max-width="38"/>-->
       </router-link>
@@ -59,7 +59,7 @@
         <v-btn class="ml-0 hidden-sm-and-down" text color="#fff" to="/writerSearch">up主查询</v-btn>
         <v-btn class="ml-0 hidden-sm-and-down" text color="#fff" to="/videoSearch">视频查询</v-btn>-->
       </div>
-      <v-app-bar-nav-icon class="fr d-md-none" color="#fff" @click="toggleDrawer"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon class="fr d-md-none" color="#fff" @click="toggleDrawer "></v-app-bar-nav-icon>
     </v-container>
 
 
@@ -101,9 +101,6 @@
   header.v-app-bar.v-app-bar--fixed{
     border-radius: 0;
     z-index: 100000;
-  }
-  .logo{
-    height: 60px;
   }
   #scrolling-techniques-7{
     border-radius: 0;

@@ -119,7 +119,7 @@
                   <img class="mx-auto" :src="item.pic" style="min-width: 140px; max-width: 160px;" alt="">
                 </td>
                 <td class="text-left d-none d-sm-table-cell px-0">
-                  <div v-if="item.title" class="td-video-title text-truncate mx-auto">{{item.title}}</div>
+                  <div v-if="item.title" class="td-video-title text-truncate mx-auto" v-html="">{{item.title}}</div>
                   <div v-else="">-</div>
                 </td>
                 <td>

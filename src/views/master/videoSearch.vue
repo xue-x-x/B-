@@ -57,7 +57,7 @@
             <img :src="item.pic" alt="">
           </div>
           <div class="text-left video-list-content">
-            <div class="mb-2 pt-2 pt-sm-6 font-weight-bold video-list-content-title">{{item.title}}</div>
+            <div class="mb-2 pt-2 pt-sm-6 font-weight-bold video-list-content-title" v-html="item.title"></div>
             <div class="d-none d-sm-flex video-list-user-number mb-1">
               <div class="mr-5 fs_12" v-if="item.view">
                 <span class="fs_14 font-weight-bold color-8">{{item.view}}</span> 播放量

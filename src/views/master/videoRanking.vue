@@ -20,7 +20,7 @@
       <div class="wrap">
         <div class="videoRanking-recommend text-left d-none d-sm-block">
           <div class="videoRanking-recommend-title"><span>HOT</span> 每日最热门视频</div>
-          <div class="videoRanking-recommend-video" @click.stop="goTo('/video',{aid: firstVideo.aid})">
+          <div v-if="firstVideo.aid" class="videoRanking-recommend-video" @click.stop="goTo('/video',{aid: firstVideo.aid})">
             <img class="vrv-img" :src="firstVideo.pic" alt="">
             <div class="vrv-content">
               <div class="vrv-content-title">{{firstVideo.title}}</div>
@@ -103,9 +103,9 @@
       <span class="end-text">已经到底啦</span>
       <span class="line line-right"></span>
     </div>
-    <v-overlay :value="overlay" color="#fff" opacity="0.3">
+    <!--<v-overlay :value="overlay" color="#fff" opacity="0.3">
       <v-progress-circular indeterminate size="64" color="#f55345"></v-progress-circular>
-    </v-overlay>
+    </v-overlay>-->
   </div>
 </template>
 
@@ -300,6 +300,7 @@
     left: 0;
     width: 280px;
     height: 174px;
+    border: none;
   }
   .vrv-content{
     padding-left: 20px;

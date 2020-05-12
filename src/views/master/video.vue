@@ -9,9 +9,9 @@
                 <!--<v-img class="fl video-img" :src="videoData.pic" aspect-ratio="1.7"></v-img>-->
                 <img class="fl video-img" :src="videoData.pic" alt="视频封面">
                 <div class="fr video-introduce">
-                  <div class="text-truncate">{{videoData.title}}</div>
-                  <div class="fs_14 color-6 text-truncate">{{videoData.introduction}}</div>
-                  <div class="video-tag-list text-truncate">{{videoData.keywords}}</div>
+                  <div class="text-truncate" v-html="videoData.title"></div>
+                  <div class="fs_14 color-6 text-truncate" v-html="videoData.introduction"></div>
+                  <div class="video-tag-list text-truncate" v-html="videoData.keywords"></div>
                   <div class="text-right video-play"><a class="fs_14" :href="'https://www.bilibili.com/video/av'+videoData.aid" target="view_window">前往播放页</a></div>
                 </div>
               </v-card>

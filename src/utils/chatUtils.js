@@ -57,5 +57,7 @@ export const HtmlDecode = (str) => {
   s = str.replace(/&amp;/g, '&');
   s = s.replace(/&ldquo;/g, '“');
   s = s.replace(/&rdquo;/g, '”');
+  s = s.replace(/&times;/g, '×');
+  s = s.replace(/&radic;/g, '√');
   return s;
 };

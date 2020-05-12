@@ -334,6 +334,10 @@
         self.writerData.fansRank = setNumber(self.writerData.fansRank);
         self.writerData.archiveViewRank = setNumber(self.writerData.archiveViewRank);
         self.writerData.likeRank = setNumber(self.writerData.likeRank);
+        self.writerData.estimate.like = setNumber(self.writerData.estimate.like);
+        self.writerData.estimate.view = setNumber(self.writerData.estimate.view);
+        self.writerData.estimate.profit = setNumber(self.writerData.estimate.profit);
+
         self.writerData['newFansRankChange'] = setNumber(Math.abs(self.writerData.fansRankChange));
         self.writerData['newArchiveViewRankChange'] = setNumber(Math.abs(self.writerData.archiveViewRankChange));
         self.writerData['newLikeRankChange'] = setNumber(Math.abs(self.writerData.likeRankChange));
