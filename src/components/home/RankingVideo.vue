@@ -6,7 +6,7 @@
         <li class="ranking-video-item" v-for="(item,index) in videoList" :key="index" @click="goTo(item.aid)">
           <img v-if="item.pic" class="video-item-img" :src="item.pic" alt="">
           <img v-else class="video-item-img" src="https://i1.hdslb.com/bfs/archive/0ef2f1640c05e4f670e6d595041f9da685b41d2f.jpg@160w_100h.jpg" alt="">
-          <p class="video-item-title">{{item.title}}</p>
+          <p class="video-item-title" v-html="item.title">{{item.title}}</p>
           <div class="video-item-usre">
             <span>{{item.datetime}}</span>
           </div>
