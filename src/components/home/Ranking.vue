@@ -192,7 +192,6 @@
         }).then(r => {
           let data = r.data;
           if(data.success){
-            console.log(data);
             self.videoList = data.data.data;
             self.setVideo();
           }
@@ -207,7 +206,6 @@
         }).then(r => {
           let data = r;
           if(data.data.success){
-            console.log(data.data.data);
             self.writerList = data.data.data.data;
             self.setWriter();
           }

@@ -29,7 +29,6 @@
     watch: {
       value: {
         handler(value) {
-          console.log(value);
           if (this.instance && this.instance.update) {
             if (this.coldDown) {
               setTimeout(() => {

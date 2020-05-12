@@ -178,7 +178,6 @@
         handler: function() {
           this.overlay = true;
           this.getWriter();
-          console.log(this.paramsData);
         },
         deep: true
       },
@@ -196,8 +195,6 @@
       goToSearch (n) {
         let self = this;
         let path = '';
-        console.log(n);
-        console.log(self.searchTitle);
         this.$router.push({
           path:'/videoSearch',
         });
@@ -219,12 +216,10 @@
       },
       getWriter(){
         let self = this;
-        console.log(self.paramsData);
         self.axios.get(`/api/author`,{
           params: self.paramsData
         }).then(r => {
           let data = r.data;
-          console.log(r);
           self.overlay = false;
           if(data.success){
             self.writerListData = data.data;
@@ -243,7 +238,6 @@
       },
       setParamsData (value) {
         let self = this;
-        console.log(value);
         if(value.type == 'number'){
           for (let i = 0; i < value.key.length ; i++){
             self.paramsData[value.key[i]] = value.value[i];
@@ -269,7 +263,6 @@
       self.setSearchTitle('作者');
       self.getWriter();
       window.addEventListener('scroll', self.scrollToTop);
-      console.log(self.$route.query.keyword);
     },
     destroyed () {
       window.removeEventListener('scroll', this.scrollToTop)

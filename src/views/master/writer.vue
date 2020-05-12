@@ -350,11 +350,9 @@
         let viewArray = [];
         self.axios.get(`/api/author/${self.mid}/data`).then(r => {
           let data = r.data;
-          console.log(r);
           if(data.success){
 
             self.authorData = data;
-            console.log(self.authorData);
             self.authorData.data.forEach(function (val) {
               if (val.fans != undefined && val.fans != 0) {
                 fansArray.push([val.day, Number(val.fans)]);
@@ -393,7 +391,6 @@
       getHotOptions () {
         let self = this;
         self.axios.get(`/api/site/prefer-keyword`).then(r => {
-          console.log(r.data);
           let data = r.data.data;
           let Array = [];
           for (var item in data){
@@ -408,7 +405,6 @@
       getPreferKeyword () {
         let self = this;
         self.axios.get(`/api/author/${self.mid}/prefer-keyword`).then(r => {
-          console.log(r.data);
           let data = r.data.data;
           let Array = [];
           for (var item in data){
@@ -423,7 +419,6 @@
       getChannel (){
         let self = this;
         self.axios.get(`/api/author/${self.mid}/channel`).then(r => {
-          console.log(r.data);
           let data = r.data.data;
           let Array = [];
           for (var item in data){

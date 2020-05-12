@@ -20,7 +20,6 @@ import "./echarts/index.js";
 
 
 // 使用axios
-console.log(process.env);
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = process.env.VUE_APP_API_ROOT;
 axios.defaults.headers = {

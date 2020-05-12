@@ -207,10 +207,8 @@
           const data = r.data;
           self.loadTime = data.time;
           self.overlay = false;
-          console.log(r);
           if(data.success && data.data){
             self.videoData = data.data;
-            console.log(self.videoData);
             self.getVideoRank();
             self.setVideo();
           }
@@ -232,13 +230,10 @@
         let self = this;
         self.axios.get(`/api/video/${self.aid}/data`).then(r => {
           let data = r.data;
-          console.log(data);
           if(data.success){
             self.getVideoRankList = data;
             self.mainChart = drawMainChart(self.getVideoRankList);
             self.likeRateChart = drawVideoPieChart(self.videoData);
-            console.log(self.newVideoData);
-            console.log(self.likeRateChart);
           }
         });
       }
@@ -247,7 +242,6 @@
       let self = this;
       self.aid = self.$route.query.aid * 1;
       self.getVideo();
-      console.log(self.aid);
     }
   }
 </script>

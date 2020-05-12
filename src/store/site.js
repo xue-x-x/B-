@@ -10,13 +10,11 @@ export default {
       state.siteInfo = info;
     },
     setData(state, payload) {
-      console.log(state[payload.name]);
       state[payload.name] = payload.data;
     }
   },
   getters: {
     bigestWatching(state) {
-      console.log(state.siteGroupInfo);
       if (state.siteGroupInfo != null && state.siteGroupInfo.maxView != null) {
         return `约为${(state.siteGroupInfo.maxView / 10000).toFixed(2)}万人`;
       } else {
@@ -31,7 +29,6 @@ export default {
       }
     },
     currentMonthTop(state) {
-      console.log(state.siteGroupInfo == null);
       if (state.siteGroupInfo == null || state.siteGroupInfo.monthlyMaxView == null) {
         return "载入中..";
       } else {
@@ -41,7 +38,6 @@ export default {
       }
     },
     compareWithLastMonth(state) {
-      console.log(state);
       if (state.siteGroupInfo == null || state.siteGroupInfo.prevMonthMaxViewRate == null) {
         return "载入中..";
       }
@@ -56,7 +52,6 @@ export default {
       return text;
     },
     compareWithLastYear(state) {
-      console.log(state)
       if (state.siteGroupInfo == null || state.siteGroupInfo.prevYearMaxViewRate == null) {
         return "载入中..";
       } else {

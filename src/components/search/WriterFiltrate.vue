@@ -197,7 +197,6 @@
       confirm () {
         let self = this;
         var reg = /(^[1-9]\d*$)/;
-        console.log(self.leastValue == null);
         if (self.leastValue > self.maximumValue || self.leastValue == null || self.maximumValue == null) {
           self.errorShow = true;
           return false;

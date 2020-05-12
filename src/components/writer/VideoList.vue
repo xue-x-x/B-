@@ -99,7 +99,6 @@
               self.newVideoList = data.data.data;
             }
           }
-          console.log(self.newVideoList);
           self.setVideoList(sort);
         });
       },
@@ -121,7 +120,6 @@
       let self = this;
       self.getVideoList(0);
       self.getVideoList(1);
-      console.log(self.mid);
     }
   }
 </script>

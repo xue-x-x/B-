@@ -139,7 +139,6 @@
 
         // 为了能够使用 `this` 获取局部状态，必须使用常规函数
         countPlusLocalState (state) {
-           console.log(state);
         return state.searchItems
       }
       }),

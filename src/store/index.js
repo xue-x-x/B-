@@ -61,8 +61,6 @@ export default new Vuex.Store({
     setChannels: (state, info) =>{state.channels = info},
     setChannelsRanking: (state, info) =>{state.channelsRanking = info},
     setNumber: (state, info) =>{
-      console.log(info);
-      console.log(info.archiveView);
       let number = undefined;
       if(info.archiveView){
         number = info.archiveView;
@@ -82,7 +80,6 @@ export default new Vuex.Store({
   actions: {
     getChannels(context) {
       axios.get("/api/video/getChannels").then(response => {
-        console.log(response);
         if(response.data.success){
           let data = response.data.data;
           let channels = [];

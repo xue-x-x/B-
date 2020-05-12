@@ -67,7 +67,6 @@
         self.$emit('goToSearch',self.searchValue);
       },
       searchClick (){
-        console.log(this.searchValue);
         let value = {
           type:'keyword',
           key:'keyword',
@@ -78,7 +77,6 @@
       },
     },
     mounted() {
-      console.log(this.title)
       this.searchValue = this.$store.state.searchValue;
     }
   }

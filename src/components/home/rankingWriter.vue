@@ -79,7 +79,6 @@
       let self = this;
       self.axios.get(`/api/site/author/recommend`).then(r => {
         let data = r.data;
-        console.log(data);
         if(data.success){
           self.writerList = data.data;
         }

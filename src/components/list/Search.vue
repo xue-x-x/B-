@@ -75,8 +75,6 @@
           value: this.searchValue
         };
         this.setSearchValue('');
-        console.log(this.$store.state.searchValue);
-        console.log(123456);
         this.$emit('setParamsData', value);
 
       },

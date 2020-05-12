@@ -224,7 +224,6 @@
             self.firstVideo[index] = setNumber(self.firstVideo[index]);
           }
         }
-        console.log(self.firstVideo);
       },
       changeSelect () {
         this.backTop();

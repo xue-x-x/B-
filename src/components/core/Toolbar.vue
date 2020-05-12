@@ -86,7 +86,6 @@
     methods: {
       ...mapMutations(['toggleDrawer']),
       goTo (url) {
-        console.log(url);
         this.$router.push(
           {
             path: url

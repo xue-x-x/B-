@@ -198,7 +198,6 @@
           if(data.success && data.data){
             self.closeOverlay();
             self.number++;
-            console.log(self.number);
             if(name === 'A'){
               self.writerA = data.data;
               self.mids.splice(0,1,mid);
@@ -251,12 +250,10 @@
       },
       setProfitDataOptions (){
         let self = this;
-        console.log(self.profitArray);
         self.profitDataOptions =  getMultiChartOptions([
           [self.profitArray[0], self.writerA.name +"每日收益", "#1e88e5"],
           [self.profitArray[1], self.writerB.name +"每日收益", "#2b821d"]
         ]);
-        console.log(self.profitDataOptions);
       },
       setOverlay (type){
         let self = this;
