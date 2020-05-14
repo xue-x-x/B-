@@ -12,6 +12,16 @@
         <v-tab class="pa-5 fs_16 font-weight-bold" @click="changeWriterLis(4)">
           <v-icon>mdi-account-minus</v-icon>掉粉榜
         </v-tab>
+        <v-tab class="pa-5 fs_16 font-weight-bold" @click="changeWriterLisNew(0)">
+          <v-icon>mdi-account-group</v-icon>三十天涨粉榜
+        </v-tab>
+        <v-tab class="pa-5 fs_16 font-weight-bold" @click="changeWriterLisNew(1)">
+          <v-icon>mdi-account-multiple-plus</v-icon>七天涨粉榜
+        </v-tab>
+        <v-tab class="pa-5 fs_16 font-weight-bold" @click="changeWriterLisNew(2)">
+          <v-icon>mdi-play-circle</v-icon>七天播放榜
+        </v-tab>
+
       </v-tabs>
     </div>
     <div class="wr-content mt-6">
@@ -151,8 +161,20 @@
           size: 10,
           sort: 0
         },
+        paramsDataNew: {
+          current: 1,
+          keyword: '',
+          size: 10,
+        },
         writerList: [],
         writerListData: {},
+        NewUrl: [
+          "fansRank30",
+          "fansRank7",
+          "viewRank7",
+        ],
+        activeUrl: "",
+        isNewClassify: false
       }
     },
     watch:{
@@ -160,6 +182,13 @@
         handler: function() {
           this.loadingShow = true;
           this.getWriterList();
+        },
+        deep: true
+      },
+      paramsDataNew: {
+        handler: function() {
+          this.loadingShow = true;
+          this.getWriterListNwe();
         },
         deep: true
       },
@@ -193,8 +222,10 @@
         var scroll = scr - self.scrollTop;
         self.scrollTop = scr;
         if(scr + clientHeight + 50 >= scrHeight && scroll > 0 && !self.loadingShow){
-          if(self.isMoreLoad){
+          if(self.isMoreLoad && !self.isNewClassify){
             self.paramsData.current = self.paramsData.current + 1;
+          }else  if(self.isMoreLoad && self.isNewClassify){
+            self.paramsDataNew.current = self.paramsDataNew.current + 1;
           }
         }
       },
@@ -216,6 +247,27 @@
 
         });
       },
+      getWriterListNwe(){
+        let self = this;
+        console.log(`/api/author/${self.activeUrl}`);
+        console.log(self.paramsDataNew);
+        self.axios.get(`/api/author/${self.activeUrl}`,{
+          params: self.paramsDataNew
+        }).then(r => {
+          console.log(r.data.data);
+          let data = r.data;
+          self.writerListData = data.data;
+          if(self.paramsData.current - data.data.totalpage == 0 || data.data.totalpage == 0){
+            self.isMoreLoad = false;
+          }
+          if(data.success){
+            self.loadingShow = false;
+            self.writerList =self.writerList.concat(data.data.data);
+            self.setWriterList();
+          }
+
+        });
+      },
       setWriterList () {
         let self = this;
         self.writerList.forEach(function (val) {
@@ -224,9 +276,18 @@
         })
       },
       changeWriterLis(n) {
+        this.isNewClassify = false;
         this.paramsData.sort = n;
         this.paramsData.current = 1;
         this.writerList = [];
+      },
+      changeWriterLisNew(n) {
+        this.isNewClassify = true;
+        this.activeUrl = this.NewUrl[n];
+        this.writerList = [];
+        this.paramsDataNew.current = 0;
+        this.paramsDataNew.current = 1;
+        console.log(this.paramsDataNew.current);
       },
       changPaging () {
         let self = this;
