@@ -3,9 +3,23 @@
     <div class="videoRanking-header">
       <div class="wrap">
         <h1 class="text-content">视频榜单</h1>
-        <v-row align="center" class="d-flex flex-row-reverse">
+        <v-row align="center">
+          <v-col  cols="12" sm="9">
+            <v-tabs hide-slider  show-arrows slider-color="#2981f4" color="#2981f4">
+              <v-tab class="px-5 fs_16 font-weight-bold" @click="changeVideoList(0)">
+                <v-icon>mdi-play-circle-outline</v-icon>播放排行榜
+              </v-tab>
+              <v-tab class="px-5 fs_16 font-weight-bold" @click="changeVideoList(1)">
+                <v-icon>mdi-play-circle-outline</v-icon>三十天播放排行榜
+              </v-tab>
+              <v-tab class="px-5 fs_16 font-weight-bold" @click="changeVideoList(2)">
+                <v-icon>mdi-play-circle-outline</v-icon>七天播放排行榜
+              </v-tab>
+            </v-tabs>
+          </v-col>
           <v-col class="d-flex fr" cols="12" sm="3">
             <v-select
+                    class="mt-3"
                     v-model="channelsText"
                     :items="channels"
                     label="全部"
@@ -13,6 +27,7 @@
                     @input="changeSelect"
             ></v-select>
           </v-col>
+
         </v-row>
       </div>
     </div>
@@ -127,6 +142,12 @@
           sort: 1,
           tag: '',
         },
+        url: "/api/video",
+        urlList: [
+          "/api/video",
+          "/api/video/rank30",
+          "/api/video/rank7",
+        ],
         videoListData: {},
         videoList: [],
         firstVideo:{},
@@ -140,7 +161,7 @@
           this.getVideo();
         },
         deep: true
-      },
+      }
     },
     computed: {
       channels() {
@@ -187,22 +208,26 @@
       },
       getVideo () {
         let self = this;
-        self.axios.get(`/api/video`,{
+        console.log(self.paramsData);
+        self.axios.get(self.url,{
           params: self.paramsData
         }).then(r => {
           let data = r.data;
           if(data.success){
             self.loadingShow = false;
             self.overlay = false;
-            if(self.paramsData.current - data.data.totalpage == 0){
+            if(self.paramsData.current - data.data.totalpage == 0 ) self.isMoreLoad = false;
+            if(data.data.recordsFiltered == 0 ) {
               self.isMoreLoad = false;
+              self.videoList = [];
+              return
             }
             if(self.paramsData.current == 1) {
               self.firstVideo = data.data.data[0];
               self.videoList = data.data.data.slice(1);
               self.setFirstVideo();
             }else {
-              self.videoList =self.videoList.concat(data.data.data);
+              self.videoList = self.videoList.concat(data.data.data);
             }
             self.loadingShow = false;
             self.videoListData = data.data;
@@ -230,7 +255,12 @@
         this.overlay = true;
         this.paramsData.current = 1;
         this.paramsData.size = 13;
-        this.paramsData.keyword = this.channelsText == '全部' ? '' : this.channelsText;
+        this.paramsData.channel = this.channelsText == '全部' ? '' : this.channelsText;
+      },
+      changeVideoList (n){
+        this.url = this.urlList[n];
+        this.paramsData.current = 0;
+        this.paramsData.current = 1;
       }
     },
     mounted () {
@@ -265,6 +295,12 @@
     font-size: 26px !important;
     font-weight: bold;
     border-bottom: 1px solid #ccc;
+  }
+  .videoRanking-header .col-sm-9{
+    padding-top: 0;
+  }
+  .videoRanking-header .col-12{
+    padding: 5px 12px;
   }
   .videoRanking-recommend{
     padding: 20px;

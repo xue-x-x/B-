@@ -21,7 +21,9 @@
         <v-tab class="pa-5 fs_16 font-weight-bold" @click="changeWriterLisNew(2)">
           <v-icon>mdi-play-circle</v-icon>七天播放榜
         </v-tab>
-
+        <v-tab class="pa-5 fs_16 font-weight-bold" @click="changeWriterLisNew(3)">
+          <v-icon>mdi-play-speed</v-icon>7天播放量/粉丝量总量
+        </v-tab>
       </v-tabs>
     </div>
     <div class="wr-content mt-6">
@@ -33,13 +35,16 @@
             <th class="text-left font-weight-bold">基本信息</th>
             <th class="text-center font-weight-bold d-none d-lg-table-cell px-0 category">bilibili个人认证</th>
             <th class="text-center font-weight-bold d-none d-md-table-cell">类型</th>
-            <th class="text-center font-weight-bold">粉丝</th>
-            <th class="text-center font-weight-bold d-none d-sm-table-cell">点赞</th>
+            <th class="text-center font-weight-bold"  v-if="activeUrl != 'viewRank7'">粉丝</th>
+            <th class="text-center font-weight-bold d-none d-sm-table-cell" v-if="!isNewClassify">点赞</th>
+            <th class="text-center font-weight-bold"  v-if="activeUrl == 'viewRank7'">播放量</th>
+            <th class="text-center font-weight-bold d-none d-sm-table-cell"  v-if="activeUrl == 'viewRank7' || activeUrl == 'ratioRank7' ">七天增长播放量</th>
             <th class="text-center font-weight-bold d-none d-sm-table-cell">Nox评级</th>
           </tr>
           </thead>
           <tbody>
           <tr class="cursorP" v-for="(item,index) in writerList" @click="goTo(item.mid)">
+            <!-- 排行 -->
             <td class="td-ranking pa-0">
               <div class="col-12 clearfix">
                 <span v-if="index == 0" class="fl num top3 gold"></span>
@@ -54,37 +59,54 @@
                 </span>
               </div>
             </td>
+            <!-- 基本信息 -->
             <td class="text-left td-user">
               <div class="td-user-div col-11 text-truncate">
                 <img v-if="item.face" class="td-user-header" :src="item.face" alt="">
                 <span class="text-truncate td-user-name">{{item.name ? item.name : ''}}</span>
               </div>
             </td>
+            <!-- bilibili个人认证 -->
             <td class="d-none d-lg-table-cell px-0 category">
               <div class="text-truncate mx-auto" style="max-width: 170px">
                 {{item.official ? item.official : '暂无数据'}}
               </div>
             </td>
+            <!-- 类型 -->
             <td class="d-none d-md-table-cell">
               <div class="text-truncate mx-auto" style="max-width: 170px">
                 <span>{{item.channels ? item.channels : '暂无数据'}}</span>
               </div>
             </td>
-            <td>
+            <!-- 粉丝 -->
+            <td v-if="activeUrl != 'viewRank7'">
               {{item.fans != 0 ? item.fans : '暂无数据'}}
-              <span class="decline" :class="{'goUp':item.fansChange < 0}"  v-if="item.fansChange">
+              <span class="decline d-none d-sm-inline" :class="{'goUp':item.fansChange < 0}"  v-if="item.fansChange">
                 <i v-if="item.fansChange < 0">↓</i>
                 <i v-if="item.fansChange > 0">↑</i>
-                {{item.fansChange != 0 ? Math.abs(item.fansChange) : ''}}
+                {{item.fansChange != 0 ? item.setFansChange : ''}}
               </span>
             </td>
-            <td class="d-none d-sm-table-cell">
+            <!-- 点赞 -->
+            <td class="d-none d-sm-table-cell" v-if="!isNewClassify">
               {{item.like != 0 ? item.like : '暂无数据'}}
               <span class="decline" :class="{'goUp':item.likeChange < 0}" v-if="item.likeChange">
                 <i v-if="item.likeChange < 0">↓</i>
                 <i v-if="item.likeChange > 0">↑</i>
-                {{item.likeChange != 0 ? Math.abs(item.likeChange) : ''}}
+                {{item.likeChange != 0 ? item.setLikeChange : ''}}
               </span>
+            </td>
+            <!--
+              七天播放榜-播放量
+            -->
+            <td v-if="activeUrl == 'viewRank7'">
+              {{item.view != 0 ? item.view : '暂无数据'}}
+            </td>
+            <!--
+             七天播放榜-七天播放量
+           -->
+            <td class="d-none d-sm-table-cell" v-if="activeUrl == 'viewRank7' || activeUrl == 'ratioRank7'">
+              {{item.varview != 0 ? item.setVarview : '暂无数据'}}
             </td>
             <td class="d-none d-sm-table-cell">
               <v-rating
@@ -172,6 +194,7 @@
           "fansRank30",
           "fansRank7",
           "viewRank7",
+          "ratioRank7",
         ],
         activeUrl: "",
         isNewClassify: false
@@ -249,12 +272,9 @@
       },
       getWriterListNwe(){
         let self = this;
-        console.log(`/api/author/${self.activeUrl}`);
-        console.log(self.paramsDataNew);
         self.axios.get(`/api/author/${self.activeUrl}`,{
           params: self.paramsDataNew
         }).then(r => {
-          console.log(r.data.data);
           let data = r.data;
           self.writerListData = data.data;
           if(self.paramsData.current - data.data.totalpage == 0 || data.data.totalpage == 0){
@@ -273,10 +293,23 @@
         self.writerList.forEach(function (val) {
           val.fans = setNumber(val.fans);
           val.like = setNumber(val.like);
-        })
+          val["setFansChange"] = setNumber(Math.abs(val.fansChange));
+          val["setLikeChange"] = setNumber(Math.abs(val.likeChange));
+        });
+        if(self.activeUrl == 'viewRank7'){
+          self.writerList.forEach(function (val) {
+            val.view = setNumber(val.view);
+            val["setVarview"] = setNumber(val.varview);
+          });
+        }else if(self.activeUrl == 'ratioRank7'){
+          self.writerList.forEach(function (val) {
+            val["setVarview"] = setNumber(val.varview);
+          });
+        }
       },
       changeWriterLis(n) {
         this.isNewClassify = false;
+        this.paramsData.sort = 0;
         this.paramsData.sort = n;
         this.paramsData.current = 1;
         this.writerList = [];
@@ -287,7 +320,6 @@
         this.writerList = [];
         this.paramsDataNew.current = 0;
         this.paramsDataNew.current = 1;
-        console.log(this.paramsDataNew.current);
       },
       changPaging () {
         let self = this;
