@@ -54,7 +54,6 @@
                   </div>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
@@ -80,7 +79,8 @@
             <v-col class="pa-2 mb-4 text-left videoRanking-video-list" cols="12" sm="3" v-for="(item,index) in videoList" :key="index">
                 <div @click.stop="goTo('/video',{aid: item.aid})">
                 <div class="videoRanking-video-list-img">
-                  <img :src="item.pic" alt="">
+                  <img v-if="item.pic" :src="item.pic" alt="">
+                  <div class="no-img" v-else="">暂无视频封面</div>
                   <div class="videoRanking-video-list-play d-flex justify-end">
                     <div>
                       <v-icon small color="#fff">mdi-play-circle</v-icon><span>{{item.view}}</span>
@@ -90,7 +90,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="text-truncate py-2">{{item.title}}</div>
+                <div class="text-truncate py-2 videoRanking-video-list-title" v-html="item.title">{{item.title}}</div>
               </div>
               <div class="vvl-user" v-if="item.face || item.name" :class="{'pl-0':!item.face}" @click="goTo('/writer',{mid: item.mid})">
                 <img class="vvl-user-img" v-if="item.face" :src="item.face" alt="">
@@ -388,7 +388,13 @@
   .videoRanking-video-list-img img{
     width: 100%;
     height: 175px;
-
+  }
+  .no-img{
+    width: 100%;
+    height: 175px;
+    line-height: 175px;
+    text-align: center;
+    border: 1px solid #ccc;
   }
   .videoRanking-video-list-play{
     position: absolute;
@@ -420,7 +426,10 @@
   .vvl-user-content{
     min-height: 40px;
   }
-
+ /* .videoRanking-video-list-title{
+    height: 40px;
+    line-height: 40px;
+  }*/
   @media screen and (max-width:768px) {
     .videoRanking-list{
       background-color: #f7f8fa;
