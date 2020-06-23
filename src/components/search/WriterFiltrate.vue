@@ -58,6 +58,28 @@
         </v-chip>
       </div>
     </div>
+    <div class="filter-list clearfix">
+      <div class="fl filter-title text-left mt-2">价值权重：</div>
+      <div class="fl">
+        <ul class="clearfix">
+          <li class="fl" v-for="(item,index) in valueAnalysisClassify" :key="index">
+            <v-select
+                    class="value-select"
+                    color="#f55345"
+                    :items="item.items"
+                    :label="item.name"
+                    v-model="item.value"
+                    dense
+                    outlined
+                    @change="changeValueAnalysis(item,index)"
+            ></v-select>
+          </li>
+          <li class="fl ml-4">
+            <v-btn class="ma-1" rounded color="#f55345" style="color: #fff">确定</v-btn>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -149,6 +171,35 @@
             name: '掉粉总量',
           },
         ],
+        valueAnalysisClassify: [
+          {
+            name: "影响力",
+            items: [1,2,3,4,5],
+            value:0,
+          },
+          {
+            name: "互动性",
+            items: [1,2,3,4,5],
+            value:0,
+          },
+          {
+            name: "专业度",
+            items: [1,2,3,4,5],
+            value:0,
+          },
+          {
+            name: "表现力",
+            items: [1,2,3,4,5],
+            value:0,
+          },
+          {
+            name: "性价比",
+            items: [1,2,3,4,5],
+            value:0,
+          },
+        ],
+        valueAnalysisTitle: "",
+        items: ['Foo', 'Bar', 'Fizz', 'Buzz'],
       }
     },
     computed:{
@@ -160,29 +211,18 @@
       },
     },
     methods: {
-      changeFilter (item,index) {
-        let self = this;
-        let arrIndex = index;
-        let value = {
-          type:'number',
-          key:['max','min'],
-          value: [item.maximum,item.least]
-        };
-        this.$emit('setParamsData', value);
-        self.filterList.forEach(function(val){
-          val.active = false;
-        });
-        self.filterList[arrIndex].active = true;
-      },
+      /* 设置粉丝数值 */
       setManualShow (text) {
         let self = this;
         self.manualShow = true;
         text == 'least' ? this.$refs.least.focus() : this.$refs.maximum.focus()
 
       },
+      /* 关闭粉丝数值输入 */
       closeInput () {
         this.manualShow = false;
       },
+      /* 重置粉丝数 */
       reset () {
         this.leastValue = null;
         this.maximumValue = null;
@@ -194,6 +234,7 @@
         };
         this.$emit('setParamsData', value);
       },
+      /* 确定粉丝数范围 */
       confirm () {
         let self = this;
         var reg = /(^[1-9]\d*$)/;
@@ -212,6 +253,22 @@
         };
         this.$emit('setParamsData', value);
       },
+      /* 粉丝数筛选 */
+      changeFilter (item,index) {
+        let self = this;
+        let arrIndex = index;
+        let value = {
+          type:'number',
+          key:['max','min'],
+          value: [item.maximum,item.least]
+        };
+        this.$emit('setParamsData', value);
+        self.filterList.forEach(function(val){
+          val.active = false;
+        });
+        self.filterList[arrIndex].active = true;
+      },
+      /* 分类筛选 */
       changeClassify (item,index) {
         let self = this;
         let value = {
@@ -225,6 +282,7 @@
         });
         self.channels[index].active = true;
       },
+      /* 排序选项筛选 */
       changOtherOptions (item,index) {
         let self = this;
         let value = {
@@ -238,6 +296,11 @@
         });
         self.otherOptions[index].active = true;
       },
+      /* 价值分析筛选 */
+      changeValueAnalysis (item,index){
+        console.log(item);
+      },
+      /* 设置粉丝数最小值 */
       setLeastValue () {
         let self = this;
         var reg = /(^[1-9]\d*$)/;
@@ -246,6 +309,7 @@
           return false;
         }
       },
+      /* 设置粉丝数最大值 */
       setMaximumValue () {
         let self = this;
         var reg = /(^[1-9]\d*$)/;
@@ -254,6 +318,7 @@
           return false;
         }
       },
+
     },
     mounted (){
       let self =this;
@@ -367,5 +432,14 @@
   .filter-list-li-active .theme--light.v-chip:not(.v-chip--active){
     background-color: #f55345;
     color: #fff;
+  }
+  .value-select{
+    margin: 0 8px;
+    width: 100px;
+    font-size: 14px;
+    border-radius: 24px;
+  }
+  .v-select__slot{
+    font-size: 14px !important;
   }
 </style>

@@ -41,6 +41,9 @@
             <v-tab>
               <v-icon left>mdi-brain</v-icon>高级统计
             </v-tab>
+            <v-tab>
+              <v-icon left>mdi-radar</v-icon>价值分析
+            </v-tab>
           </v-tabs>
 
           <v-tabs-items v-model="tab">
@@ -258,11 +261,38 @@
               </v-row>
               <video-list :mid="mid"></video-list>
             </v-tab-item>
+            <v-tab-item>
+              <v-row>
+                <v-col>
+                  <v-card>
+                    <div class="text-left">
+                      <h3 class="px-5 py-1 writer-title">UP主价值分析</h3>
+                    </div>
+                    <v-card-text v-if="writerData.estimate != null">
+                      <v-row>
+                        <v-card-text>
+                          <Chart
+                                  class="mb-2"
+                                  title="UP主价值分析"
+                                  :options="valueAnalysisOptions"
+                                  style="width: 100%;"
+                          />
+                        </v-card-text>
+                      </v-row>
+                    </v-card-text>
+                    <v-card-text v-else>
+                      <div>暂无数据</div>
+                    </v-card-text>
+                  </v-card>
+                </v-col>
+              </v-row>
+
+              <video-list :mid="mid"></video-list>
+            </v-tab-item>
           </v-tabs-items>
         </v-col>
       </v-row>
       <div>
-
       </div>
     </div>
   </div>
@@ -310,10 +340,12 @@
         authorFansEfficiencyOptions: {},
         hotOptions: {},
         typeOptions: {},
-        authorData: {}
+        authorData: {},
+        valueAnalysisOptions: {}
       }
     },
     methods: {
+      // 获取UP主详情
       getWriter () {
         let self = this;
         self.axios.get(`/api/author/${self.mid}`).then(r => {
@@ -342,7 +374,7 @@
         self.writerData['newArchiveViewRankChange'] = setNumber(Math.abs(self.writerData.archiveViewRankChange));
         self.writerData['newLikeRankChange'] = setNumber(Math.abs(self.writerData.likeRankChange));
       },
-
+      // 获取UP主每日数据
       getAuthorData () {
         let self = this;
         let fansArray = [];
@@ -351,7 +383,6 @@
         self.axios.get(`/api/author/${self.mid}/data`).then(r => {
           let data = r.data;
           if(data.success){
-
             self.authorData = data;
             self.authorData.data.forEach(function (val) {
               if (val.fans != undefined && val.fans != 0) {
@@ -383,12 +414,41 @@
               ],
               "line","areaStyle"
             );
-            self.earningsDataOptions = getMultiChartOptions([ [fansArray, "每日收益", "#1e88e5"]])
+            self.earningsDataOptions = getMultiChartOptions([ [fansArray, "每日收益", "#1e88e5"]]);
+            self.valueAnalysisOptions =  {
+              tooltip: {},
+              radar: {
+                name: {
+                  textStyle: {
+                    color: '#fff',
+                    backgroundColor: '#999',
+                    borderRadius: 3,
+                    padding: [3, 5]
+                  }
+                },
+                indicator: [
+                  { name: '影响力', max: 6},
+                  { name: '互动性', max: 6},
+                  { name: '专业度', max: 6},
+                  { name: '表现力', max: 6},
+                  { name: '性价比', max: 6}
+                ]
+              },
+              series: [{
+                type: 'radar',
+                data: [
+                  {
+                    value: [4.1, 3.9, 2.9, 3.5, 3],
+                    name: 'UP主价值分析'
+                  }
+                ]
+              }]
+            }
           }
         });
 
       },
-      getHotOptions () {
+      /*getHotOptions () {
         let self = this;
         self.axios.get(`/api/site/prefer-keyword`).then(r => {
           let data = r.data.data;
@@ -401,7 +461,8 @@
           }
           self.hotOptions = getOptions(Array);
         });
-      },
+      },*/
+      // 获取UP主热词数据
       getPreferKeyword () {
         let self = this;
         self.axios.get(`/api/author/${self.mid}/prefer-keyword`).then(r => {
@@ -416,6 +477,7 @@
           self.hotOptions = getOptions(Array);
         });
       },
+      //获取UP主频道分析数据
       getChannel (){
         let self = this;
         self.axios.get(`/api/author/${self.mid}/channel`).then(r => {
