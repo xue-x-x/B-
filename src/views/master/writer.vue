@@ -303,6 +303,7 @@
   import interpolation from "../../charts/util/interpolation";
   import getOptions from "../../charts/cloud-charts.js";
   import getMultiChartOptions from "@/charts/biliob-multi-line-chart.js";
+  import getRadarOptions from "@/charts/biliob-radar-line-chart.js";
   import getAuthorFansEfficiencyOptions from "@/charts/author-fans-efficiency.js";
   var deepCopy = function(o) {
     if (o instanceof Array) {
@@ -354,6 +355,9 @@
           if(data.success){
             self.writerData = data.data;
             self.setWriter();
+            // effect=>影响力;interact=>互动性;profession=>专业度;show=>表现力;cost=>性价比
+            let tadarArray = [data.data.effect,data.data.interact,data.data.profession,data.data.show,data.data.cost,];
+            self.valueAnalysisOptions =  getRadarOptions ([[tadarArray, "UP主价值分析"]]);
           }
 
         });
@@ -415,35 +419,6 @@
               "line","areaStyle"
             );
             self.earningsDataOptions = getMultiChartOptions([ [fansArray, "每日收益", "#1e88e5"]]);
-            self.valueAnalysisOptions =  {
-              tooltip: {},
-              radar: {
-                name: {
-                  textStyle: {
-                    color: '#fff',
-                    backgroundColor: '#999',
-                    borderRadius: 3,
-                    padding: [3, 5]
-                  }
-                },
-                indicator: [
-                  { name: '影响力', max: 6},
-                  { name: '互动性', max: 6},
-                  { name: '专业度', max: 6},
-                  { name: '表现力', max: 6},
-                  { name: '性价比', max: 6}
-                ]
-              },
-              series: [{
-                type: 'radar',
-                data: [
-                  {
-                    value: [4.1, 3.9, 2.9, 3.5, 3],
-                    name: 'UP主价值分析'
-                  }
-                ]
-              }]
-            }
           }
         });
 

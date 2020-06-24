@@ -165,7 +165,12 @@
           max: 0,
           min: 0,
           size: 10,
-          sort: 0
+          sort: 0,
+          effect: 0,
+          interact: 0,
+          profession: 0,
+          show: 0,
+          cost: 0,
         },
         totalpage: 0,
         writerListData: {},
@@ -238,7 +243,7 @@
       },
       setParamsData (value) {
         let self = this;
-        if(value.type == 'number'){
+        if(value.type == 'number' || value.type == 'value'){
           for (let i = 0; i < value.key.length ; i++){
             self.paramsData[value.key[i]] = value.value[i];
           }
@@ -246,7 +251,7 @@
         }
         let key = value.key;
         let content = value.value == '全部' ? '' : value.value;
-        self.paramsData[''+key] = content;
+        self.paramsData[key] = content;
       },
       changPaging () {
         let self = this;

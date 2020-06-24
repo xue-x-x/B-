@@ -71,11 +71,10 @@
                     v-model="item.value"
                     dense
                     outlined
-                    @change="changeValueAnalysis(item,index)"
             ></v-select>
           </li>
           <li class="fl ml-4">
-            <v-btn class="ma-1" rounded color="#f55345" style="color: #fff">确定</v-btn>
+            <v-btn class="ma-1" rounded color="#f55345" style="color: #fff" @click="changeValueAnalysis()">确定</v-btn>
           </li>
         </ul>
       </div>
@@ -175,26 +174,31 @@
           {
             name: "影响力",
             items: [1,2,3,4,5],
+            type: "effect",
             value:0,
           },
           {
             name: "互动性",
             items: [1,2,3,4,5],
+            type: "interact",
             value:0,
           },
           {
             name: "专业度",
             items: [1,2,3,4,5],
+            type: "profession",
             value:0,
           },
           {
             name: "表现力",
             items: [1,2,3,4,5],
+            type: "show",
             value:0,
           },
           {
             name: "性价比",
             items: [1,2,3,4,5],
+            type: "cost",
             value:0,
           },
         ],
@@ -297,8 +301,21 @@
         self.otherOptions[index].active = true;
       },
       /* 价值分析筛选 */
-      changeValueAnalysis (item,index){
-        console.log(item);
+      changeValueAnalysis (){
+        let self = this;
+        let key = [];
+        let valueArr = [];
+        self.valueAnalysisClassify.forEach(function (item) {
+          key.push(item.type);
+          valueArr.push(item.value);
+        });
+
+        let value = {
+          type:'value',
+          key: key,
+          value: valueArr
+        };
+        this.$emit('setParamsData', value);
       },
       /* 设置粉丝数最小值 */
       setLeastValue () {
