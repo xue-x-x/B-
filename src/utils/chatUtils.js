@@ -15,6 +15,9 @@ export function setNumber(num) {
     postfix = "万";
     num /= 10000;
   } else {
+    if(parseInt(num) < parseFloat(num)){
+      num = num.toFixed(2);
+    }
     return num;
   }
   num = num.toFixed(1);

@@ -221,7 +221,7 @@
       },
       getWriter(){
         let self = this;
-        self.axios.get(`/api/author`,{
+        self.axios.get(`/api/author/upPage`,{
           params: self.paramsData
         }).then(r => {
           let data = r.data;

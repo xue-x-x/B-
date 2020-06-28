@@ -270,18 +270,54 @@
                     </div>
                     <v-card-text v-if="writerData.estimate != null">
                       <v-row>
-                        <v-card-text>
-                          <Chart
-                                  class="mb-2"
-                                  title="UP主价值分析"
-                                  :options="valueAnalysisOptions"
-                                  style="width: 100%;"
-                          />
-                        </v-card-text>
+                        <v-col cols="12" sm="6">
+                          <v-card-text>
+                            <Chart
+                                    class="mb-2"
+                                    title="UP主价值分析"
+                                    :options="valueAnalysisOptions"
+                                    style="width: 100%;"
+                            />
+                          </v-card-text>
+                        </v-col>
+                        <v-col cols="12" sm="6">
+                          <ul class="pt-5">
+                            <li class="value-analysis-intro mb-4 pr-md-8">
+                              <div class="intro-title">影响力</div>
+                              <div class="intro-text">
+                                结合达人粉丝数、历史播放量等数据并通过大数据分析得出。该指数有可能影响合作视频的曝光量等数据；
+                              </div>
+                            </li>
+                            <li class="value-analysis-intro mb-4 pr-md-8">
+                              <div class="intro-title">互动性</div>
+                              <div class="intro-text">
+                                结合达人获赞数、评论数等数据并通过大数据分析得出。该指数有可能影响合作视频的获赞量、评论量、转发量等数据；
+                              </div>
+                            </li>
+                            <li class="value-analysis-intro mb-4 pr-md-8">
+                              <div class="intro-title">专业度</div>
+                              <div class="intro-text">
+                                结合达人历史视频的专业程度并通过大数据分析得出。该指数有可能会影响达人对产品及相关知识的讲解以及产品垂直领域的专业度；
+                              </div>
+                            </li>
+                            <li class="value-analysis-intro mb-4 pr-md-8">
+                              <div class="intro-title">表现力</div>
+                              <div class="intro-text">
+                                结合达人历史视频的表现力并通过大数据分析得出。该指数有可能会影响合作视频的后期制作水平、达人的镜头表现力等；
+                              </div>
+                            </li>
+                            <li class="value-analysis-intro  pr-md-8">
+                              <div class="intro-title">性价比</div>
+                              <div class="intro-text">
+                                结合达人报价和其综合指标的比值并通过大数据分析得出。该指数直接反映达人的性价比程度。
+                              </div>
+                            </li>
+                          </ul>
+                        </v-col>
                       </v-row>
                     </v-card-text>
                     <v-card-text v-else>
-                      <div>暂无数据</div>
+                      <div>暂无数据</div>6
                     </v-card-text>
                   </v-card>
                 </v-col>
@@ -364,16 +400,16 @@
       },
       setWriter () {
         let self = this;
-        self.writerData.fans = setNumber(self.writerData.fans);
-        self.writerData.archiveView = setNumber(self.writerData.archiveView);
-        self.writerData.like = setNumber(self.writerData.like);
-        self.writerData.fansRank = setNumber(self.writerData.fansRank);
-        self.writerData.archiveViewRank = setNumber(self.writerData.archiveViewRank);
-        self.writerData.likeRank = setNumber(self.writerData.likeRank);
-        self.writerData.estimate.like = setNumber(self.writerData.estimate.like);
-        self.writerData.estimate.view = setNumber(self.writerData.estimate.view);
-        self.writerData.estimate.profit = setNumber(self.writerData.estimate.profit);
-
+        let parameter = ["fans","archiveView","like","fansRank","archiveViewRank","likeRank","estimate"];
+        parameter.forEach(function (item) {
+          if(self.writerData[item] != null&& item != "estimate"){
+            self.writerData[item] = setNumber(self.writerData[item]);
+          }else if(self.writerData[item] != null && item == "estimate"){
+            self.writerData[item].like = setNumber(self.writerData[item].like);
+            self.writerData[item].view = setNumber(self.writerData[item].view);
+            self.writerData[item].profit = setNumber(self.writerData[item].profit);
+          }
+        });
         self.writerData['newFansRankChange'] = setNumber(Math.abs(self.writerData.fansRankChange));
         self.writerData['newArchiveViewRankChange'] = setNumber(Math.abs(self.writerData.archiveViewRankChange));
         self.writerData['newLikeRankChange'] = setNumber(Math.abs(self.writerData.likeRankChange));
@@ -535,5 +571,33 @@
   }
   .border-bottom{
     border-bottom: 2px solid #1e88e5;
+  }
+  .value-analysis-intro{
+    position: relative;
+    padding-left: 100px;
+  }
+  .intro-title{
+    position: absolute;
+    top: 8px;
+    left: 0;
+    width: 80px;
+    height: 28px;
+    line-height: 28px;
+    color: #fff;
+    text-align: center;
+    background-color: #1887f0;
+    border-radius: 5px;
+  }
+  .intro-text{
+    line-height: 22px;
+    text-align: left;
+  }
+  @media screen and (max-width: 750px){
+    .v-application ul{
+      padding-left: 0;
+    }
+    .v-card__text{
+      /*padding: 0;*/
+    }
   }
 </style>

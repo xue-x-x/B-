@@ -59,22 +59,23 @@
       </div>
     </div>
     <div class="filter-list clearfix">
-      <div class="fl filter-title text-left mt-2">价值权重：</div>
+      <div class="fl filter-title text-left">
+        价值权重：
+        <p>(权重总值为10)</p>
+      </div>
       <div class="fl">
         <ul class="clearfix">
-          <li class="fl" v-for="(item,index) in valueAnalysisClassify" :key="index">
-            <v-select
-                    class="value-select"
-                    color="#f55345"
-                    :items="item.items"
-                    :label="item.name"
-                    v-model="item.value"
-                    dense
-                    outlined
-            ></v-select>
+          <li class="fl value-analysis-classify" v-for="(item,index) in valueAnalysisClassify" :key="index">
+            <input type="number" v-model="item.value" max="10" min="0" @input="setValueAnalysisValue()">
+            <p>{{item.name}}</p>
           </li>
           <li class="fl ml-4">
-            <v-btn class="ma-1" rounded color="#f55345" style="color: #fff" @click="changeValueAnalysis()">确定</v-btn>
+            <v-tooltip v-model="show" bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn class="ma-1" rounded color="#f55345" style="color: #fff" @click="changeValueAnalysis()">（总值：{{valueAnalysisValue}}）确定</v-btn>
+              </template>
+              <span>请设置正确的权重</span>
+            </v-tooltip>
           </li>
         </ul>
       </div>
@@ -170,6 +171,7 @@
             name: '掉粉总量',
           },
         ],
+        valueAnalysisValue: 0,
         valueAnalysisClassify: [
           {
             name: "影响力",
@@ -203,6 +205,7 @@
           },
         ],
         valueAnalysisTitle: "",
+        show: false,
         items: ['Foo', 'Bar', 'Fizz', 'Buzz'],
       }
     },
@@ -305,17 +308,28 @@
         let self = this;
         let key = [];
         let valueArr = [];
+        if(self.valueAnalysisValue > 10 || self.valueAnalysisValue < 10){
+          self.show = true;
+          return
+        }
         self.valueAnalysisClassify.forEach(function (item) {
           key.push(item.type);
           valueArr.push(item.value);
         });
-
         let value = {
           type:'value',
           key: key,
           value: valueArr
         };
         this.$emit('setParamsData', value);
+      },
+      setValueAnalysisValue (){
+        let self = this;
+        self.valueAnalysisValue = 0;
+        self.show = false;
+        self.valueAnalysisClassify.forEach(function (item) {
+          self.valueAnalysisValue += item.value * 1;
+        })
       },
       /* 设置粉丝数最小值 */
       setLeastValue () {
@@ -357,6 +371,10 @@
   }
   .filter-title{
     width: 100px;
+  }
+  .filter-title p{
+    font-size: 12px;
+    color: #f55345;
   }
   .filter-label{
     width: 60%;
@@ -458,5 +476,26 @@
   }
   .v-select__slot{
     font-size: 14px !important;
+  }
+  .value-analysis-classify{
+    margin: 0 8px 8px;
+    width: 80px;
+    text-align: center;
+  }
+  .value-analysis-classify input{
+    padding-left: 20px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 13px;
+  }
+  .value-analysis-classify input:focus{
+    border: 1px solid #f55345;
+    outline: 0;
+    box-shadow: 0 0 3px 0 #f55345;
+    -webkit-box-shadow: 0 0 3px 0 #f55345;
+  }
+  .value-analysis-classify p{
+    margin-top: 5px;
+    font-size: 14px;
   }
 </style>
