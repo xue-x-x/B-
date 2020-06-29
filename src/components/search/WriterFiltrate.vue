@@ -74,7 +74,7 @@
               <template v-slot:activator="{ on, attrs }">
                 <v-btn class="ma-1" rounded color="#f55345" style="color: #fff" @click="changeValueAnalysis()">（总值：{{valueAnalysisValue}}）确定</v-btn>
               </template>
-              <span>请设置正确的权重</span>
+              <span>权重总值不得大于10</span>
             </v-tooltip>
           </li>
         </ul>
@@ -308,7 +308,7 @@
         let self = this;
         let key = [];
         let valueArr = [];
-        if(self.valueAnalysisValue > 10 || self.valueAnalysisValue < 10){
+        if(self.valueAnalysisValue > 10){
           self.show = true;
           return
         }

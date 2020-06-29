@@ -281,7 +281,7 @@
                           </v-card-text>
                         </v-col>
                         <v-col cols="12" sm="6">
-                          <ul class="pt-5">
+                          <ul class="pt-md-5">
                             <li class="value-analysis-intro mb-4 pr-md-8">
                               <div class="intro-title">影响力</div>
                               <div class="intro-text">
