@@ -27,11 +27,11 @@ export default new Router({
       }
     },
     {
-      name: "UP主查询",
+      name: "达人查询",
       path: "/writerSearch",
       component: WriterSearch,
       meta:{
-        title:'UP主查询'
+        title:'达人查询'
       }
     },
     {

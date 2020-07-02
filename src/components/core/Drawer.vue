@@ -11,7 +11,7 @@
         <v-list-item-icon>
           <v-icon>equalizer</v-icon>
         </v-list-item-icon>
-        <v-list-item-title>up主排行榜</v-list-item-title>
+        <v-list-item-title>达人排行榜</v-list-item-title>
       </v-list-item>
       <v-list-item class="text-left" @click="onClick($event)" to="/videoRanking">
         <v-list-item-icon>
@@ -23,7 +23,7 @@
         <v-list-item-icon>
           <v-icon>search</v-icon>
         </v-list-item-icon>
-        <v-list-item-title>up主查询</v-list-item-title>
+        <v-list-item-title>达人查询</v-list-item-title>
       </v-list-item>
       <v-list-item class="text-left" @click="onClick($event)" to="/videoSearch">
         <v-list-item-icon>

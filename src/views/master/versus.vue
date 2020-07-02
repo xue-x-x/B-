@@ -113,12 +113,12 @@
         <v-col col="12">
           <v-card>
             <div class="text-left">
-              <h3 class="px-5 py-1 versus-title">UP主数据对比</h3>
+              <h3 class="px-5 py-1 versus-title">达人数据对比</h3>
             </div>
             <v-card-text>
               <Chart
                       class="mb-2"
-                      title="UP主数据对比"
+                      title="达人数据对比"
                       :options="contrastDataOptions"
                       style="width: 100%"
               />
@@ -130,12 +130,12 @@
         <v-col col="12">
           <v-card>
             <div class="text-left">
-              <h3 class="px-5 py-1 versus-title">UP主收益对比</h3>
+              <h3 class="px-5 py-1 versus-title">达人收益对比</h3>
             </div>
             <v-card-text>
               <Chart
                       class="mb-2"
-                      title="UP主收益对比"
+                      title="达人收益对比"
                       :options="profitDataOptions"
                       style="width: 100%"
               />

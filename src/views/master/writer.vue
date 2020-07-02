@@ -52,7 +52,7 @@
                 <v-col>
                   <v-card>
                     <div class="text-left">
-                      <h3 class="px-5 py-1 writer-title">UP主最新数据</h3>
+                      <h3 class="px-5 py-1 writer-title">达人最新数据</h3>
                     </div>
                     <v-card-text v-if="writerData">
                       <v-row>
@@ -80,7 +80,7 @@
                 <v-col>
                   <v-card>
                     <div class="text-left">
-                      <h3 class="px-5 py-1 writer-title">UP主排行数据</h3>
+                      <h3 class="px-5 py-1 writer-title">达人排行数据</h3>
                     </div>
                     <v-card-text>
                       <v-row>
@@ -122,7 +122,7 @@
                         </v-col>
                       </v-row>
                       <v-row class="clearfix">
-                        <v-col class="fl pa-0 fs_12 text-left">仅包括已经观测UP主</v-col>
+                        <v-col class="fl pa-0 fs_12 text-left">仅包括已经观测达人</v-col>
                         <v-col class="fr pa-0 fs_12 text-right">{{loadTime}}</v-col>
                       </v-row>
                     </v-card-text>
@@ -136,12 +136,12 @@
                 <v-col col="12">
                   <v-card>
                     <div class="text-left">
-                      <h3 class="px-5 py-1 writer-title">UP主历史数据</h3>
+                      <h3 class="px-5 py-1 writer-title">达人历史数据</h3>
                     </div>
                     <v-card-text>
                       <Chart
                               class="mb-2"
-                              title="UP主历史数据"
+                              title="达人历史数据"
                               :options="historyDataOptions"
                               style="width: 100%"
                       />
@@ -235,10 +235,10 @@
                 <v-col>
                   <v-tabs class="elevation-3 py-0 my-2 border-bottom" v-model="hotTab" show-arrows color="#1e88e5">
                     <v-tab>
-                      <v-icon left>mdi-fire</v-icon>UP主频道分析
+                      <v-icon left>mdi-fire</v-icon>达人频道分析
                     </v-tab>
                     <v-tab>
-                      <v-icon left>mdi-alpha-i-circle-outline</v-icon>UP主热词
+                      <v-icon left>mdi-alpha-i-circle-outline</v-icon>达人热词
                     </v-tab>
                   </v-tabs>
                   <v-tabs-items v-model="hotTab">
@@ -266,7 +266,7 @@
                 <v-col>
                   <v-card>
                     <div class="text-left">
-                      <h3 class="px-5 py-1 writer-title">UP主价值分析</h3>
+                      <h3 class="px-5 py-1 writer-title">达人价值分析</h3>
                     </div>
                     <v-card-text>
                       <v-row>
@@ -274,7 +274,7 @@
                           <v-card-text>
                             <Chart
                                     class="mb-2"
-                                    title="UP主价值分析"
+                                    title="达人价值分析"
                                     :options="valueAnalysisOptions"
                                     style="width: 100%;"
                             />
@@ -379,7 +379,7 @@
       }
     },
     methods: {
-      // 获取UP主详情
+      // 获取达人详情
       getWriter () {
         let self = this;
         self.axios.get(`/api/author/${self.mid}`).then(r => {
@@ -390,7 +390,7 @@
             self.setWriter();
             // effect=>影响力;interact=>互动性;profession=>专业度;show=>表现力;cost=>性价比
             let tadarArray = [data.data.effect,data.data.interact,data.data.profession,data.data.show,data.data.cost,];
-            self.valueAnalysisOptions =  getRadarOptions ([[tadarArray, "UP主价值分析"]]);
+            self.valueAnalysisOptions =  getRadarOptions ([[tadarArray, "达人价值分析"]]);
           }
 
         });
@@ -411,7 +411,7 @@
         self.writerData['newArchiveViewRankChange'] = setNumber(Math.abs(self.writerData.archiveViewRankChange));
         self.writerData['newLikeRankChange'] = setNumber(Math.abs(self.writerData.likeRankChange));
       },
-      // 获取UP主每日数据
+      // 获取达人每日数据
       getAuthorData () {
         let self = this;
         let fansArray = [];
@@ -470,7 +470,7 @@
           self.hotOptions = getOptions(Array);
         });
       },*/
-      // 获取UP主热词数据
+      // 获取达人热词数据
       getPreferKeyword () {
         let self = this;
         self.axios.get(`/api/author/${self.mid}/prefer-keyword`).then(r => {
@@ -485,7 +485,7 @@
           self.hotOptions = getOptions(Array);
         });
       },
-      //获取UP主频道分析数据
+      //获取达人频道分析数据
       getChannel (){
         let self = this;
         self.axios.get(`/api/author/${self.mid}/channel`).then(r => {

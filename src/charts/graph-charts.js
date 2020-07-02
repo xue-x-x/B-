@@ -49,7 +49,7 @@ function drawChart(nodes, categories, links, pic) {
   let option = {
     series: [
       {
-        name: "up主名称",
+        name: "达人名称",
         type: "graph",
         layout: "circular",
         data: nodes,

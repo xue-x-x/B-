@@ -33,7 +33,7 @@
             </v-menu>
           </v-col>
           <v-col>
-            <v-btn class="ml-0 hidden-sm-and-down" text color="#fff" to="/writerSearch">up主查询</v-btn>
+            <v-btn class="ml-0 hidden-sm-and-down" text color="#fff" to="/writerSearch">达人查询</v-btn>
           </v-col>
           <v-col>
             <v-btn class="ml-0 hidden-sm-and-down" text color="#fff" to="/videoSearch">视频查询</v-btn>
@@ -56,7 +56,7 @@
             </v-list-item>
           </v-list>
         </v-menu>
-        <v-btn class="ml-0 hidden-sm-and-down" text color="#fff" to="/writerSearch">up主查询</v-btn>
+        <v-btn class="ml-0 hidden-sm-and-down" text color="#fff" to="/writerSearch">达人查询</v-btn>
         <v-btn class="ml-0 hidden-sm-and-down" text color="#fff" to="/videoSearch">视频查询</v-btn>-->
       </div>
       <v-app-bar-nav-icon class="fr d-md-none" color="#fff" @click="toggleDrawer "></v-app-bar-nav-icon>
