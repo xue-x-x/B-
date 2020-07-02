@@ -268,7 +268,7 @@
                     <div class="text-left">
                       <h3 class="px-5 py-1 writer-title">UP主价值分析</h3>
                     </div>
-                    <v-card-text v-if="writerData.estimate != null">
+                    <v-card-text>
                       <v-row>
                         <v-col cols="12" sm="6">
                           <v-card-text>
@@ -315,9 +315,6 @@
                           </ul>
                         </v-col>
                       </v-row>
-                    </v-card-text>
-                    <v-card-text v-else>
-                      <div>暂无数据</div>6
                     </v-card-text>
                   </v-card>
                 </v-col>
@@ -503,6 +500,10 @@
           self.typeOptions = getOptions(Array);
         });
       },
+      goBack() {
+        this.$router.go(-1);
+        this.$cookies.set("writerMId",this.mid);
+      },
     },
     mounted() {
       let self = this;
@@ -511,6 +512,15 @@
       self.getAuthorData();
       self.getPreferKeyword();
       self.getChannel();
+      // 监听返回按钮
+      if (window.history && window.history.pushState) {
+        history.pushState(null, null, document.URL);
+        window.addEventListener('popstate', this.goBack, false);
+      }
+    },
+    destroyed(){
+      // 取消监听返回按钮
+      window.removeEventListener('popstate', this.goBack, false);
     }
 
   }

@@ -1,7 +1,7 @@
 <template>
   <div id="box">
-    <search-search :title="'作者'" @goToSearch="goToSearch" @setParamsData="setParamsData"></search-search>
-    <search-writer-filtrate class="d-none d-sm-block" @setParamsData="setParamsData"></search-writer-filtrate>
+    <search-search ref="search" :title="'作者'" @goToSearch="goToSearch" @setParamsData="setParamsData"></search-search>
+    <search-writer-filtrate ref="writerFiltrate" class="d-none d-sm-block" @setParamsData="setParamsData"></search-writer-filtrate>
     <div class="wtiter-content">
       <ul class="wrap" v-if="writerList.length > 0">
         <!--<li class="wtiter-list">
@@ -129,14 +129,25 @@
         <div>暂无数据</div>
       </div>
       <div class="wrap clearfix" v-if="Number(writerListData.totalpage) > 1">
-        <v-pagination
-                v-model="paramsData.current"
-                :length="Number(writerListData.totalpage)"
-                :total-visible="7"
-                color="#f55345"
-                class="fr"
-                @input="changPaging"
-        ></v-pagination>
+        <v-row>
+          <v-col cols="8">
+            <v-pagination
+                    v-model="paramsData.current"
+                    :length="Number(writerListData.totalpage)"
+                    :total-visible="7"
+                    color="#f55345"
+                    class="fr"
+                    @input="changPaging"
+            ></v-pagination>
+          </v-col>
+          <v-col cols="4">
+            <div class="jump-box">
+              <span class="jump-title">前往：</span>
+              <input class="jump-input" type="text" @input="jumpValue=jumpValue.replace(/[^\d]/g,'')" v-model="jumpValue">
+              <span class="go-btn v-pagination__item" @click="setJumpValue()">确定</span>
+            </div>
+          </v-col>
+        </v-row>
       </div>
     </div>
     <v-overlay :value="overlay" color="#fff" opacity="0.3">
@@ -175,7 +186,8 @@
         totalpage: 0,
         writerListData: {},
         writerList: [],
-        overlay: true
+        overlay: true,
+        jumpValue: 1
       }
     },
     watch:{
@@ -189,7 +201,11 @@
     },
     methods: {
       ...mapMutations(['setSearchTitle']),
+      // 跳转页面
       goTo (url,obj) {
+        if(url.indexOf("writer") != -1){
+          self.$cookies.set("writerSearchMId",obj.mid);
+        }
         this.$router.push(
           {
             path: url,
@@ -197,6 +213,7 @@
           }
         );
       },
+      // 跳转视频搜索
       goToSearch (n) {
         let self = this;
         let path = '';
@@ -221,6 +238,7 @@
       },
       getWriter(){
         let self = this;
+        self.$cookies.set("writerSearchParamsData",self.paramsData);
         self.axios.get(`/api/author/upPage`,{
           params: self.paramsData
         }).then(r => {
@@ -243,6 +261,7 @@
       },
       setParamsData (value) {
         let self = this;
+        self.paramsData.current = 1;
         if(value.type == 'number' || value.type == 'value'){
           for (let i = 0; i < value.key.length ; i++){
             self.paramsData[value.key[i]] = value.value[i];
@@ -258,12 +277,33 @@
         self.backTop();
         self.getWriter();
       },
-
+      // 跳转分页
+      setJumpValue() {
+        let self = this;
+        if(self.jumpValue > Number(self.writerListData.totalpage) || self.jumpValue < 1){
+          self.getWriter();
+        }else {
+          self.paramsData.current= Number(self.jumpValue);
+        }
+      },
     },
     mounted() {
       let self = this;
       let isMobile = self.$store.getters.getMobile;
-      self.paramsData.keyword = self.$store.state.searchValue;
+      let writerSearchMId = this.$cookies.get('writerSearchMId');
+      let writerMId = this.$cookies.get('writerMId');
+      let writerSearchParamsData = self.$cookies.get("writerSearchParamsData");
+      if(writerSearchMId == writerMId && writerMId && writerSearchMId){
+
+        // 判断是否是达人详情页返回
+        self.paramsData = writerSearchParamsData;
+        self.$cookies.set("writerSearchMId",0);
+        self.$refs.writerFiltrate.setActive(self.paramsData);
+        self.$refs.search.setSearchActive(self.paramsData);
+      }
+      if(self.$store.state.searchValue){
+        self.paramsData.keyword = self.$store.state.searchValue;
+      }
       isMobile ? self.ratingSize = '14px' : self.ratingSize = '20px';
       self.setSearchTitle('作者');
       self.getWriter();
@@ -278,6 +318,9 @@
 <style scoped>
   .cursorP{
     cursor: pointer;
+  }
+  .v-pagination{
+    justify-content: flex-end !important;
   }
   .v-application ul{
     padding: 0;
@@ -361,6 +404,29 @@
     margin: 0 auto;
     width: 70px;
     height: 70px;
+  }
+  /* 分页跳转 */
+  .jump-box{
+    text-align: left;
+    line-height: 43px;
+  }
+  .jump-input{
+    width: 55px;
+    height: 26px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+  }
+  .go-btn{
+    margin-left: 10px;
+    padding: 6px 14px;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #fff;
   }
   @media screen and (max-width:768px) {
     .wtiter-list{

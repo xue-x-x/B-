@@ -15,7 +15,10 @@ export default new Vuex.Store({
     searchValue: '',
     channels: null,
     channelsRanking: null,
-    fansNumber: null
+    fansNumber: null,
+    filterIndex: 0,
+    classifyIndex: 0,
+    isConfirm: false
   },
   getters: {
     categories: state => {
@@ -74,8 +77,13 @@ export default new Vuex.Store({
       // }
 
     },
-    toggleDrawer: state => (state.drawer = !state.drawer)
-
+    toggleDrawer: state => (state.drawer = !state.drawer),
+    setFilterIndex: (state, info) => {
+      state.filterIndex = info;
+      state.isConfirm = false;
+    },
+    setClassifyIndex: (state, info) => {state.classifyIndex = info},
+    setIsConfirm: (state, info) => {state.isConfirm = info},
   },
   actions: {
     getChannels(context) {

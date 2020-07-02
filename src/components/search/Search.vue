@@ -75,6 +75,9 @@
         this.setSearchValue('');
         this.$emit('setParamsData', value);
       },
+      setSearchActive (data){
+        this.searchValue = data.keyword;
+      },
     },
     mounted() {
       this.searchValue = this.$store.state.searchValue;

@@ -175,31 +175,26 @@
         valueAnalysisClassify: [
           {
             name: "影响力",
-            items: [1,2,3,4,5],
             type: "effect",
             value:0,
           },
           {
             name: "互动性",
-            items: [1,2,3,4,5],
             type: "interact",
             value:0,
           },
           {
             name: "专业度",
-            items: [1,2,3,4,5],
             type: "profession",
             value:0,
           },
           {
             name: "表现力",
-            items: [1,2,3,4,5],
             type: "show",
             value:0,
           },
           {
             name: "性价比",
-            items: [1,2,3,4,5],
             type: "cost",
             value:0,
           },
@@ -259,6 +254,10 @@
           value: [self.maximumValue,self.leastValue]
         };
         this.$emit('setParamsData', value);
+        self.filterList.forEach(function(val){
+          val.active = false;
+        });
+        self.$store.commit('setIsConfirm', true);
       },
       /* 粉丝数筛选 */
       changeFilter (item,index) {
@@ -274,6 +273,7 @@
           val.active = false;
         });
         self.filterList[arrIndex].active = true;
+        self.$store.commit('setFilterIndex', arrIndex);
       },
       /* 分类筛选 */
       changeClassify (item,index) {
@@ -288,6 +288,7 @@
           val.active = false;
         });
         self.channels[index].active = true;
+        self.$store.commit('setClassifyIndex', index);
       },
       /* 排序选项筛选 */
       changOtherOptions (item,index) {
@@ -349,13 +350,45 @@
           return false;
         }
       },
-
+      /* 设置选中值 */
+      setActive (data){
+        let self = this;
+        let filterIndex = self.$store.state.filterIndex;
+        let classifyIndex = self.$store.state.classifyIndex;
+        let isConfirm = self.$store.state.isConfirm;
+        self.filterList.forEach(function(val,index){
+          val.active = filterIndex == index && !isConfirm ? true : false;
+        });
+        if(isConfirm){
+          self.leastText = data.min;
+          self.maximumText = data.max;
+        }
+        self.channels.forEach(function (val,index) {
+          val.active = classifyIndex == index ? true : false;
+        });
+        self.otherOptions.forEach(function(val){
+          if(val.value == data.sort){
+            val.active = true;
+          }else {
+            val.active = false;
+          }
+        });
+        self.valueAnalysisClassify.forEach(function (val) {
+          val.value = data[val.type];
+        });
+        self.setValueAnalysisValue();
+      },
     },
     mounted (){
       let self =this;
       if (self.$store.state.channels == undefined) {
         self.$store.dispatch("getChannels");
       }
+    },
+    destroyed(){
+      this.channels.forEach(function(val,index){
+        val.active = index == 0 ? true : false;
+      });
     }
   }
 </script>
