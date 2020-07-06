@@ -1,83 +1,72 @@
-var format = require("date-fns/format");
-function drawChart(data, name, color = "#1e88e5") {
-  let Chart = {
-    grid: {
-      left: "10px",
-      right: "50px",
-      top: "10px",
-      containLabel: true
-    },
-    dataZoom: [
-      {
-        type: "inside",
-        filterMode: "weakFilter"
+import { format } from 'date-fns';
+import formatNumber from "../utils/format-number";
+function drawChart(data, type = "line", areaStyle) {
+    let legendData = [];
+    let xAxisData = [];
+    let series = data.map(e => {
+      let dataData = [];
+      xAxisData = [];
+        if(e[0] !== undefined){
+            e[0].map(item => {
+                xAxisData.push(item[0]);
+                dataData.push(item[1]);
+                // return [item[0], item[1]];
+            });
+        }
+        legendData.push(e[1]);
+        let data = {
+            name: e[1],
+            data: dataData,
+            color: e[2],
+            type: type,
+            smooth: true,
+            showSymbol: false,
+        };
+        if(areaStyle){
+            data['areaStyle'] = {}
+        }
+        return data;
+    });
+    let Chart =  {
+      title: {
+        text: '折线图堆叠'
       },
-      {
-        handleSize: "100%",
-        handleStyle: {},
-        bottom: "20px"
-      }
-    ],
-    tooltip: {
-      trigger: "axis",
-      confine: true,
-      axisPointer: {
-        label: {
-          formatter: function(params) {
-            return Math.round(params.value);
-          }
+      tooltip: {
+        trigger: 'axis',
+        formatter: '{b0}<br/>{a0}: {c0}%<br />{a1}: {c1}%<br />{a2}: {c2}%'
+      },
+      legend: {
+        data: legendData
+      },
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+      },
+      toolbox: {
+        feature: {
+          saveAsImage: {}
         }
-      }
-    },
-    xAxis: {
-      type: "time",
-      axisPointer: {
-        label: {
-          formatter: function(params) {
-            return "日期：" + format(params.value, "YYYY-MM-DD HH:mm");
-          }
-        }
-      }
-    },
-    color: [color],
-    yAxis: [
-      {
-        type: "value",
-        min: "dataMin",
+      },
+      xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: xAxisData,
+      },
+      yAxis: {
+        type: 'value',
         axisLabel: {
-          formatter: function toThousands(num) {
-            let postfix = "";
-            if (num > 100000000) {
-              postfix = "亿";
-              num /= 100000000;
-            } else if (num > 10000) {
-              postfix = "万";
-              num /= 10000;
-            } else {
-              return num;
-            }
-            num = num.toFixed(2);
-            let [int, dec] = num.split(".");
-            let inter = "";
-            while (int != "") {
-              inter = int.slice(-3) + "," + inter;
-              int = int.slice(0, -3);
-            }
-            return `${inter.slice(0, -1)}.${dec}${postfix}`;
-          }
-        }
-      }
-    ],
-    series: [
-      {
-        name: name,
-        data: data,
-        smooth: true,
-        showSymbol: false,
-        type: "line"
-      }
-    ]
-  };
-  return Chart;
+          textStyle: {
+            color: "#4572A7"
+          },
+          show: true,
+          interval: "auto",
+          formatter: "{value}%"
+        },
+      },
+      series: series
+    };
+    return Chart;
 }
 export default drawChart;

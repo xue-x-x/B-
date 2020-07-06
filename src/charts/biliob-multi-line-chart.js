@@ -28,21 +28,10 @@ function drawChart(data, type = "line", areaStyle) {
     },
     grid: {
       left: "10px",
-      right: "50px",
+      right: "4%",
       top: "30px",
       containLabel: true
     },
-    dataZoom: [
-      {
-        type: "inside",
-        filterMode: "weakFilter"
-      },
-      {
-        handleSize: "100%",
-        handleStyle: {},
-        bottom: "20px"
-      }
-    ],
     tooltip: {
       trigger: "axis",
       confine: true,
@@ -59,7 +48,7 @@ function drawChart(data, type = "line", areaStyle) {
       axisPointer: {
         label: {
           formatter: function(params) {
-            return "日期：" + format(params.value, "yyyy-MM-dd HH:mm");
+            return "日期：" + format(params.value, "yyyy-MM-dd");
           }
         }
       }

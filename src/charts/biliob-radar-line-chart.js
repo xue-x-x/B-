@@ -12,7 +12,6 @@ function drawChart(data, type = "radar", max = 5) {
 
     return data;
   });
-  console.log(series);
   let Chart = {
     tooltip: {},
     radar: {

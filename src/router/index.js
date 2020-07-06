@@ -6,6 +6,7 @@ const VideoRanking = () => import("../views/master/videoRanking.vue");
 const VideoSearch = () => import("../views/master/videoSearch.vue");
 const Video = () => import("../views/master/video.vue");
 const Writer = () => import("../views/master/writer.vue");
+const WriterOld = () => import("../views/master/writer-old.vue");
 const WriterRanking = () => import("../views/master/writerRanking.vue");
 const WriterSearch = () => import("../views/master/writerSearch.vue");
 
@@ -48,6 +49,14 @@ export default new Router({
       component: Writer,
       meta:{
         title:'作者详情'
+      }
+    },
+    {
+      name: "作者详情old",
+      path: "/writer-old",
+      component: WriterOld,
+      meta:{
+        title:'作者详情old'
       }
     },
     {

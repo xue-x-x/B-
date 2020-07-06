@@ -2,176 +2,147 @@
   <div>
     <header>
       <div class="wrap">
-        <v-card class="pa-2">
-          <v-row>
-            <v-col cols="12" md="10">
-                <div class="d-flex flex-row">
-                  <v-avatar size="90" min-width="90px">
-                    <img v-if="writerData.face" :src="writerData.face" alt="John">
-                  </v-avatar>
-                  <div class="user-right text-left ml-3">
-                    <div class="font-weight-bold user-name text-truncate">
-                      <span v-if="writerData.name">{{writerData.name}}</span>
-                      <i v-if="writerData.sex == '男' || writerData.sex == '女'" :class="writerData.sex == '男' ? 'icon-man' : 'icon-woman'"></i>
-                      <span class="mg-grade">{{writerData.moguScore}}分</span>
-                      <span class="mg-exponent excellence">
-                        <v-icon class="mr-1" size="24px" color="green darken-1">mdi-emoticon-happy-outline</v-icon>优秀
-                      </span>
-                      <span class="mg-exponent good">
-                        <v-icon class="mr-2" size="24px" color="orange accent-2">mdi-emoticon-neutral-outline</v-icon>好
-                      </span>
-                      <span class="mg-exponent ordinary">
-                        <v-icon class="mr-1" size="24px" color="deep-orange darken-1">mdi-emoticon-sad-outline</v-icon>一般
-                      </span>
-                    </div>
-                    <!--<div class="my-1 user-official">
-                      <span>蘑菇指数：</span>
-                      <span class="mg-grade">23.9分</span>
-                      <span class="mg-exponent">
-                        <v-icon size="24px" color="green">mdi-emoticon-happy-outline</v-icon>
-                        优秀
-                      </span>
-                    </div>-->
-                    <div class="my-2 user-official"><span>平台认证：</span>{{writerData.official}}</div>
-                    <div class="my-2 user-official">
-                      <span>类型：</span>
-                      <v-chip class="mr-1 px-2" small text-color="#666" color="#f1f2f4" v-for="(item,index) in writerData.newTag" :key="index">
-                        {{item}}
-                      </v-chip>
-                    </div>
-                    <div class="my-2 user-official"><span>创建时间：</span>{{writerData.regtime}}</div>
+        <v-row>
+          <v-col col="12">
+            <v-card class="pa-2">
+              <div class="d-flex flex-row">
+                <v-avatar size="70" min-width="70px">
+                  <img v-if="writerData.face" :src="writerData.face" alt="John">
+                </v-avatar>
+                <div class="user-right text-left ml-3">
+                  <div class="font-weight-bold user-name text-truncate">
+                    <span v-if="writerData.name">{{writerData.name}}</span>
+                    <span v-if="writerData.level" class="user-level ml-2">Lv.{{writerData.level}}</span>
+                    <i v-if="writerData.sex == '男' || writerData.sex == '女'" :class="writerData.sex == '男' ? 'icon-man' : 'icon-woman'"></i>
+                  </div>
+                  <div class="my-1 user-official">{{writerData.official}}</div>
+                  <div class="my-2">
+                    <v-chip class="mr-1 px-2" small text-color="#666" color="#f1f2f4" v-for="(item,index) in writerData.keywords" :key="index">
+                      {{item}}
+                    </v-chip>
                   </div>
                 </div>
-            </v-col>
-            <v-col cols="12" md="2">
-              <v-btn class="ma-2" outlined color="indigo">相似达人</v-btn>
-              <v-btn class="ma-2" outlined color="indigo">我要合作</v-btn>
-            </v-col>
-          </v-row>
-        </v-card>
+              </div>
+            </v-card>
+          </v-col>
+        </v-row>
       </div>
     </header>
     <div class="wrap">
       <v-row>
         <v-col>
           <v-tabs class="elevation-3 py-0 my-2" v-model="tab" show-arrows hide-slider color="#f55345">
-            <v-tab>达人详情</v-tab>
-            <v-tab>视频分析</v-tab>
-            <v-tab>粉丝分析</v-tab>
-            <v-tab>价值分析</v-tab>
-            <v-tab>合作预估</v-tab>
+            <v-tab>
+              <v-icon left>mdi-database</v-icon>基本统计
+            </v-tab>
+            <v-tab>
+              <v-icon left>mdi-history</v-icon>历史数据
+            </v-tab>
+            <v-tab>
+              <v-icon left>mdi-brain</v-icon>高级统计
+            </v-tab>
+            <v-tab>
+              <v-icon left>mdi-radar</v-icon>价值分析
+            </v-tab>
           </v-tabs>
 
           <v-tabs-items v-model="tab">
-            <!-- 达人详情 -->
             <v-tab-item>
               <v-row>
-                <!-- 粉丝数 折线图 -->
-                <v-col cols="12" md="6">
-                  <v-card class="pa-1 pa-md-4">
-                    <div class="pt-2 text-left">
-                      <span>粉丝数：{{writerData.fans ? writerData.newFans : '-'}}</span>
-                      <span v-if="writerData.fansChange > 0" class="decline"> ↑ </span>
-                      <span v-if="writerData.fansChange < 0" class="goUp"> ↓ </span>
-                      <span v-if="writerData.fansChange" :class="writerData.fansChange < 0 ? 'goUp' : 'decline'">{{writerData.newFansChange}}</span>
-                      <!--<span><img src="" alt=""></span>-->
+                <v-col>
+                  <v-card>
+                    <div class="text-left">
+                      <h3 class="px-5 py-1 writer-title">达人最新数据</h3>
                     </div>
-                    <div>
-                      <v-card-text>
-                        <Chart
-                                class="mb-2"
-                                title="粉丝数"
-                                :options="fansDataOptions"
-                                style="width: 100%"
-                        />
-                      </v-card-text>
-                    </div>
+                    <v-card-text v-if="writerData">
+                      <v-row>
+                        <v-col>
+                          <div class="text--darken-2">粉丝总数</div>
+                          <div class="text--darken-3 font-weight-bold fs_18 mt-2" v-if="writerData.fans">{{writerData.fans}}</div>
+                          <div class="text--darken-3 font-weight-bold fs_18 mt-2" v-else="">-</div>
+                        </v-col>
+                        <v-col>
+                          <div class="text--darken-2">播放总数</div>
+                          <div class="text--darken-3 font-weight-bold fs_18 mt-2" v-if="writerData.archiveView">{{writerData.archiveView}}</div>
+                          <div class="text--darken-3 font-weight-bold fs_18 mt-2" v-else="">-</div>
+                        </v-col>
+                        <v-col>
+                          <div class="text--darken-2">获赞总数</div>
+                          <div class="text--darken-3 font-weight-bold fs_18 mt-2" v-if="writerData.like != 0">{{writerData.like}}</div>
+                          <div class="text--darken-3 font-weight-bold fs_18 mt-2" v-else="">-</div>
+                        </v-col>
+                      </v-row>
+                    </v-card-text>
                   </v-card>
                 </v-col>
-                <!-- 播放量 折线图 -->
-                <v-col cols="12" md="6">
-                  <v-card class="pa-1 pa-md-4">
-                    <div class="pt-2 text-left">
-                      <span>播放量：{{writerData.archiveView ? writerData.archiveView : '-'}}</span>
-                      <span v-if="writerData.archiveViewChange > 0" class="decline"> ↑ </span>
-                      <span v-if="writerData.archiveViewChange < 0" class="goUp"> ↓ </span>
-                      <span v-if="Number(writerData.archiveViewChange)" :class="writerData.archiveViewChange < 0 ? 'goUp' : 'decline'">{{writerData.newArchiveViewChange}}</span>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-card>
+                    <div class="text-left">
+                      <h3 class="px-5 py-1 writer-title">达人排行数据</h3>
                     </div>
-                    <div>
-                      <v-card-text>
-                        <Chart
-                                class="mb-2"
-                                title="播放量"
-                                :options="viewDataOptions"
-                                style="width: 100%"
-                        />
-                      </v-card-text>
-                    </div>
-                  </v-card>
-                </v-col>
-                <!-- 获赞数 折线图 -->
-                <v-col cols="12" md="6">
-                  <v-card class="pa-1 pa-md-4">
-                    <div class="pt-2 text-left">
-                      <span>获赞数：{{writerData.like ? writerData.like : '-'}}</span>
-                      <span v-if="writerData.likeChange > 0" class="decline"> ↑ </span>
-                      <span v-if="writerData.likeChange < 0" class="goUp"> ↓ </span>
-                      <span v-if="Number(writerData.likeChange)" :class="writerData.likeChange < 0 ? 'goUp' : 'decline'">{{writerData.newLikeChange}}</span>
-                      <!--<span><img src="" alt=""></span>-->
-                    </div>
-                    <div>
-                      <v-card-text>
-                        <Chart
-                                class="mb-2"
-                                title="获赞数"
-                                :options="likeDataOptions"
-                                style="width: 100%"
-                        />
-                      </v-card-text>
-                    </div>
-                  </v-card>
-                </v-col>
-                <!-- 投稿数 折线图 -->
-                <v-col cols="12" md="6">
-                  <v-card class="pa-1 pa-md-4">
-                    <div class="pt-2 text-left">
-                      <span>投稿数：{{contribute.totalNums ? contribute.totalNums : '-'}}</span>
-                      <span v-if="contribute.monthUp > 0" class="decline"> ↑ </span>
-                      <span v-if="contribute.monthUp < 0" class="goUp"> ↓ </span>
-                      <span v-if="Number(contribute.monthUp)" :class="contribute.monthUp < 0 ? 'goUp' : 'decline'">{{contribute.newMonthUp}}</span>
-                      <!--<span><img src="" alt=""></span>-->
-                    </div>
-                    <div>
-                      <v-card-text>
-                        <Chart
-                                class="mb-2"
-                                title="投稿数"
-                                :options="videoNumByMonthOptions"
-                                style="width: 100%"
-                        />
-                      </v-card-text>
-                    </div>
+                    <v-card-text>
+                      <v-row>
+                        <v-col>
+                          <div class="text--darken-2">粉丝排名</div>
+                          <div class="text--darken-3 font-weight-bold fs_18 mt-2" v-if="writerData.fansRank">
+                            {{writerData.fansRank}}
+                            <span class="change d-none d-md-inline">
+                              <span v-if="writerData.fansRankChange > 0" class="decline"> ↑ </span>
+                              <span v-if="writerData.fansRankChange < 0" class="goUp"> ↓ </span>
+                              <span v-if="writerData.fansRankChange" :class="writerData.fansRankChange < 0 ? 'goUp' : 'decline'">{{writerData.newFansRankChange}}</span>
+                            </span>
+                          </div>
+                          <div class="text--darken-3 font-weight-bold fs_18 mt-2" v-else="">-</div>
+                        </v-col>
+                        <v-col>
+                          <div class="text--darken-2">播放排名</div>
+                          <div class="text--darken-3 font-weight-bold fs_18 mt-2" v-if="writerData.archiveViewRank">
+                            {{writerData.archiveViewRank}}
+                            <div class="change d-none d-md-inline" >
+                              <span v-if="writerData.archiveViewRankChange > 0" class="goUp"> ↓</span>
+                              <span v-if="writerData.archiveViewRankChange < 0" class="decline"> ↑ </span>
+                              <span v-if="writerData.archiveViewRankChange" :class="writerData.archiveViewRankChange > 0 ? 'goUp' : 'decline'">{{writerData.newArchiveViewRankChange}}</span>
+                            </div>
+                          </div>
+                          <div class="text--darken-3 font-weight-bold fs_18 mt-2" v-else="">-</div>
+                        </v-col>
+                        <v-col>
+                          <div class="text--darken-2">获赞排名</div>
+                          <div class="text--darken-3 font-weight-bold fs_18 mt-2" v-if="writerData.likeRank">
+                            {{writerData.likeRank}}
+                            <span class="change d-none d-md-inline">
+                              <span v-if="parseInt(writerData.likeRankChange) > 0" class="goUp"> ↓ </span>
+                              <span v-if="parseInt(writerData.likeRankChange) < 0" class="decline"> ↑ </span>
+                              <span v-if="parseInt(writerData.likeRankChange)" :class="writerData.likeRankChange > 0 ? 'goUp' : 'decline'">{{writerData.newLikeRankChange}}</span>
+                            </span>
+                          </div>
+                          <div class="text--darken-3 font-weight-bold fs_18 mt-2" v-else="">-</div>
+                        </v-col>
+                      </v-row>
+                      <v-row class="clearfix">
+                        <v-col class="fl pa-0 fs_12 text-left">仅包括已经观测达人</v-col>
+                        <v-col class="fr pa-0 fs_12 text-right">{{loadTime}}</v-col>
+                      </v-row>
+                    </v-card-text>
                   </v-card>
                 </v-col>
               </v-row>
               <video-list :mid="mid"></video-list>
             </v-tab-item>
-            <!-- 视频分析 -->
             <v-tab-item>
               <v-row>
                 <v-col col="12">
                   <v-card>
                     <div class="text-left">
-                      <h3 class="px-5 py-1 writer-title">播放数据分析</h3>
+                      <h3 class="px-5 py-1 writer-title">达人历史数据</h3>
                     </div>
-                    <v-row>
-                      <v-col cols="6" md="3">平均播放量：{{chartData.newAvgView}}</v-col>
-                      <v-col cols="6" md="2">播放率：{{avgViewRate}}</v-col>
-                    </v-row>
                     <v-card-text>
                       <Chart
                               class="mb-2"
-                              :options="viewListOptions"
+                              title="达人历史数据"
+                              :options="historyDataOptions"
                               style="width: 100%"
                       />
                     </v-card-text>
@@ -182,18 +153,13 @@
                 <v-col col="12">
                   <v-card>
                     <div class="text-left">
-                      <h3 class="px-5 py-1 writer-title">互动数据分析</h3>
+                      <h3 class="px-5 py-1 writer-title">历史变化速率</h3>
                     </div>
-                    <v-row>
-                      <v-col cols="4" md="2">点击率：{{chartData.alikeRate}}</v-col>
-                      <v-col cols="4" md="2">评论率：{{chartData.commentRate}}</v-col>
-                      <v-col cols="4" md="2">弹幕率：{{chartData.commentRate}}</v-col>
-                    </v-row>
                     <v-card-text>
                       <Chart
                               class="mb-2"
-                              title="互动数据分析"
-                              :options="interactListOptions"
+                              title="历史变化速率"
+                              :options="authorFansRateOptions"
                               style="width: 100%"
                       />
                     </v-card-text>
@@ -295,7 +261,6 @@
               </v-row>
               <video-list :mid="mid"></video-list>
             </v-tab-item>
-            <!-- 价值分析 -->
             <v-tab-item>
               <v-row>
                 <v-col>
@@ -318,31 +283,31 @@
                         <v-col cols="12" sm="6">
                           <ul class="pt-md-5">
                             <li class="value-analysis-intro mb-4 pr-md-8">
-                              <div class="intro-title">影响力({{writerData.effect}})</div>
+                              <div class="intro-title">影响力</div>
                               <div class="intro-text">
                                 结合达人粉丝数、历史播放量等数据并通过大数据分析得出。该指数有可能影响合作视频的曝光量等数据；
                               </div>
                             </li>
                             <li class="value-analysis-intro mb-4 pr-md-8">
-                              <div class="intro-title">互动性({{writerData.interact}})</div>
+                              <div class="intro-title">互动性</div>
                               <div class="intro-text">
                                 结合达人获赞数、评论数等数据并通过大数据分析得出。该指数有可能影响合作视频的获赞量、评论量、转发量等数据；
                               </div>
                             </li>
                             <li class="value-analysis-intro mb-4 pr-md-8">
-                              <div class="intro-title">专业度({{writerData.profession}})</div>
+                              <div class="intro-title">专业度</div>
                               <div class="intro-text">
                                 结合达人历史视频的专业程度并通过大数据分析得出。该指数有可能会影响达人对产品及相关知识的讲解以及产品垂直领域的专业度；
                               </div>
                             </li>
                             <li class="value-analysis-intro mb-4 pr-md-8">
-                              <div class="intro-title">表现力({{writerData.show}})</div>
+                              <div class="intro-title">表现力</div>
                               <div class="intro-text">
                                 结合达人历史视频的表现力并通过大数据分析得出。该指数有可能会影响合作视频的后期制作水平、达人的镜头表现力等；
                               </div>
                             </li>
                             <li class="value-analysis-intro  pr-md-8">
-                              <div class="intro-title">性价比({{writerData.cost}})</div>
+                              <div class="intro-title">性价比</div>
                               <div class="intro-text">
                                 结合达人报价和其综合指标的比值并通过大数据分析得出。该指数直接反映达人的性价比程度。
                               </div>
@@ -360,6 +325,8 @@
           </v-tabs-items>
         </v-col>
       </v-row>
+      <div>
+      </div>
     </div>
   </div>
 </template>
@@ -369,10 +336,8 @@
   import interpolation from "../../charts/util/interpolation";
   import getOptions from "../../charts/cloud-charts.js";
   import getMultiChartOptions from "@/charts/biliob-multi-line-chart.js";
-  import getChartOptions from "@/charts/biliob-line-chart.js";
   import getRadarOptions from "@/charts/biliob-radar-line-chart.js";
   import getAuthorFansEfficiencyOptions from "@/charts/author-fans-efficiency.js";
-  import formatNumber from "@/utils/format-number";
   var deepCopy = function(o) {
     if (o instanceof Array) {
       var n = [];
@@ -404,22 +369,13 @@
         mid: 0,
         writerData: {},
         historyDataOptions: {},
-        fansDataOptions: {},// 粉丝数-折线图
-        viewDataOptions: {},// 播放量-折线图
-        likeDataOptions: {},// 获赞数-折线图
         earningsDataOptions: {},
-        authorFansRateOptions: {},// 历史变化速率
-        authorFansEfficiencyOptions: {},// 粉丝变化效率
+        authorFansRateOptions: {},
+        authorFansEfficiencyOptions: {},
         hotOptions: {},
         typeOptions: {},
         authorData: {},
-        valueAnalysisOptions: {},// 达人价值分析
-        contribute: {},
-        videoNumByMonthOptions: {},// 月度投稿数-折线图
-        chartData: {},// 视频分析数据
-        avgViewRate: 0,// 播放率（平均播放 / 粉丝数）
-        viewListOptions: {},// 播放数据分析
-        interactListOptions: {},// 互动数据
+        valueAnalysisOptions: {}
       }
     },
     methods: {
@@ -441,7 +397,7 @@
       },
       setWriter () {
         let self = this;
-        let parameter = ["archiveView","like","fansRank","archiveViewRank","likeRank","estimate"];
+        let parameter = ["fans","archiveView","like","fansRank","archiveViewRank","likeRank","estimate"];
         parameter.forEach(function (item) {
           if(self.writerData[item] != null&& item != "estimate"){
             self.writerData[item] = setNumber(self.writerData[item]);
@@ -451,12 +407,6 @@
             self.writerData[item].profit = setNumber(self.writerData[item].profit);
           }
         });
-        self.writerData['newTag'] = self.writerData.tag.split(',');
-        self.writerData['newFans'] = setNumber(Math.abs(self.writerData.fans));
-        self.writerData['newFansChange'] = setNumber(self.writerData.fansChange);
-        self.writerData['newArchiveViewChange'] = setNumber(self.writerData.archiveViewChange);
-        self.writerData['newLikeChange'] = setNumber(self.writerData.likeChange);
-
         self.writerData['newFansRankChange'] = setNumber(Math.abs(self.writerData.fansRankChange));
         self.writerData['newArchiveViewRankChange'] = setNumber(Math.abs(self.writerData.archiveViewRankChange));
         self.writerData['newLikeRankChange'] = setNumber(Math.abs(self.writerData.likeRankChange));
@@ -473,7 +423,7 @@
             self.authorData = data;
             self.authorData.data.forEach(function (val) {
               if (val.fans != undefined && val.fans != 0) {
-                fansArray.push([val.day, val.fans]);
+                fansArray.push([val.day, Number(val.fans)]);
               }
               if (val.like != undefined && val.like != 0) {
                 likeArray.push([val.day, val.like]);
@@ -488,12 +438,6 @@
             fansArray = fansArray.reverse();
             viewArray = viewArray.reverse();
             likeArray = likeArray.reverse();
-            // 粉丝数
-            self.fansDataOptions = getMultiChartOptions([[fansArray, "", "#1e88e5"]]);
-            // 播放数
-            self.viewDataOptions = getMultiChartOptions([[viewArray, "", "#1e88e5"]]);
-            // 获赞数
-            self.likeDataOptions = getMultiChartOptions([[likeArray, "", "#1e88e5"]]);
             self.historyDataOptions =  getMultiChartOptions([
               [fansArray, "粉丝数", "#1e88e5"],
               [viewArray, "播放数", "#2b821d"],
@@ -541,7 +485,7 @@
           self.hotOptions = getOptions(Array);
         });
       },
-      // 获取达人频道分析数据
+      //获取达人频道分析数据
       getChannel (){
         let self = this;
         self.axios.get(`/api/author/${self.mid}/channel`).then(r => {
@@ -556,134 +500,6 @@
           self.typeOptions = getOptions(Array);
         });
       },
-      // 获取投稿数据
-      getVideoNumByMonth (){
-        let self = this;
-        self.axios.get(`/api/video/${self.mid}/getVideoNumByMonth`).then(r => {
-          let data = r.data;
-          let videoNumByMonth = [];
-          self.contribute = {
-            totalNums: data.totalNums,
-            monthUp: data.monthUp,
-            newMonthUp: setNumber(data.monthUp)
-          };
-          data.videoNums.forEach(function (val) {
-            if (val.nums != undefined && val.nums != 0) {
-              videoNumByMonth.push([val.mont, val.nums]);
-            }
-          });
-          videoNumByMonth = videoNumByMonth.reverse();
-          self.videoNumByMonthOptions = getMultiChartOptions([[videoNumByMonth, "", "#1e88e5"]]);
-        });
-      },
-      // 获取视频分析数据
-      getChartData (){
-        let self = this;
-        let alikeRateArray = [];
-        let commentRateArray = [];
-        let danmakuRateArray = [];
-        self.axios.get(`/api/video/${self.mid}/getChartData`).then(r => {
-          let data = r.data;
-          let avgViewRate = data.avgView / self.writerData.fans;
-          self.chartData = data;
-          self.chartData['newAvgView'] = setNumber(Math.abs(self.chartData.avgView));
-          self.avgViewRate = `${avgViewRate.toFixed(3)}%`;
-          self.setViewListOptions();
-          self.chartData.interactList.forEach(function (val) {
-            if (val.alikeRate != undefined) {
-              alikeRateArray.push([val.datetime, (val.alikeRate * 100).toFixed(2)]);
-            }
-            if (val.commentRate != undefined) {
-              commentRateArray.push([val.datetime, (val.commentRate * 100).toFixed(2)]);
-            }
-            if (val.danmakuRate != undefined) {
-              danmakuRateArray.push([val.datetime, (val.danmakuRate * 100).toFixed(2)]);
-            }
-          });
-          alikeRateArray = alikeRateArray.reverse();
-          commentRateArray = commentRateArray.reverse();
-          danmakuRateArray = danmakuRateArray.reverse();
-          self.interactListOptions = getChartOptions(
-            [
-              [alikeRateArray, "点赞率","#ffa414"],
-              [commentRateArray, "评论率","#30903f"],
-              [danmakuRateArray, "弹幕率","#c12e34"],
-            ]
-          );
-        });
-      },
-      // 设置播放数据柱状图
-      setViewListOptions (){
-        let self = this;
-        let xAxisData = [];
-        let dataData = [];
-        self.chartData.viewList.forEach(value => {
-          let newDatetime=/\d{4}-\d{1,2}-\d{1,2}/g.exec(value.datetime);
-          self.$set(value,'newView',setNumber(Number(value.view)));
-          self.$set(value,'newDatetime',newDatetime[0]);
-          xAxisData.push(value.datetime);
-          dataData.push(value.view);
-        });
-        self.viewListOptions = {
-          color: ['#3398DB'],
-          tooltip: {
-            trigger: 'axis',
-            enterable: true,
-            padding: 0,
-            position: function(pt) {
-              return [pt[0], pt[1]];
-            },
-            formatter: function (params) {
-              let index = params[0].dataIndex;
-              let item = self.chartData.viewList[index];
-              let res  = '<a href="/video?aid='+item.aid+'" style="padding: 10px;\n' +
-                '    display: block;\n' +
-                '    width: 140px;\n' +
-                '    font-size: 14px;\n' +
-                '    color: #333;\n' +
-                '    text-align: left;\n' +
-                '    box-shadow: 0 0 8px 2px #999;\n' +
-                '    background-color: #fff">\n' +
-                '        <img style="margin-bottom: 5px;display: block;width: 100%" src="'+item.pic+'" alt="">\n' +
-                '        <p style="margin-bottom: 0">'+item.newDatetime+'</p>\n' +
-                '        <p style="margin-bottom: 0">观看量：'+item.newView+'</p>\n' +
-                '      </a>';
-              return res;
-            }
-          },
-          grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true
-          },
-          xAxis: [
-            {
-              type: 'category',
-              data: xAxisData,
-              axisTick: {
-                alignWithLabel: true
-              }
-            }
-          ],
-          yAxis: [
-            {
-              type: 'value',
-              axisLabel: {
-                formatter: formatNumber
-              }
-            },
-          ],
-          series: [
-            {
-              type: 'bar',
-              barWidth: '60%',
-              data: dataData,
-            }
-          ]
-        }
-      },
-      // 返回上一页
       goBack() {
         this.$router.go(-1);
         this.$cookies.set("writerMId",this.mid);
@@ -696,8 +512,6 @@
       self.getAuthorData();
       self.getPreferKeyword();
       self.getChannel();
-      self.getVideoNumByMonth();
-      self.getChartData();
       // 监听返回按钮
       if (window.history && window.history.pushState) {
         history.pushState(null, null, document.URL);
@@ -707,7 +521,7 @@
     destroyed(){
       // 取消监听返回按钮
       window.removeEventListener('popstate', this.goBack, false);
-    },
+    }
 
   }
 </script>
@@ -728,10 +542,10 @@
     background-size: 100% 100%;
   }
   .decline{
-    color: #41ba47
+    color: #f55345;
   }
   .goUp{
-    color: #f55345;
+    color: #41ba47;
   }
   .user-right{
     width: 100%;
@@ -748,44 +562,11 @@
     color: #fff;
     border-radius: 12px;
   }
-  .v-card__text{
-    padding: 0 !important;
-  }
-  .text-left{
-    text-align: left;
-  }
-  .mg-grade{
-    font-size: 14px;
-    font-weight: bold;
-    color: #333 !important;
-
-  }
-  .user-official span{
-    color: #8c8c8c;
-  }
   .user-official{
     font-size: 14px;
-    color: #333;
+    color: #999;
   }
- .mg-exponent{
-   display: inline-block;
-   width: 60px;
-   height: 24px;
-   border-radius: 12px;
-   font-size: 14px;
- }
-  .excellence{
-    color: #43a047 !important;
-    background-color: #e8f5e9;
-  }
-  .good{
-    color: #ffab40 !important;
-    background-color: #fff3e0;
-  }
-  .ordinary{
-    color: #f4511e !important;
-    background-color: #fbe9e7;
-  }
+
   .writer-title{
     font-size: 20px;
     font-weight: bold;

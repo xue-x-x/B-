@@ -16,11 +16,11 @@ export function setNumber(num) {
     num /= 10000;
   } else {
     if(parseInt(num) < parseFloat(num)){
-      num = num.toFixed(2);
+      num = num.toFixed(3);
     }
     return num;
   }
-  num = num.toFixed(1);
+  num = num.toFixed(3);
   let [int, dec] = num.split(".");
   let inter = "";
   while (int != "") {
