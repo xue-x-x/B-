@@ -54,14 +54,13 @@
     <div class="wrap">
       <v-row>
         <v-col>
-          <v-tabs class="elevation-3 py-0 my-2" v-model="tab" show-arrows hide-slider color="#f55345">
+          <v-tabs class="elevation-3 py-0 my-2" v-model="tab" @change="changeTab" show-arrows hide-slider color="#f55345">
             <v-tab>达人详情</v-tab>
             <v-tab>视频分析</v-tab>
             <v-tab>粉丝分析</v-tab>
             <v-tab>价值分析</v-tab>
             <v-tab>合作预估</v-tab>
           </v-tabs>
-
           <v-tabs-items v-model="tab">
             <!-- 达人详情 -->
             <v-tab-item>
@@ -150,6 +149,18 @@
                                 style="width: 100%"
                         />
                       </v-card-text>
+                    </div>
+                  </v-card>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col col="12">
+                  <v-card>
+                    <div class="text-left">
+                      <h3 class="px-5 py-1 writer-title" @click="isPause = !isPause">达人热词</h3>
+                    </div>
+                    <div class="baberrage-box">
+                      <v-barrage ref="VBarrage" :arr="barrageList" :isPause="isPause" :percent="100"></v-barrage>
                     </div>
                   </v-card>
                 </v-col>
@@ -265,34 +276,6 @@
                   </v-card>
                 </v-col>
               </v-row>
-              <v-row>
-                <v-col>
-                  <v-tabs class="elevation-3 py-0 my-2 border-bottom" v-model="hotTab" show-arrows color="#1e88e5">
-                    <v-tab>
-                      <v-icon left>mdi-fire</v-icon>达人频道分析
-                    </v-tab>
-                    <v-tab>
-                      <v-icon left>mdi-alpha-i-circle-outline</v-icon>达人热词
-                    </v-tab>
-                  </v-tabs>
-                  <v-tabs-items v-model="hotTab">
-                    <v-tab-item>
-                      <v-row>
-                        <v-col>
-                          <biliob-detail-charts :options="typeOptions"></biliob-detail-charts>
-                        </v-col>
-                      </v-row>
-                    </v-tab-item>
-                    <v-tab-item>
-                      <v-row>
-                        <v-col>
-                          <biliob-detail-charts :options="hotOptions"></biliob-detail-charts>
-                        </v-col>
-                      </v-row>
-                    </v-tab-item>
-                  </v-tabs-items>
-                </v-col>
-              </v-row>
               <video-list :mid="mid"></video-list>
             </v-tab-item>
             <!-- 价值分析 -->
@@ -395,6 +378,7 @@
     components: {
       BiliobDetailCharts: () => import('@/components/biliob/DetailCharts'),
       VideoList: () => import('@/components/writer/VideoList'),
+      VBarrage: () => import('@/components/VBarrage/index.vue'),
     },
     data() {
       return {
@@ -411,7 +395,6 @@
         authorFansRateOptions: {},// 历史变化速率
         authorFansEfficiencyOptions: {},// 粉丝变化效率
         hotOptions: {},
-        typeOptions: {},
         authorData: {},
         valueAnalysisOptions: {},// 达人价值分析
         contribute: {},
@@ -420,7 +403,16 @@
         avgViewRate: 0,// 播放率（平均播放 / 粉丝数）
         viewListOptions: {},// 播放数据分析
         interactListOptions: {},// 互动数据
+        barrageLoop: true,
+        boxHeight: 300,
+        barrageList: [],// 达人热词
+        isPause: false,
+        isJs: false,
+        direction: 'default',
       }
+    },
+    computed: {
+
     },
     methods: {
       // 获取达人详情
@@ -512,48 +504,43 @@
         });
 
       },
-      /*getHotOptions () {
-        let self = this;
-        self.axios.get(`/api/site/prefer-keyword`).then(r => {
-          let data = r.data.data;
-          let Array = [];
-          for (var item in data){
-            Array.push({ name: item, value: data[item] });
-          }
-          if(JSON.stringify(data) =="{}"){
-            Array.push({ name: '暂无数据', value: 0 });
-          }
-          self.hotOptions = getOptions(Array);
-        });
-      },*/
       // 获取达人热词数据
       getPreferKeyword () {
         let self = this;
         self.axios.get(`/api/author/${self.mid}/prefer-keyword`).then(r => {
           let data = r.data.data;
-          let Array = [];
+          self.barrageList = [];
           for (var item in data){
-            Array.push({ name: item, value: data[item] });
+            let tiem = Math.floor(Math.random() * (6 - 3) + 3);
+            let opacity = Math.random();
+            opacity = opacity > 0.5 ? opacity : opacity + .2
+            self.barrageList.push(
+              {
+                content: item, // 弹幕内容
+                direction: self.direction, // 方向  default | top
+                isSelf: true, // 是否是自己发的弹幕
+                style: {
+                  color: 'red',
+                  fontSize: `${tiem}${tiem}px`,
+                  opacity: opacity,
+                },
+                isJs: false  // 是否解析html
+              }
+            );
           }
-          if(JSON.stringify(data) =="{}"){
-            Array.push({ name: '暂无数据', value: 0 });
+          if(!self.barrageList.length){
+            self.barrageList.push({
+              content: "暂无数据", // 弹幕内容
+              direction: 'top', // 方向  default | top
+              isSelf: true, // 是否是自己发的弹幕
+              style: {
+                color: 'red',
+                top: '40%',
+                background: '#000',
+              },
+              isJs: false  // 是否解析html
+            });
           }
-          self.hotOptions = getOptions(Array);
-        });
-      },
-      // 获取达人频道分析数据
-      getChannel (){
-        let self = this;
-        self.axios.get(`/api/author/${self.mid}/channel`).then(r => {
-          let data = r.data.data;
-          let Array = [];
-          for (var item in data){
-            Array.push({ name: data[item].name, value: data[item].tid });
-          }
-          if(JSON.stringify(data) =="{}"){
-            Array.push({ name: '暂无数据', value: 0 });
-          }
-          self.typeOptions = getOptions(Array);
         });
       },
       // 获取投稿数据
@@ -688,6 +675,14 @@
         this.$router.go(-1);
         this.$cookies.set("writerMId",this.mid);
       },
+      changeTab(){
+        let self = this;
+        if(self.tab == 0 ){
+          self.isPause = false;
+        }else {
+          self.isPause = true;
+        }
+      },
     },
     mounted() {
       let self = this;
@@ -695,7 +690,6 @@
       self.getWriter();
       self.getAuthorData();
       self.getPreferKeyword();
-      self.getChannel();
       self.getVideoNumByMonth();
       self.getChartData();
       // 监听返回按钮
@@ -820,6 +814,22 @@
   .intro-text{
     line-height: 22px;
     text-align: left;
+  }
+  .baberrage-box{
+    position: relative;
+    height: 400px;
+  }
+  .barrageStyle1{
+    font-size: 12px;
+  }
+  .barrageStyle2{
+    font-size: 22px;
+  }
+  .barrageStyle3{
+    font-size: 32px;
+  }
+  .barrageStyle4{
+    font-size: 20px;
   }
   @media screen and (max-width: 750px){
     .v-application ul{

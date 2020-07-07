@@ -9,6 +9,7 @@ const Writer = () => import("../views/master/writer.vue");
 const WriterOld = () => import("../views/master/writer-old.vue");
 const WriterRanking = () => import("../views/master/writerRanking.vue");
 const WriterSearch = () => import("../views/master/writerSearch.vue");
+const test = () => import("../views/master/test.vue");
 
 
 
@@ -89,6 +90,14 @@ export default new Router({
       component: Versus,
       meta:{
         title:'榜首粉丝对比'
+      }
+    },
+    {
+      name: "测试",
+      path: "/test",
+      component: test,
+      meta:{
+        title:'测试'
       }
     },
   ]
