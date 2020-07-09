@@ -14,14 +14,8 @@
                       <span v-if="writerData.name">{{writerData.name}}</span>
                       <i v-if="writerData.sex == '男' || writerData.sex == '女'" :class="writerData.sex == '男' ? 'icon-man' : 'icon-woman'"></i>
                       <span class="mg-grade">{{writerData.moguScore}}分</span>
-                      <span class="mg-exponent excellence">
-                        <v-icon class="mr-1" size="24px" color="green darken-1">mdi-emoticon-happy-outline</v-icon>优秀
-                      </span>
-                      <span class="mg-exponent good">
-                        <v-icon class="mr-2" size="24px" color="orange accent-2">mdi-emoticon-neutral-outline</v-icon>好
-                      </span>
-                      <span class="mg-exponent ordinary">
-                        <v-icon class="mr-1" size="24px" color="deep-orange darken-1">mdi-emoticon-sad-outline</v-icon>一般
+                      <span v-if="writerData.moguLevel" class="mg-exponent" :class="mgExponent[writerData.moguLevel].className">
+                        <i></i>{{mgExponent[writerData.moguLevel].title}}
                       </span>
                     </div>
                     <!--<div class="my-1 user-official">
@@ -44,8 +38,8 @@
                 </div>
             </v-col>
             <v-col cols="12" md="2">
-              <v-btn class="ma-2" outlined color="indigo">相似达人</v-btn>
-              <v-btn class="ma-2" outlined color="indigo">我要合作</v-btn>
+              <v-btn class="ma-2 header-btn" color="blue lighten-1" @click="goTo('/writerSimilarity',{tag: encodeURIComponent(writerData.tag)})">相似达人</v-btn>
+              <v-btn class="ma-2 header-btn" color="green lighten-1">我要合作</v-btn>
             </v-col>
           </v-row>
         </v-card>
@@ -213,66 +207,63 @@
               </v-row>
               <video-list :mid="mid"></video-list>
             </v-tab-item>
+            <!-- 粉丝分析 -->
             <v-tab-item>
               <v-row>
-                <v-col>
-                  <v-card>
-                    <div class="text-left">
-                      <h3 class="px-5 py-1 writer-title">下期视频预测</h3>
+                <!-- 粉丝年龄段分布 树状图 -->
+                <v-col cols="12" md="6">
+                  <v-card class="pa-1 pa-md-4">
+                    <div>
+                      <v-card-text>
+                        <Chart
+                                class="mb-2"
+                                :options="fansLis.fansAgeOptions"
+                                style="width: 100%"
+                        />
+                      </v-card-text>
                     </div>
-                    <v-card-text v-if="writerData.estimate != null">
-                      <v-row>
-                        <v-col>
-                          <div class="text--darken-2">涨粉</div>
-                          <div class="text--darken-3 font-weight-bold fs_18 mt-2">{{writerData.estimate.like}}</div>
-                        </v-col>
-                        <v-col>
-                          <div class="text--darken-2">播放</div>
-                          <div class="text--darken-3 font-weight-bold fs_18 mt-2">{{writerData.estimate.view}}</div>
-                        </v-col>
-                        <v-col>
-                          <div class="text--darken-2">收益</div>
-                          <div class="text--darken-3 font-weight-bold fs_18 mt-2">{{writerData.estimate.profit}}</div>
-                        </v-col>
-                      </v-row>
-                    </v-card-text>
-                    <v-card-text v-else>
-                      <div>暂无数据</div>
-                    </v-card-text>
                   </v-card>
                 </v-col>
-              </v-row>
-              <v-row>
-                <v-col col="12">
-                  <v-card>
-                    <div class="text-left">
-                      <h3 class="px-5 py-1 writer-title">每日收益</h3>
+                <!-- 粉丝性别 饼图 -->
+                <v-col cols="12" md="6">
+                  <v-card class="pa-1 pa-md-4">
+                    <div>
+                      <v-card-text>
+                        <Chart
+                                class="mb-2"
+                                :options="fansLis.fansGenderOptions"
+                                style="width: 100%"
+                        />
+                      </v-card-text>
                     </div>
-                    <v-card-text>
-                      <Chart
-                              class="mb-2"
-                              title="每日收益"
-                              :options="earningsDataOptions"
-                              style="width: 100%"
-                      />
-                    </v-card-text>
                   </v-card>
                 </v-col>
-              </v-row>
-              <v-row>
-                <v-col col="12">
-                  <v-card>
-                    <div class="text-left">
-                      <h3 class="px-5 py-1 writer-title">粉丝变化效率</h3>
+                <!-- 粉丝地域 饼图 -->
+                <v-col cols="12" md="6">
+                  <v-card class="pa-1 pa-md-4">
+                    <div>
+                      <v-card-text>
+                        <Chart
+                                class="mb-2"
+                                :options="fansLis.fansRegionOptions"
+                                style="width: 100%"
+                        />
+                      </v-card-text>
                     </div>
-                    <v-card-text>
-                      <Chart
-                              class="mb-2"
-                              title="粉丝变化效率"
-                              :options="authorFansEfficiencyOptions"
-                              style="width: 100%"
-                      />
-                    </v-card-text>
+                  </v-card>
+                </v-col>
+                <!-- 活跃粉丝 饼图 -->
+                <v-col cols="12" md="6">
+                  <v-card class="pa-1 pa-md-4">
+                    <div>
+                      <v-card-text>
+                        <Chart
+                                class="mb-2"
+                                :options="fansLis.fansLivefansOptions"
+                                style="width: 100%"
+                        />
+                      </v-card-text>
+                    </div>
                   </v-card>
                 </v-col>
               </v-row>
@@ -337,6 +328,46 @@
                   </v-card>
                 </v-col>
               </v-row>
+              <video-list :mid="mid"></video-list>
+            </v-tab-item>
+            <!-- 合作预估 -->
+            <v-tab-item>
+              <v-card>
+                <v-container fluid>
+                  <v-row>
+                    <v-col cols="12">
+                      <v-row class="forecast-form">
+                        <v-col>
+                          <label for="">
+                            <span>您的产品：</span>
+                            <input type="text" placeholder="请输入产品类型">
+                          </label>
+                        </v-col>
+                        <v-col>
+                          <label for="">
+                            <span>产品售价：</span>
+                            <input type="text" placeholder="请输入产品售价">
+                          </label>
+                        </v-col>
+                        <v-col>
+                          <v-btn color="primary">数据预估</v-btn>
+                        </v-col>
+                      </v-row>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-row class="forecast-value">
+                        <v-col>
+                          <p>预估播放量：23642</p>
+                        </v-col>
+                        <v-col>
+                          <p>预估摄影佣金：23544</p>
+                        </v-col>
+                      </v-row>
+                    </v-col>
+                  </v-row>
+                </v-container>
+
+              </v-card>
 
               <video-list :mid="mid"></video-list>
             </v-tab-item>
@@ -386,35 +417,68 @@
         hotTab: null,
         loadTime: "",
         mid: 0,
-        writerData: {},
-        historyDataOptions: {},
+        mgExponent: {
+          1:{
+            className: 'worse',
+            title: '较差',
+          },
+          2:{
+            className: 'ordinary',
+            title: '一般',
+          },
+          3:{
+            className: 'good',
+            title: '较好',
+          },
+          4:{
+            className: 'excellence',
+            title: '优秀',
+          },
+          5:{
+            className: 'wonderfulness',
+            title: '极好',
+          },
+        },
+        writerData: {}, // 达人详情信息
         fansDataOptions: {},// 粉丝数-折线图
         viewDataOptions: {},// 播放量-折线图
         likeDataOptions: {},// 获赞数-折线图
-        earningsDataOptions: {},
         authorFansRateOptions: {},// 历史变化速率
-        authorFansEfficiencyOptions: {},// 粉丝变化效率
-        hotOptions: {},
-        authorData: {},
+        authorData: {}, // 达人每日数据
         valueAnalysisOptions: {},// 达人价值分析
-        contribute: {},
+        contribute: {},// 作者投稿数据
         videoNumByMonthOptions: {},// 月度投稿数-折线图
         chartData: {},// 视频分析数据
         avgViewRate: 0,// 播放率（平均播放 / 粉丝数）
         viewListOptions: {},// 播放数据分析
         interactListOptions: {},// 互动数据
-        barrageLoop: true,
-        boxHeight: 300,
         barrageList: [],// 达人热词
-        isPause: false,
-        isJs: false,
-        direction: 'default',
+        isPause: false,// 控制是否暂停弹幕
+        isJs: false,// 是否解析html
+        direction: 'default',// 方向  default | top
+        fansDataByMid: {}, // 粉丝分析数据
+        fansLis:{
+          fansAgeOptions:{},
+          fansGenderOptions:{},
+          fansRegionOptions:{},
+          fansLivefansOptions:{},
+        },
+
       }
     },
     computed: {
 
     },
     methods: {
+      // 跳转页面
+      goTo (url,obj) {
+        this.$router.push(
+          {
+            path: url,
+            query : obj
+          }
+        );
+      },
       // 获取达人详情
       getWriter () {
         let self = this;
@@ -474,9 +538,6 @@
                 viewArray.push([val.day, val.view]);
               }
             });
-            self.authorFansEfficiencyOptions = getAuthorFansEfficiencyOptions(
-              deepCopy(self.authorData)
-            );
             fansArray = fansArray.reverse();
             viewArray = viewArray.reverse();
             likeArray = likeArray.reverse();
@@ -486,11 +547,6 @@
             self.viewDataOptions = getMultiChartOptions([[viewArray, "", "#1e88e5"]]);
             // 获赞数
             self.likeDataOptions = getMultiChartOptions([[likeArray, "", "#1e88e5"]]);
-            self.historyDataOptions =  getMultiChartOptions([
-              [fansArray, "粉丝数", "#1e88e5"],
-              [viewArray, "播放数", "#2b821d"],
-              [likeArray, "获赞数", "#c12e34"]
-            ]);
             self.authorFansRateOptions = getMultiChartOptions(
               [
                 [interpolation(fansArray), "粉丝数增长", "#1e88e5"],
@@ -499,7 +555,6 @@
               ],
               "line","areaStyle"
             );
-            self.earningsDataOptions = getMultiChartOptions([ [fansArray, "每日收益", "#1e88e5"]]);
           }
         });
 
@@ -599,7 +654,60 @@
           );
         });
       },
-      // 设置播放数据柱状图
+      // 获取粉丝分析数据
+      getFansDataByMid (){
+        let self = this;
+        self.axios.get(`/api/author/${self.mid}/getFansDataByMid`).then(r => {
+          self.fansDataByMid = r.data;
+          let livefans = {
+            '活跃粉丝': self.fansDataByMid.livefans,
+            '其他': self.fansDataByMid.fans - self.fansDataByMid.livefans,
+          };
+          let itemStyle = {
+            normal:{
+              color:function(params) {
+                //自定义颜色
+                var colorList = [
+                  '#16a085', '#3398DB'
+                ];
+                return colorList[params.dataIndex]
+              }
+            }
+          };
+          console.log(livefans);
+          let pieList = [
+            {
+              title: '粉丝性别分布',
+              name: '粉丝性别',
+              data: self.fansDataByMid.gender,
+              optionName: 'fansGenderOptions',
+              itemStyle: {},
+            },
+            {
+              title: '粉丝地域分布',
+              name: '粉丝性别',
+              data: self.fansDataByMid.region,
+              optionName: 'fansRegionOptions',
+              itemStyle: {},
+            },
+            {
+              title: '活跃粉丝占比',
+              name: '活跃粉丝',
+              data: livefans,
+              optionName: 'fansLivefansOptions',
+              itemStyle: itemStyle,
+            },
+          ];
+          self.setFansAgeOptions();// 粉丝年龄段
+          pieList.forEach(function (value) {
+            self.fansLis[value.optionName] = self.setPieOptions(value.title,value.name,value.data,value.itemStyle);
+          });
+
+
+
+        });
+      },
+      // 设置播放数据-柱状图
       setViewListOptions (){
         let self = this;
         let xAxisData = [];
@@ -631,7 +739,7 @@
                 '    text-align: left;\n' +
                 '    box-shadow: 0 0 8px 2px #999;\n' +
                 '    background-color: #fff">\n' +
-                '        <img style="margin-bottom: 5px;display: block;width: 100%" src="'+item.pic+'" alt="">\n' +
+                '        <img style="margin-bottom: 5px;display: block;width: 100%" src="'+item.pic+'" alt="视频封面">\n' +
                 '        <p style="margin-bottom: 0">'+item.newDatetime+'</p>\n' +
                 '        <p style="margin-bottom: 0">观看量：'+item.newView+'</p>\n' +
                 '      </a>';
@@ -670,11 +778,113 @@
           ]
         }
       },
+      // 设置粉丝年龄段分布-柱状图
+      setFansAgeOptions (){
+        let self = this;
+        let xAxisData = [];
+        let seriesData = [];
+        for (let item in self.fansDataByMid.age){
+          xAxisData.push(item);
+          seriesData.push((self.fansDataByMid.age[item] * self.fansDataByMid.fans).toFixed(3));
+        }
+        self.fansLis.fansAgeOptions = {
+          title: {
+            text: '粉丝年龄段分布',
+            left: 'center'
+          },
+          color: ['#3398DB'],
+          tooltip: {
+            trigger: "axis",
+            confine: true,
+            formatter: function (params) {
+              let tar = params[0];
+              let value = (tar.value / 10000).toFixed(3);
+              return tar.name + ' : ' + value + '万';
+            }
+          },
+          xAxis: {
+            type: 'category',
+            data: xAxisData.reverse(),
+            axisLabel: {    //重点在这一块，其余可以忽略
+              interval: 0,   //这个一定要有，别忘记了
+              rotate: 0,
+              textStyle: {
+                color: '#000',
+                fontSize: 12
+              }
+            },
+          },
+          yAxis: {
+            type: 'value',
+            axisLabel: {
+              formatter: formatNumber
+            }
+          },
+          series: [{
+            data: seriesData,
+            type: 'bar'
+          }]
+        };
+      },
+      // 设置饼图参数
+      setPieOptions(title,name,data,itemStyle){
+        let self = this;
+        let legendData = [];
+        let seriesData = [];
+        for (let item in data){
+          let value;
+          if(data[item] > 1){
+            value = Number(data[item]).toFixed(3);
+          }else {
+            value = (data[item] * self.fansDataByMid.fans).toFixed(3);
+          }
+
+          legendData.push(item);
+          seriesData.push({value: value, name: item});
+        }
+        let option = {
+          title: {
+            text: title,
+            left: 'center'
+          },
+          tooltip: {
+            trigger: 'item',
+            formatter: function (params) {
+              let tar = params;
+              let value = (tar.value / 10000).toFixed(3);
+              return `${name}<br/>${tar.name} : ${value}万(${tar.percent})%`;
+            }
+          },
+          legend: {
+            left: 'center',
+            bottom: 0,
+            data: legendData
+          },
+          series: [
+            {
+              type: 'pie',
+              radius: '55%',
+              center: ['50%', '46%'],
+              data: seriesData,
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+              },
+              itemStyle: itemStyle,
+            }
+          ]
+        };
+        return option;
+      },
       // 返回上一页
       goBack() {
         this.$router.go(-1);
         this.$cookies.set("writerMId",this.mid);
       },
+      // 导航切换
       changeTab(){
         let self = this;
         if(self.tab == 0 ){
@@ -691,6 +901,7 @@
       self.getAuthorData();
       self.getPreferKeyword();
       self.getVideoNumByMonth();
+      self.getFansDataByMid();
       self.getChartData();
       // 监听返回按钮
       if (window.history && window.history.pushState) {
@@ -752,7 +963,6 @@
     font-size: 14px;
     font-weight: bold;
     color: #333 !important;
-
   }
   .user-official span{
     color: #8c8c8c;
@@ -762,24 +972,68 @@
     color: #333;
   }
  .mg-exponent{
+   position: relative;
+   padding-left: 30px;
    display: inline-block;
-   width: 60px;
+   width: 70px;
    height: 24px;
+   line-height: 24px;
    border-radius: 12px;
    font-size: 14px;
  }
+  .mg-exponent i{
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+  }
+  .wonderfulness{
+    color: #43a047 !important;
+    background-color: #e8f5e9;
+  }
+  .wonderfulness i{
+    background: url("../../assets/icon/wonderfulness.png") no-repeat;;
+    background-size: 100% 100%;
+  }
   .excellence{
     color: #43a047 !important;
     background-color: #e8f5e9;
+  }
+  .excellence i{
+    background: url("../../assets/icon/excellence.png") no-repeat;;
+    background-size: 100% 100%;
   }
   .good{
     color: #ffab40 !important;
     background-color: #fff3e0;
   }
+  .good i{
+    background: url("../../assets/icon/good.png") no-repeat;;
+    background-size: 100% 100%;
+  }
   .ordinary{
     color: #f4511e !important;
     background-color: #fbe9e7;
   }
+  .ordinary i{
+    background: url("../../assets/icon/ordinary.png") no-repeat;;
+    background-size: 100% 100%;
+  }
+  .worse{
+    color: #f4511e !important;
+    background-color: #fbe9e7;
+  }
+  .worse i{
+    background: url("../../assets/icon/worse.png") no-repeat;;
+    background-size: 100% 100%;
+  }
+  .header-btn{
+    color: #fff;
+  }
+
   .writer-title{
     font-size: 20px;
     font-weight: bold;
@@ -830,6 +1084,22 @@
   }
   .barrageStyle4{
     font-size: 20px;
+  }
+  /* 合作预估 */
+  .forecast-form{
+    font-size: 14px;
+  }
+  .forecast-form input{
+    padding: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    color: #666;
+  }
+  .forecast-value{
+    text-align: left;
+  }
+  .forecast-value .col{
+    border: 1px solid #ccc;
   }
   @media screen and (max-width: 750px){
     .v-application ul{

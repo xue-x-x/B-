@@ -9,6 +9,7 @@ const Writer = () => import("../views/master/writer.vue");
 const WriterOld = () => import("../views/master/writer-old.vue");
 const WriterRanking = () => import("../views/master/writerRanking.vue");
 const WriterSearch = () => import("../views/master/writerSearch.vue");
+const WriterSimilarity = () => import("../views/master/writerSimilarity.vue");
 const test = () => import("../views/master/test.vue");
 
 
@@ -34,6 +35,14 @@ export default new Router({
       component: WriterSearch,
       meta:{
         title:'达人查询'
+      }
+    },
+    {
+      name: "相似达人",
+      path: "/writerSimilarity",
+      component: WriterSimilarity,
+      meta:{
+        title:'相似达人'
       }
     },
     {
