@@ -61,22 +61,6 @@
         ]
       };
     },
-    computed: {
-    },
-    created () {
-
-    },
-    mounted () {
-      this.barrageMainDm = this.$refs.barrageMainDm;
-      // 缓存容器宽度
-      this.barMainWidth = this.barrageMainDm.clientWidth;
-      // 初始化弹幕dom组
-      this.init();
-      // 开始播放弹幕
-      this.playDm();
-      // 注册页面监听器
-      document.addEventListener("visibilitychange", this.visibilitychangeFn);
-    },
     watch: {
       arr (list) {
         this.barrages = list;
@@ -291,10 +275,18 @@
             }
           }
         }, self.interValTime);
-      }
+      },
     },
-    components: {
-
+    mounted () {
+      this.barrageMainDm = this.$refs.barrageMainDm;
+      // 缓存容器宽度
+      this.barMainWidth = this.barrageMainDm.clientWidth;
+      // 初始化弹幕dom组
+      this.init();
+      // 开始播放弹幕
+      this.playDm();
+      // 注册页面监听器
+      document.addEventListener("visibilitychange", this.visibilitychangeFn);
     },
   };
 </script>

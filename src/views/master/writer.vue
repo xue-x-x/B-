@@ -48,7 +48,7 @@
     <div class="wrap">
       <v-row>
         <v-col>
-          <v-tabs class="elevation-3 py-0 my-2" v-model="tab" @change="changeTab" show-arrows hide-slider color="#f55345">
+          <v-tabs class="elevation-3 py-0 my-2" v-model="tab" @change="changeTab" show-arrows color="#f55345">
             <v-tab>达人详情</v-tab>
             <v-tab>视频分析</v-tab>
             <v-tab>粉丝分析</v-tab>
@@ -147,19 +147,6 @@
                   </v-card>
                 </v-col>
               </v-row>
-              <v-row>
-                <v-col col="12">
-                  <v-card>
-                    <div class="text-left">
-                      <h3 class="px-5 py-1 writer-title" @click="isPause = !isPause">达人热词</h3>
-                    </div>
-                    <div class="baberrage-box">
-                      <v-barrage ref="VBarrage" :arr="barrageList" :isPause="isPause" :percent="100"></v-barrage>
-                    </div>
-                  </v-card>
-                </v-col>
-              </v-row>
-              <video-list :mid="mid"></video-list>
             </v-tab-item>
             <!-- 视频分析 -->
             <v-tab-item>
@@ -205,7 +192,6 @@
                   </v-card>
                 </v-col>
               </v-row>
-              <video-list :mid="mid"></video-list>
             </v-tab-item>
             <!-- 粉丝分析 -->
             <v-tab-item>
@@ -267,7 +253,7 @@
                   </v-card>
                 </v-col>
               </v-row>
-              <video-list :mid="mid"></video-list>
+
             </v-tab-item>
             <!-- 价值分析 -->
             <v-tab-item>
@@ -328,50 +314,59 @@
                   </v-card>
                 </v-col>
               </v-row>
-              <video-list :mid="mid"></video-list>
             </v-tab-item>
             <!-- 合作预估 -->
             <v-tab-item>
-              <v-card>
-                <v-container fluid>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-row class="forecast-form">
-                        <v-col>
-                          <label for="">
-                            <span>您的产品：</span>
-                            <input type="text" placeholder="请输入产品类型">
-                          </label>
-                        </v-col>
-                        <v-col>
-                          <label for="">
-                            <span>产品售价：</span>
-                            <input type="text" placeholder="请输入产品售价">
-                          </label>
-                        </v-col>
-                        <v-col>
-                          <v-btn color="primary">数据预估</v-btn>
-                        </v-col>
-                      </v-row>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-row class="forecast-value">
-                        <v-col>
-                          <p>预估播放量：23642</p>
-                        </v-col>
-                        <v-col>
-                          <p>预估摄影佣金：23544</p>
-                        </v-col>
-                      </v-row>
-                    </v-col>
-                  </v-row>
-                </v-container>
-
+              <v-card class="forecast-box py-8">
+                <v-row>
+                  <v-col cols="12">
+                    <v-row class="forecast-form">
+                      <v-col>
+                        <label for="">
+                          <span>您的产品：</span>
+                          <input type="text" placeholder="请输入产品类型">
+                        </label>
+                      </v-col>
+                      <v-col>
+                        <label for="">
+                          <span>产品售价：</span>
+                          <input type="text" placeholder="请输入产品售价">
+                        </label>
+                      </v-col>
+                      <v-col>
+                        <v-btn color="primary">数据预估</v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-col>
+                  <v-col cols="12">
+                    <v-row class="forecast-value">
+                      <v-col cols="5">
+                        <p>预估播放量：23642</p>
+                      </v-col>
+                      <v-col cols="5">
+                        <p>预估摄影佣金：23544</p>
+                      </v-col>
+                    </v-row>
+                  </v-col>
+                </v-row>
               </v-card>
-
-              <video-list :mid="mid"></video-list>
             </v-tab-item>
           </v-tabs-items>
+          <!-- 达人热词 -->
+          <v-row :class="[isBarrage ? 'showBarrage' : 'hideBarrage' ]">
+            <v-col col="12">
+              <v-card>
+                <div class="text-left">
+                  <h3 class="px-5 py-1 writer-title" @click="isPause = !isPause">达人热词</h3>
+                </div>
+                <div class="baberrage-box">
+                  <v-barrage ref="VBarrage" :arr="barrageList" :isPause="isPause" :percent="100"></v-barrage>
+                </div>
+              </v-card>
+            </v-col>
+          </v-row>
+          <!-- 达人视频 -->
+          <video-list :mid="mid"></video-list>
         </v-col>
       </v-row>
     </div>
@@ -452,6 +447,7 @@
         avgViewRate: 0,// 播放率（平均播放 / 粉丝数）
         viewListOptions: {},// 播放数据分析
         interactListOptions: {},// 互动数据
+        isBarrage: true, // 是否显示达人热词
         barrageList: [],// 达人热词
         isPause: false,// 控制是否暂停弹幕
         isJs: false,// 是否解析html
@@ -888,8 +884,10 @@
         let self = this;
         if(self.tab == 0 ){
           self.isPause = false;
+          self.isBarrage = true;
         }else {
           self.isPause = true;
+          self.isBarrage = false;
         }
       },
     },
@@ -969,7 +967,7 @@
     font-size: 14px;
     color: #333;
   }
- .mg-exponent{
+  .mg-exponent{
    position: relative;
    padding-left: 30px;
    display: inline-block;
@@ -1031,7 +1029,6 @@
   .header-btn{
     color: #fff;
   }
-
   .writer-title{
     font-size: 20px;
     font-weight: bold;
@@ -1084,20 +1081,39 @@
     font-size: 20px;
   }
   /* 合作预估 */
+  .forecast-box .row{
+    margin: 0;
+  }
   .forecast-form{
     font-size: 14px;
   }
   .forecast-form input{
     padding: 5px;
     border: 1px solid #ccc;
+    border-radius: 10px;
     font-size: 14px;
     color: #666;
+    outline: none;
   }
   .forecast-value{
     text-align: left;
+    display: flex;
+    justify-content: space-around;
   }
   .forecast-value .col{
     border: 1px solid #ccc;
+    border-radius: 10px;
+  }
+  /* 达人热词 */
+  .showBarrage{
+    position: relative;
+    z-index: 1;
+    opacity: 1;
+  }
+  .hideBarrage{
+    position: absolute;
+    z-index: -100;
+    opacity: 0;
   }
   @media screen and (max-width: 750px){
     .v-application ul{

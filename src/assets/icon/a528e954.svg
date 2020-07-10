@@ -1,0 +1,16 @@
+<svg t="1563517803592" class="icon" viewBox="0 0 100 50" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="787" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200">
+  <defs>
+    <style type="text/css">
+      #polyline {
+		  	stroke-dasharray: 170;
+		  	stroke-dashoffset: 200;
+		 	animation: dash 1.5s linear infinite;
+         }
+       @keyframes dash {
+		  	0%   {stroke-dashoffset: 300;  }
+    		100% {stroke-dashoffset: 0;}
+        }
+    </style>
+  </defs>
+   <polyline id="polyline" points="0,25 25,25 37.5,50 62.5,0 75,25 100,25" stroke-width="8" fill="none" stroke="#F55345"></polyline>
+</svg>
