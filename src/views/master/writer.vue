@@ -39,7 +39,7 @@
             </v-col>
             <v-col cols="12" md="2">
               <v-btn class="ma-2 header-btn" color="blue lighten-1" @click="goTo('/writerSimilarity',{tag: encodeURIComponent(writerData.tag)})">相似达人</v-btn>
-              <v-btn class="ma-2 header-btn" color="green lighten-1">我要合作</v-btn>
+              <v-btn class="ma-2 header-btn" color="green lighten-1" @click="goTo('/cooperation',{id: writerData.mid})">我要合作</v-btn>
             </v-col>
           </v-row>
         </v-card>
@@ -674,7 +674,6 @@
               }
             }
           };
-          console.log(livefans);
           let pieList = [
             {
               title: '粉丝性别分布',
@@ -913,7 +912,6 @@
       // 取消监听返回按钮
       window.removeEventListener('popstate', this.goBack, false);
     },
-
   }
 </script>
 

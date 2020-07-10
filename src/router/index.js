@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+const Cooperation = () => import("../views/master/cooperation.vue");
 const MasterIndex = () => import("../views/master/index.vue");
 const Versus = () => import("../views/master/versus.vue");
 const VideoRanking = () => import("../views/master/videoRanking.vue");
@@ -27,6 +28,14 @@ export default new Router({
       component: MasterIndex,
       meta:{
         title:'首页'
+      }
+    },
+    {
+      name: "合作",
+      path: "/cooperation",
+      component: Cooperation,
+      meta:{
+        title:'合作'
       }
     },
     {
