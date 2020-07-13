@@ -31,7 +31,7 @@
           </label>
         </div>
         <div class="btn-box">
-          <v-btn color="primary" @click="submit">确认提交</v-btn>
+          <v-btn color="red darken-2" dark @click="submit">确认提交</v-btn>
         </div>
       </div>
     </v-card>
@@ -40,6 +40,13 @@
         {{tooltipText}}
       </v-overlay>
     </div>
+    <v-overlay :value="successOverlay" color="#000" opacity="0.6">
+      <div class="success-box">
+        <v-icon size="100px" color="green">mdi-check-circle</v-icon>
+        <p class="mt-3">提交成功</p>
+        <v-btn class="mt-12" min-width="160" color="blue darken-2" dark @click="setSuccessOverlay">确定</v-btn>
+      </div>
+    </v-overlay>
   </div>
 </template>
 
@@ -55,6 +62,7 @@
         productType: "",
         content: "",
         overlay: false,
+        successOverlay: false,
         tooltipText: "请将信息填写完整",
       }
     },
@@ -98,10 +106,17 @@
         }).then(r => {
           let data = r.data;
           if(data.success){
-
+            self.successOverlay = true;
           }
         });
 
+      },
+      setSuccessOverlay(){
+        this.successOverlay = false;
+        this.username =  "";
+        this.tel =  "";
+        this.productType =  "";
+        this.content =  "";
       },
     },
     mounted (){
@@ -182,6 +197,25 @@
     border-radius: 10px;
     overflow: hidden;
   }
+  .success-box{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 100;
+    padding: 50px;
+    width: 360px;
+    height: 400px;
+    background-color: #fff;
+  }
+  .success-box p{
+    margin-top: 20px;
+    color: #333;
+    font-size: 28px;
+  }
+  .success-box .v-btn{
+    font-size: 18px;
+  }
   @media screen and (max-width: 750px){
     .container{
       padding: 32px 20px;
@@ -197,6 +231,11 @@
     }
     .textarea-box textarea{
       height: 150px;
+    }
+    .success-box{
+      padding: 50px;
+      width: 260px;
+      height: 60vh;
     }
   }
 </style>

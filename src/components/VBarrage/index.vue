@@ -66,7 +66,6 @@
         this.barrages = list;
       },
       isPause (val) {
-        console.log(val);
         if (val) {
           this.pauseDm();
         } else {
@@ -82,9 +81,7 @@
         if (!document.hidden || n) {
           //处于当前页面
           this.playDm();
-          console.log('进入页面');
         } else {
-          console.log('离开页面');
           clearInterval(this.intervalDM);
           this.intervalDM = null;
         }
@@ -115,7 +112,6 @@
               })
               // this.domPool[j].push({ el: dom });
               // 动画结束后设置当前dom为空闲状态
-              // console.log(i, j)
               if (this.domPool[i][j]) {
                 this.domPool[i][j].isFree = false;
               }
@@ -211,14 +207,10 @@
         if (dmItem.style) {
           let keys = Object.keys(dmItem.style);
           let self = this;
-          console.log(keys);
           keys.forEach(key => {
             // 检查样式属性是否合法
             let isStyle = self.dmStyles.includes(key);
-            console.log(key);
-            console.log(isStyle);
             if (isStyle) {
-              console.log(dmItem.style[key]);
               dom.style[key] = dmItem.style[key];
             }
           });

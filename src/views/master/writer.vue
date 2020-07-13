@@ -18,14 +18,6 @@
                         <i></i>{{mgExponent[writerData.moguLevel].title}}
                       </span>
                     </div>
-                    <!--<div class="my-1 user-official">
-                      <span>蘑菇指数：</span>
-                      <span class="mg-grade">23.9分</span>
-                      <span class="mg-exponent">
-                        <v-icon size="24px" color="green">mdi-emoticon-happy-outline</v-icon>
-                        优秀
-                      </span>
-                    </div>-->
                     <div class="my-2 user-official"><span>平台认证：</span>{{writerData.official}}</div>
                     <div class="my-2 user-official">
                       <span>类型：</span>
@@ -67,7 +59,7 @@
                       <span v-if="writerData.fansChange > 0" class="decline"> ↑ </span>
                       <span v-if="writerData.fansChange < 0" class="goUp"> ↓ </span>
                       <span v-if="writerData.fansChange" :class="writerData.fansChange < 0 ? 'goUp' : 'decline'">{{writerData.newFansChange}}</span>
-                      <!--<span><img src="" alt=""></span>-->
+                      <span class="icon-fans"><img src="@/assets/icon/a528e954.svg" alt=""></span>
                     </div>
                     <div>
                       <v-card-text>
@@ -177,9 +169,9 @@
                       <h3 class="px-5 py-1 writer-title">互动数据分析</h3>
                     </div>
                     <v-row>
-                      <v-col cols="4" md="2">点击率：{{chartData.alikeRate}}</v-col>
-                      <v-col cols="4" md="2">评论率：{{chartData.commentRate}}</v-col>
-                      <v-col cols="4" md="2">弹幕率：{{chartData.commentRate}}</v-col>
+                      <v-col cols="4" md="3">点击率/评级：{{chartData.alikeRate}}/{{chartData.alikeLevel}}</v-col>
+                      <v-col cols="4" md="3">评论率/评级：{{chartData.commentRate}}/{{chartData.commentLevel}}</v-col>
+                      <v-col cols="4" md="3">弹幕率/评级：{{chartData.danmakuRate}}/{{chartData.danmakuLevel}}</v-col>
                     </v-row>
                     <v-card-text>
                       <Chart
@@ -317,34 +309,58 @@
             </v-tab-item>
             <!-- 合作预估 -->
             <v-tab-item>
-              <v-card class="forecast-box py-8">
+              <v-card class="forecast-box">
                 <v-row>
                   <v-col cols="12">
                     <v-row class="forecast-form">
-                      <v-col>
+                      <v-col cols="12" md="3">
                         <label for="">
                           <span>您的产品：</span>
-                          <input type="text" placeholder="请输入产品类型">
+                          <select name="" id="" v-model="category">
+                            <option :value = "item" v-for="(item,index) in selectItem" :key="index">{{item}}</option>
+                          </select>
                         </label>
                       </v-col>
-                      <v-col>
+                      <v-col cols="12" md="3">
                         <label for="">
                           <span>产品售价：</span>
-                          <input type="text" placeholder="请输入产品售价">
+                          <input type="text" v-model="price" placeholder="请输入产品售价">
                         </label>
                       </v-col>
-                      <v-col>
-                        <v-btn color="primary">数据预估</v-btn>
+                      <v-col cols="12" md="3">
+                        <v-btn color="primary" @click="getYuguData">数据预估</v-btn>
                       </v-col>
                     </v-row>
                   </v-col>
-                  <v-col cols="12">
+                  <v-col cols="12" class="mt-8">
                     <v-row class="forecast-value">
-                      <v-col cols="5">
-                        <p>预估播放量：23642</p>
+                      <v-col cols="12" md="5" class="mb-3 mb-md-0">
+                        <p class="forecast-title">预估播放量：</p>
+                        <v-number :number="yuguData.yuguViews"></v-number>
+                        <v-tooltip bottom>
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-btn icon v-bind="attrs" v-on="on">
+                              <v-icon class="icon-help">help</v-icon>
+                            </v-btn>
+                          </template>
+                          <span>
+                            数据基于大数据分析进行预估，实时佣金与预估佣金可能会有一定出入。该预估数据仅供参考。
+                          </span>
+                        </v-tooltip>
                       </v-col>
-                      <v-col cols="5">
-                        <p>预估摄影佣金：23544</p>
+                      <v-col cols="12" md="5" class="mb-3 mb-md-0">
+                        <p class="forecast-title">预估摄影佣金：</p>
+                        <v-number :number="yuguData.yuguPrice"></v-number>
+                        <v-tooltip bottom>
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-btn icon v-bind="attrs" v-on="on">
+                              <v-icon class="icon-help">help</v-icon>
+                            </v-btn>
+                          </template>
+                          <span>
+                            数据基于大数据分析进行预估，实时佣金与预估佣金可能会有一定出入。请以达人或平台客服报价为准。
+                          </span>
+                        </v-tooltip>
                       </v-col>
                     </v-row>
                   </v-col>
@@ -370,6 +386,9 @@
         </v-col>
       </v-row>
     </div>
+    <v-overlay :value="overlay" color="#fff" opacity="0.3">
+      <v-progress-circular indeterminate size="64" color="#f55345"></v-progress-circular>
+    </v-overlay>
   </div>
 </template>
 
@@ -405,9 +424,11 @@
       BiliobDetailCharts: () => import('@/components/biliob/DetailCharts'),
       VideoList: () => import('@/components/writer/VideoList'),
       VBarrage: () => import('@/components/VBarrage/index.vue'),
+      VNumber: () => import('@/components/number/index.vue'),
     },
     data() {
       return {
+        overlay: false,
         tab: null,
         hotTab: null,
         loadTime: "",
@@ -453,13 +474,19 @@
         isJs: false,// 是否解析html
         direction: 'default',// 方向  default | top
         fansDataByMid: {}, // 粉丝分析数据
-        fansLis:{
+        fansLis: {
           fansAgeOptions:{},
           fansGenderOptions:{},
           fansRegionOptions:{},
           fansLivefansOptions:{},
         },
-
+        selectItem: ['请选择产品','美食','宠物','手机平板','影音智能','汽车','运动户外','绘画手工','游戏','教育培训'],
+        category: '请选择产品',
+        price: '',
+        yuguData: {
+          yuguViews: 0,
+          yuguPrice: 0,
+        },
       }
     },
     computed: {
@@ -700,6 +727,28 @@
 
 
 
+        });
+      },
+      //获取数据预估
+      getYuguData (){
+        let self = this;
+        if(self.category == '请选择产品' || !self.price) return;
+        self.overlay = true;
+        self.axios.get('/api/author/getYuguData',{
+          params: {
+            mid: self.mid,
+            category: self.category,
+            price: self.price,
+          }
+        }).then(r => {
+          let data = r.data;
+          console.log(data);
+          if(data.msg == 'success'){
+            self.overlay = false;
+            self.yuguData.yuguViews = data.yuguViews;
+            self.yuguData.yuguPrice = data.yuguPrice;
+            console.log(self.yuguData);
+          }
         });
       },
       // 设置播放数据-柱状图
@@ -1081,14 +1130,19 @@
     font-size: 20px;
   }
   /* 合作预估 */
+  .forecast-box{
+    padding: 32px 0 100px 0;
+  }
   .forecast-box .row{
     margin: 0;
   }
   .forecast-form{
     font-size: 14px;
   }
-  .forecast-form input{
+  .forecast-form input,.forecast-form select{
     padding: 5px;
+    display: inline-block;
+    width: 180px;
     border: 1px solid #ccc;
     border-radius: 10px;
     font-size: 14px;
@@ -1100,9 +1154,36 @@
     display: flex;
     justify-content: space-around;
   }
-  .forecast-value .col{
+  .forecast-value .col-12{
+    position: relative;
+    padding-left: 110px;
+    padding-right: 40px;
     border: 1px solid #ccc;
     border-radius: 10px;
+    color: #fff;
+    background-color: #706fd3;
+  }
+  /*.forecast-value .col:first-child{
+    background-color: #5352ed;
+  }
+  .forecast-value .col:last-child{
+    background-color: #ff6348;
+  }*/
+
+  .forecast-title{
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .forecast-value .v-btn{
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+  .v-tooltip__content{
+    padding: 5px 10px;
+    width: 180px;
   }
   /* 达人热词 */
   .showBarrage{
@@ -1114,6 +1195,15 @@
     position: absolute;
     z-index: -100;
     opacity: 0;
+  }
+  .icon-fans{
+    display: inline-block;
+    width: 20px;
+    vertical-align: middle;
+  }
+  .icon-fans img{
+    display: block;
+    width: 100%;
   }
   @media screen and (max-width: 750px){
     .v-application ul{

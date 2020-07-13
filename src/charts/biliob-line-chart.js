@@ -28,9 +28,6 @@ function drawChart(data, type = "line", areaStyle) {
         return data;
     });
     let Chart =  {
-      title: {
-        text: '折线图堆叠'
-      },
       tooltip: {
         trigger: 'axis',
         formatter: '{b0}<br/>{a0}: {c0}%<br />{a1}: {c1}%<br />{a2}: {c2}%'
