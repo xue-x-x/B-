@@ -15,7 +15,7 @@
     name: 'BusiDigitalScroll',
     props: {
       number: {
-        type: Number,
+        type: String,
         default: 0,
       },
     },

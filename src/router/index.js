@@ -6,6 +6,7 @@ const Versus = () => import("../views/master/versus.vue");
 const VideoRanking = () => import("../views/master/videoRanking.vue");
 const VideoSearch = () => import("../views/master/videoSearch.vue");
 const Video = () => import("../views/master/video.vue");
+const VideoOld = () => import("../views/master/video-old.vue");
 const Writer = () => import("../views/master/writer.vue");
 const WriterOld = () => import("../views/master/writer-old.vue");
 const WriterRanking = () => import("../views/master/writerRanking.vue");
@@ -84,6 +85,14 @@ export default new Router({
       component: Video,
       meta:{
         title:'视频详情'
+      }
+    },
+    {
+      name: "视频详情old",
+      path: "/VideoOld",
+      component: VideoOld,
+      meta:{
+        title:'视频详情old'
       }
     },
     {

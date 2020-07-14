@@ -81,6 +81,7 @@
                       <span v-if="writerData.archiveViewChange > 0" class="decline"> ↑ </span>
                       <span v-if="writerData.archiveViewChange < 0" class="goUp"> ↓ </span>
                       <span v-if="Number(writerData.archiveViewChange)" :class="writerData.archiveViewChange < 0 ? 'goUp' : 'decline'">{{writerData.newArchiveViewChange}}</span>
+                      <span class="icon-fans"><img src="@/assets/icon/a528e954.svg" alt=""></span>
                     </div>
                     <div>
                       <v-card-text>
@@ -102,7 +103,7 @@
                       <span v-if="writerData.likeChange > 0" class="decline"> ↑ </span>
                       <span v-if="writerData.likeChange < 0" class="goUp"> ↓ </span>
                       <span v-if="Number(writerData.likeChange)" :class="writerData.likeChange < 0 ? 'goUp' : 'decline'">{{writerData.newLikeChange}}</span>
-                      <!--<span><img src="" alt=""></span>-->
+                      <span class="icon-fans"><img src="@/assets/icon/a528e954.svg" alt=""></span>
                     </div>
                     <div>
                       <v-card-text>
@@ -120,11 +121,11 @@
                 <v-col cols="12" md="6">
                   <v-card class="pa-1 pa-md-4">
                     <div class="pt-2 text-left">
-                      <span>投稿数：{{contribute.totalNums ? contribute.totalNums : '-'}}</span>
-                      <span v-if="contribute.monthUp > 0" class="decline"> ↑ </span>
-                      <span v-if="contribute.monthUp < 0" class="goUp"> ↓ </span>
-                      <span v-if="Number(contribute.monthUp)" :class="contribute.monthUp < 0 ? 'goUp' : 'decline'">{{contribute.newMonthUp}}</span>
-                      <!--<span><img src="" alt=""></span>-->
+                      <span>投稿数：{{writerData.archiveNum ? writerData.newArchiveNum : '-'}}</span>
+                      <span v-if="contribute.monthUp > 0" class="decline" title="月增量"> ↑ </span>
+                      <span v-if="contribute.monthUp < 0" class="goUp" title="月增量"> ↓ </span>
+                      <span v-if="Number(contribute.monthUp)" :class="contribute.monthUp < 0 ? 'goUp' : 'decline'" title="月增量">{{contribute.newMonthUp}}</span>
+                      <span class="icon-fans"><img src="@/assets/icon/a528e954.svg" alt=""></span>
                     </div>
                     <div>
                       <v-card-text>
@@ -336,7 +337,7 @@
                     <v-row class="forecast-value">
                       <v-col cols="12" md="5" class="mb-3 mb-md-0">
                         <p class="forecast-title">预估播放量：</p>
-                        <v-number :number="yuguData.yuguViews"></v-number>
+                        <v-number :number="`${yuguData.yuguViews}`"></v-number>
                         <v-tooltip bottom>
                           <template v-slot:activator="{ on, attrs }">
                             <v-btn icon v-bind="attrs" v-on="on">
@@ -350,7 +351,7 @@
                       </v-col>
                       <v-col cols="12" md="5" class="mb-3 mb-md-0">
                         <p class="forecast-title">预估摄影佣金：</p>
-                        <v-number :number="yuguData.yuguPrice"></v-number>
+                        <v-number :number="`${yuguData.yuguPrice}`"></v-number>
                         <v-tooltip bottom>
                           <template v-slot:activator="{ on, attrs }">
                             <v-btn icon v-bind="attrs" v-on="on">
@@ -484,8 +485,8 @@
         category: '请选择产品',
         price: '',
         yuguData: {
-          yuguViews: 0,
-          yuguPrice: 0,
+          yuguViews: '000000',
+          yuguPrice: '000000',
         },
       }
     },
@@ -535,6 +536,7 @@
         self.writerData['newFansChange'] = setNumber(self.writerData.fansChange);
         self.writerData['newArchiveViewChange'] = setNumber(self.writerData.archiveViewChange);
         self.writerData['newLikeChange'] = setNumber(self.writerData.likeChange);
+        self.writerData['newArchiveNum'] = setNumber(self.writerData.archiveNum);
 
         self.writerData['newFansRankChange'] = setNumber(Math.abs(self.writerData.fansRankChange));
         self.writerData['newArchiveViewRankChange'] = setNumber(Math.abs(self.writerData.archiveViewRankChange));
@@ -649,10 +651,10 @@
         let danmakuRateArray = [];
         self.axios.get(`/api/video/${self.mid}/getChartData`).then(r => {
           let data = r.data;
-          let avgViewRate = data.avgView / self.writerData.fans;
+          let avgViewRate = (data.avgView / self.writerData.fans) * 100 ;
+          self.avgViewRate = `${avgViewRate.toFixed(3)}%`;
           self.chartData = data;
           self.chartData['newAvgView'] = setNumber(Math.abs(self.chartData.avgView));
-          self.avgViewRate = `${avgViewRate.toFixed(3)}%`;
           self.setViewListOptions();
           self.chartData.interactList.forEach(function (val) {
             if (val.alikeRate != undefined) {
@@ -747,7 +749,6 @@
             self.overlay = false;
             self.yuguData.yuguViews = data.yuguViews;
             self.yuguData.yuguPrice = data.yuguPrice;
-            console.log(self.yuguData);
           }
         });
       },
@@ -848,7 +849,7 @@
           },
           xAxis: {
             type: 'category',
-            data: xAxisData.reverse(),
+            data: xAxisData,
             axisLabel: {    //重点在这一块，其余可以忽略
               interval: 0,   //这个一定要有，别忘记了
               rotate: 0,
