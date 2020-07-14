@@ -9,7 +9,7 @@
     name: "",
     data() {
       return {
-        msg: "Hello Vue.js"
+        msg: "商品详情"
       }
     },
     methods: {},

@@ -99,7 +99,7 @@
                 <v-col cols="12" md="6">
                   <v-card class="pa-1 pa-md-4">
                     <div class="pt-2 text-left">
-                      <span>获赞数：{{writerData.like ? writerData.like : '-'}}</span>
+                      <span>获赞数：{{writerData.archiveAlike ? writerData.archiveAlike : '-'}}</span>
                       <span v-if="writerData.likeChange > 0" class="decline"> ↑ </span>
                       <span v-if="writerData.likeChange < 0" class="goUp"> ↓ </span>
                       <span v-if="Number(writerData.likeChange)" :class="writerData.likeChange < 0 ? 'goUp' : 'decline'">{{writerData.newLikeChange}}</span>
@@ -151,7 +151,7 @@
                     </div>
                     <v-row>
                       <v-col cols="6" md="3">平均播放量：{{chartData.newAvgView}}</v-col>
-                      <v-col cols="6" md="2">播放率：{{avgViewRate}}</v-col>
+                      <v-col v-if="avgViewRate" cols="6" md="2">播放率：{{avgViewRate}}</v-col>
                     </v-row>
                     <v-card-text>
                       <Chart
@@ -521,7 +521,7 @@
       },
       setWriter () {
         let self = this;
-        let parameter = ["archiveView","like","fansRank","archiveViewRank","likeRank","estimate"];
+        let parameter = ["archiveView","archiveAlike","like","fansRank","archiveViewRank","likeRank","estimate"];
         parameter.forEach(function (item) {
           if(self.writerData[item] != null&& item != "estimate"){
             self.writerData[item] = setNumber(self.writerData[item]);
@@ -650,10 +650,10 @@
         let commentRateArray = [];
         let danmakuRateArray = [];
         self.axios.get(`/api/video/${self.mid}/getChartData`).then(r => {
-          let data = r.data;
-          let avgViewRate = (data.avgView / self.writerData.fans) * 100 ;
-          self.avgViewRate = `${avgViewRate.toFixed(3)}%`;
-          self.chartData = data;
+          let avgViewRate =r.data.avgView && self.writerData.fans ? (r.data.avgView / self.writerData.fans) : 0;
+          self.avgViewRate = avgViewRate ? `${(avgViewRate * 100).toFixed(3)}%` : 0;
+          self.chartData = r.data;
+
           self.chartData['newAvgView'] = setNumber(Math.abs(self.chartData.avgView));
           self.setViewListOptions();
           self.chartData.interactList.forEach(function (val) {
