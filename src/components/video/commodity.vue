@@ -1,5 +1,11 @@
 <template>
-  <div>{{msg}}</div>
+  <div>
+    <v-row class="wrap">
+      <v-col>
+
+      </v-col>
+    </v-row>
+  </div>
   <!--<someComponent></someComponent>-->
 </template>
 

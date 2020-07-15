@@ -85,7 +85,7 @@
               </v-tab-item>
               <!-- 商品分析 -->
               <v-tab-item>
-                <v-commodity></v-commodity>
+                <v-commodity :aid="aid"></v-commodity>
               </v-tab-item>
               <!-- 观众分析 -->
               <v-tab-item>

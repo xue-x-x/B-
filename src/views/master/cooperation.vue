@@ -86,7 +86,7 @@
         let self = this;
         let pubtime = new Date();
         pubtime = pubtime.toLocaleString();
-        if(!self.username || !self.tel || !self.productType || !self.content){
+        if(!self.username || !self.tel || !self.productType){
           self.overlay = true;
           return;
         }else if(!self.testTel){

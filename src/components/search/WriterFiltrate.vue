@@ -129,7 +129,7 @@
           {
             active: false,
             name:'100万+',
-            least: null,
+            least: 1000001,
             maximum: null,
           },
         ],

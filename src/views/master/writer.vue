@@ -59,7 +59,7 @@
                       <span v-if="writerData.fansChange > 0" class="decline"> ↑ </span>
                       <span v-if="writerData.fansChange < 0" class="goUp"> ↓ </span>
                       <span v-if="writerData.fansChange" :class="writerData.fansChange < 0 ? 'goUp' : 'decline'">{{writerData.newFansChange}}</span>
-                      <span class="icon-fans"><img src="@/assets/icon/a528e954.svg" alt=""></span>
+                      <span v-if="writerData.fansChange" class="icon-fans"><img src="@/assets/icon/a528e954.svg" alt=""></span>
                     </div>
                     <div>
                       <v-card-text>
@@ -81,7 +81,7 @@
                       <span v-if="writerData.archiveViewChange > 0" class="decline"> ↑ </span>
                       <span v-if="writerData.archiveViewChange < 0" class="goUp"> ↓ </span>
                       <span v-if="Number(writerData.archiveViewChange)" :class="writerData.archiveViewChange < 0 ? 'goUp' : 'decline'">{{writerData.newArchiveViewChange}}</span>
-                      <span class="icon-fans"><img src="@/assets/icon/a528e954.svg" alt=""></span>
+                      <span v-if="Number(writerData.archiveViewChange)" class="icon-fans"><img src="@/assets/icon/a528e954.svg" alt=""></span>
                     </div>
                     <div>
                       <v-card-text>
@@ -103,7 +103,7 @@
                       <span v-if="writerData.likeChange > 0" class="decline"> ↑ </span>
                       <span v-if="writerData.likeChange < 0" class="goUp"> ↓ </span>
                       <span v-if="Number(writerData.likeChange)" :class="writerData.likeChange < 0 ? 'goUp' : 'decline'">{{writerData.newLikeChange}}</span>
-                      <span class="icon-fans"><img src="@/assets/icon/a528e954.svg" alt=""></span>
+                      <span v-if="Number(writerData.likeChange)" class="icon-fans"><img src="@/assets/icon/a528e954.svg" alt=""></span>
                     </div>
                     <div>
                       <v-card-text>
@@ -125,7 +125,7 @@
                       <span v-if="contribute.monthUp > 0" class="decline" title="月增量"> ↑ </span>
                       <span v-if="contribute.monthUp < 0" class="goUp" title="月增量"> ↓ </span>
                       <span v-if="Number(contribute.monthUp)" :class="contribute.monthUp < 0 ? 'goUp' : 'decline'" title="月增量">{{contribute.newMonthUp}}</span>
-                      <span class="icon-fans"><img src="@/assets/icon/a528e954.svg" alt=""></span>
+                      <span v-if="Number(contribute.monthUp)" class="icon-fans"><img src="@/assets/icon/a528e954.svg" alt=""></span>
                     </div>
                     <div>
                       <v-card-text>
@@ -511,6 +511,7 @@
           self.loadTime = data.time;
           if(data.success){
             self.writerData = data.data;
+            console.log(self.writerData);
             self.setWriter();
             // effect=>影响力;interact=>互动性;profession=>专业度;show=>表现力;cost=>性价比
             let tadarArray = [data.data.effect,data.data.interact,data.data.profession,data.data.show,data.data.cost,];
@@ -731,7 +732,7 @@
 
         });
       },
-      //获取数据预估
+      // 获取数据预估
       getYuguData (){
         let self = this;
         if(self.category == '请选择产品' || !self.price) return;

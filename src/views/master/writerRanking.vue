@@ -80,33 +80,33 @@
             </td>
             <!-- 粉丝 -->
             <td v-if="activeUrl != 'viewRank7'">
-              {{item.fans != 0 ? item.fans : '暂无数据'}}
+              {{item.fans != 0 ? setNumber(item.fans) : '暂无数据'}}
               <span class="decline d-none d-sm-inline" :class="{'goUp':item.fansChange < 0}"  v-if="item.fansChange">
                 <i v-if="item.fansChange < 0">↓</i>
                 <i v-if="item.fansChange > 0">↑</i>
-                {{item.fansChange != 0 ? item.setFansChange : ''}}
+                {{item.fansChange != 0 ? setNumber(item.fansChange): ''}}
               </span>
             </td>
             <!-- 点赞 -->
             <td class="d-none d-sm-table-cell" v-if="!isNewClassify">
-              {{item.like != 0 ? item.like : '暂无数据'}}
+              {{item.archiveAlike != 0 ? setNumber(item.archiveAlike) : '暂无数据'}}
               <span class="decline" :class="{'goUp':item.likeChange < 0}" v-if="item.likeChange">
                 <i v-if="item.likeChange < 0">↓</i>
                 <i v-if="item.likeChange > 0">↑</i>
-                {{item.likeChange != 0 ? item.setLikeChange : ''}}
+                {{item.likeChange != 0 ? setNumber(item.likeChange) : ''}}
               </span>
             </td>
             <!--
               七天播放榜-播放量
             -->
             <td v-if="activeUrl == 'viewRank7'">
-              {{item.view != 0 ? item.view : '暂无数据'}}
+              {{item.view != 0 ? setNumber(item.view) : '暂无数据'}}
             </td>
             <!--
              七天播放榜-七天播放量
            -->
             <td class="d-none d-sm-table-cell" v-if="activeUrl == 'viewRank7' || activeUrl == 'ratioRank7'">
-              {{item.varview != 0 ? item.setVarview : '暂无数据'}}
+              {{item.varview != 0 ? setNumber(item.varview) : '暂无数据'}}
             </td>
             <td class="d-none d-sm-table-cell">
               <v-rating
@@ -114,7 +114,7 @@
                       background-color="orange lighten-3"
                       color="orange"
                       length="6"
-                      size="20px"
+                      size="10px"
                       readonly
                       medium
               ></v-rating>
@@ -265,7 +265,6 @@
           if(data.success){
             self.loadingShow = false;
             self.writerList =self.writerList.concat(data.data.data);
-            self.setWriterList();
           }
 
         });
@@ -277,42 +276,27 @@
         }).then(r => {
           let data = r.data;
           self.writerListData = data.data;
+          console.log(self.writerListData);
           if(self.paramsData.current - data.data.totalpage == 0 || data.data.totalpage == 0){
             self.isMoreLoad = false;
           }
           if(data.success){
             self.loadingShow = false;
             self.writerList =self.writerList.concat(data.data.data);
-            self.setWriterList();
           }
 
         });
       },
-      setWriterList () {
-        let self = this;
-        self.writerList.forEach(function (val) {
-          val.fans = setNumber(val.fans);
-          val.like = setNumber(val.like);
-          val["setFansChange"] = setNumber(Math.abs(val.fansChange));
-          val["setLikeChange"] = setNumber(Math.abs(val.likeChange));
-        });
-        if(self.activeUrl == 'viewRank7'){
-          self.writerList.forEach(function (val) {
-            val.view = setNumber(val.view);
-            val["setVarview"] = setNumber(val.varview);
-          });
-        }else if(self.activeUrl == 'ratioRank7'){
-          self.writerList.forEach(function (val) {
-            val["setVarview"] = setNumber(val.varview);
-          });
-        }
+      setNumber(number) {
+        return setNumber(number);
       },
       changeWriterLis(n) {
         this.isNewClassify = false;
-        this.paramsData.sort = 0;
+        this.paramsData.sort = 6;
         this.paramsData.sort = n;
         this.paramsData.current = 1;
         this.writerList = [];
+        this.activeUrl = '';
       },
       changeWriterLisNew(n) {
         this.isNewClassify = true;
