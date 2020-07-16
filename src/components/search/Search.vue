@@ -63,14 +63,14 @@
       changSelect () {
         let self = this;
         if (self.searchTitle == self.title) return;
-        self.setSearchValue(self.searchValue);
-        self.$emit('goToSearch',self.searchValue);
+        self.setSearchValue(self.searchValue.trim());
+        self.$emit('goToSearch',self.searchValue.trim());
       },
       searchClick (){
         let value = {
           type:'keyword',
           key:'keyword',
-          value: this.searchValue
+          value: this.searchValue.trim()
         };
         this.setSearchValue('');
         this.$emit('setParamsData', value);

@@ -5,7 +5,9 @@
             :key="index"
             class="aird-digitalscroll__item"
     >
-      <span ref="numberDom">0123456789</span>
+      <span ref="numberDom">
+        0<br/>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>
+      </span>
     </p>
   </div>
 </template>
@@ -98,8 +100,8 @@
     height: 46px;
     color: #fffffe;
     text-align: center;
-    writing-mode: vertical-lr;
-    text-orientation: upright;
+    /*writing-mode: vertical-lr;
+    text-orientation: upright;*/
     overflow: hidden;
     border-radius: 5px;
     background-color: #2a3242;
@@ -113,9 +115,10 @@
     left: 50%;
     transform: translate(-50%, 2%);
     transition: transform 2s ease 1s;
-    letter-spacing: 10px;
+    line-height: 35px;
     font-size: 28px;
     font-weight: bold;
     color: #9694ff;
   }
+
 </style>

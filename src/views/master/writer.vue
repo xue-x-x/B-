@@ -13,10 +13,7 @@
                     <div class="font-weight-bold user-name text-truncate">
                       <span v-if="writerData.name">{{writerData.name}}</span>
                       <i v-if="writerData.sex == '男' || writerData.sex == '女'" :class="writerData.sex == '男' ? 'icon-man' : 'icon-woman'"></i>
-                      <span class="mg-grade">{{writerData.moguScore}}分</span>
-                      <span v-if="writerData.moguLevel" class="mg-exponent" :class="mgExponent[writerData.moguLevel].className">
-                        <i></i>{{mgExponent[writerData.moguLevel].title}}
-                      </span>
+
                     </div>
                     <div class="my-2 user-official"><span>平台认证：</span>{{writerData.official}}</div>
                     <div class="my-2 user-official">
@@ -40,13 +37,23 @@
     <div class="wrap">
       <v-row>
         <v-col>
-          <v-tabs class="elevation-3 py-0 my-2" v-model="tab" @change="changeTab" show-arrows color="#f55345">
-            <v-tab>达人详情</v-tab>
-            <v-tab>视频分析</v-tab>
-            <v-tab>粉丝分析</v-tab>
-            <v-tab>价值分析</v-tab>
-            <v-tab>合作预估</v-tab>
-          </v-tabs>
+          <v-row>
+            <v-col cols="12" md="9">
+              <v-tabs class="elevation-3 py-0 my-2" v-model="tab" @change="changeTab" show-arrows color="#f55345">
+                <v-tab>达人详情</v-tab>
+                <v-tab>视频分析</v-tab>
+                <v-tab>粉丝分析</v-tab>
+                <v-tab>价值分析</v-tab>
+                <v-tab>合作预估</v-tab>
+              </v-tabs>
+            </v-col>
+            <v-col cols="12" md="3" class="d-flex align-center ">
+              <v-card class="fs_14" style="width: 100%;height: 48px;line-height: 48px;color: #666">
+                数据更新于{{writerData.datetime}}
+              </v-card>
+            </v-col>
+          </v-row>
+
           <v-tabs-items v-model="tab">
             <!-- 达人详情 -->
             <v-tab-item>
@@ -151,7 +158,10 @@
                     </div>
                     <v-row>
                       <v-col cols="6" md="3">平均播放量：{{chartData.newAvgView}}</v-col>
-                      <v-col v-if="avgViewRate" cols="6" md="2">播放率：{{avgViewRate}}</v-col>
+                      <v-col v-if="avgViewRate" cols="6" md="4">
+                        播放率：{{avgViewRate}}
+                        <v-exponent class="d-inline-block" v-if="chartData.viewLevel" :index="chartData.viewLevel"></v-exponent>
+                      </v-col>
                     </v-row>
                     <v-card-text>
                       <Chart
@@ -170,9 +180,18 @@
                       <h3 class="px-5 py-1 writer-title">互动数据分析</h3>
                     </div>
                     <v-row>
-                      <v-col cols="4" md="3">点击率/评级：{{chartData.alikeRate}}/{{chartData.alikeLevel}}</v-col>
-                      <v-col cols="4" md="3">评论率/评级：{{chartData.commentRate}}/{{chartData.commentLevel}}</v-col>
-                      <v-col cols="4" md="3">弹幕率/评级：{{chartData.danmakuRate}}/{{chartData.danmakuLevel}}</v-col>
+                      <v-col cols="4" md="3">
+                        点击率：{{chartData.alikeRate}}
+                        <v-exponent class="d-inline-block" v-if="chartData.alikeLevel" :index="chartData.alikeLevel"></v-exponent>
+                      </v-col>
+                      <v-col cols="4" md="3">
+                        评论率：{{chartData.commentRate}}
+                        <v-exponent class="d-inline-block" v-if="chartData.commentLevel" :index="chartData.commentLevel"></v-exponent>
+                      </v-col>
+                      <v-col cols="4" md="3">
+                        弹幕率：{{chartData.danmakuRate}}
+                        <v-exponent class="d-inline-block" v-if="chartData.danmakuLevel" :index="chartData.danmakuLevel"></v-exponent>
+                      </v-col>
                     </v-row>
                     <v-card-text>
                       <Chart
@@ -258,7 +277,12 @@
                     </div>
                     <v-card-text>
                       <v-row>
-                        <v-col cols="12" sm="6">
+                        <v-col cols="12" sm="6" class="value-analysis">
+                          <div class="value-analysis-mg">
+                            <span>蘑菇指数:</span>
+                            <span class="mg-grade">{{writerData.moguScore}}分</span>
+                            <v-exponent class="d-inline-block" v-if="writerData.moguLevel" :index="writerData.moguLevel"></v-exponent>
+                          </div>
                           <v-card-text>
                             <Chart
                                     class="mb-2"
@@ -316,7 +340,7 @@
                     <v-row class="forecast-form">
                       <v-col cols="12" md="3">
                         <label for="">
-                          <span>您的产品：</span>
+                          <span>产品类型：</span>
                           <select name="" id="" v-model="category">
                             <option :value = "item" v-for="(item,index) in selectItem" :key="index">{{item}}</option>
                           </select>
@@ -425,7 +449,8 @@
       BiliobDetailCharts: () => import('@/components/biliob/DetailCharts'),
       VideoList: () => import('@/components/writer/VideoList'),
       VBarrage: () => import('@/components/VBarrage/index.vue'),
-      VNumber: () => import('@/components/number/index.vue'),
+      VNumber: () => import('@/components/number/index'),
+      VExponent: () => import('@/components/icon/exponent'),
     },
     data() {
       return {
@@ -1130,6 +1155,15 @@
   }
   .barrageStyle4{
     font-size: 20px;
+  }
+  /* 价值分析 */
+  .value-analysis{
+    position: relative;
+  }
+  .value-analysis-mg{
+    position: absolute;
+    top: 20px;
+    right: 0;
   }
   /* 合作预估 */
   .forecast-box{

@@ -88,10 +88,6 @@
                 <v-icon color="#FBC02D" small>mdi-flash-circle</v-icon>
                 <span class="fs_14 pl-1">{{item.official}}</span>
               </div>
-              <div class="text-truncate" :class="{'ml-8': item.official}" v-if="item.keywords">
-                <v-icon color="#2981f4" small>mdi-book-variant</v-icon>
-                <span class="fs_14 pl-1">{{item.keywords}}</span>
-              </div>
             </div>
             <div class="d-none d-sm-flex wtiter-list-user-number text-truncate">
               <div class="mr-5 fs_12" v-if="item.fans">
@@ -143,8 +139,8 @@
           <v-col cols="4">
             <div class="jump-box">
               <span class="jump-title">前往：</span>
-              <input class="jump-input" type="text" @input="jumpValue=jumpValue.replace(/[^\d]/g,'')" v-model="jumpValue">
-              <span class="go-btn v-pagination__item" @click="setJumpValue()">确定</span>
+              <input class="jump-input" type="text" @input="jumpValue=jumpValue.replace(/[^\d]/g,'')" v-model="jumpValue" @keyup.enter="setJumpValue">
+              <span class="go-btn v-pagination__item" @click="setJumpValue">确定</span>
             </div>
           </v-col>
         </v-row>

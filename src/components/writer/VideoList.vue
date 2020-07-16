@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row>
+    <v-row v-if="newVideoList.length > 0">
       <v-col>
         <v-card>
           <div class="text-left">
@@ -25,7 +25,7 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-row>
+    <v-row v-if="hotVideoList.length > 0">
       <v-col>
         <v-card>
           <div class="text-left">
@@ -59,17 +59,23 @@
     name: "",
     props: {
       mid: {
-        default: false,
-        type: Number
+        type: Number,
+        default: 0,
       }
     },
     data() {
       return {
-        newVideoList: undefined,
-        hotVideoList: undefined,
+        newVideoList: [],
+        hotVideoList: [],
         newOverlay: true,
         hotOverlay: true,
       }
+    },
+    watch:{
+      mid(val, oldVal){
+        this.getVideoList(0);
+        this.getVideoList(1);
+      },
     },
     methods: {
       goTo (aid) {
@@ -90,6 +96,7 @@
           }
         }).then(r => {
           let data = r.data;
+          console.log(data);
           if(data.success){
             if(sort){
               self.hotOverlay = false;
@@ -118,8 +125,10 @@
     },
     mounted() {
       let self = this;
-      self.getVideoList(0);
-      self.getVideoList(1);
+      if(self.mid){
+        self.getVideoList(0);
+        self.getVideoList(1);
+      }
     }
   }
 </script>
