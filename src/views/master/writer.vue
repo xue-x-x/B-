@@ -47,9 +47,10 @@
                 <v-tab>合作预估</v-tab>
               </v-tabs>
             </v-col>
-            <v-col cols="12" md="3" class="d-flex align-center ">
+            <v-col cols="12" md="3" class="d-flex align-center">
               <v-card class="fs_14" style="width: 100%;height: 48px;line-height: 48px;color: #666">
-                数据更新于{{writerData.datetime}}
+                <!--数据更新于{{writerData.datetime}}-->
+                数据更新于<span class="font-weight-black ml-2 fs_16">{{datetime}}</span>
               </v-card>
             </v-col>
           </v-row>
@@ -158,8 +159,8 @@
                     </div>
                     <v-row>
                       <v-col cols="6" md="3">平均播放量：{{chartData.newAvgView}}</v-col>
-                      <v-col v-if="avgViewRate" cols="6" md="4">
-                        播放率：{{avgViewRate}}
+                      <v-col v-if="chartData.viewRate" cols="6" md="4">
+                        播放率：{{chartData.viewRate}}
                         <v-exponent class="d-inline-block" v-if="chartData.viewLevel" :index="chartData.viewLevel"></v-exponent>
                       </v-col>
                     </v-row>
@@ -181,7 +182,7 @@
                     </div>
                     <v-row>
                       <v-col cols="4" md="3">
-                        点击率：{{chartData.alikeRate}}
+                        点赞率：{{chartData.alikeRate}}
                         <v-exponent class="d-inline-block" v-if="chartData.alikeLevel" :index="chartData.alikeLevel"></v-exponent>
                       </v-col>
                       <v-col cols="4" md="3">
@@ -279,7 +280,7 @@
                       <v-row>
                         <v-col cols="12" sm="6" class="value-analysis">
                           <div class="value-analysis-mg">
-                            <span>蘑菇指数:</span>
+                            <span class="mg-text">蘑菇指数:</span>
                             <span class="mg-grade">{{writerData.moguScore}}分</span>
                             <v-exponent class="d-inline-block" v-if="writerData.moguLevel" :index="writerData.moguLevel"></v-exponent>
                           </div>
@@ -491,7 +492,6 @@
         contribute: {},// 作者投稿数据
         videoNumByMonthOptions: {},// 月度投稿数-折线图
         chartData: {},// 视频分析数据
-        avgViewRate: 0,// 播放率（平均播放 / 粉丝数）
         viewListOptions: {},// 播放数据分析
         interactListOptions: {},// 互动数据
         isBarrage: true, // 是否显示达人热词
@@ -513,6 +513,7 @@
           yuguViews: '000000',
           yuguPrice: '000000',
         },
+        datetime: '',// 数据更新日期
       }
     },
     computed: {
@@ -676,10 +677,7 @@
         let commentRateArray = [];
         let danmakuRateArray = [];
         self.axios.get(`/api/video/${self.mid}/getChartData`).then(r => {
-          let avgViewRate =r.data.avgView && self.writerData.fans ? (r.data.avgView / self.writerData.fans) : 0;
-          self.avgViewRate = avgViewRate ? `${(avgViewRate * 100).toFixed(3)}%` : 0;
           self.chartData = r.data;
-
           self.chartData['newAvgView'] = setNumber(Math.abs(self.chartData.avgView));
           self.setViewListOptions();
           self.chartData.interactList.forEach(function (val) {
@@ -777,6 +775,11 @@
             self.yuguData.yuguPrice = data.yuguPrice;
           }
         });
+      },
+      getDatetime () {
+        let day1 = new Date();
+        day1.setTime(day1.getTime()-24*60*60*1000);
+        return day1.getFullYear()+"-" + (day1.getMonth()+1) + "-" + day1.getDate();
       },
       // 设置播放数据-柱状图
       setViewListOptions (){
@@ -970,6 +973,7 @@
     mounted() {
       let self = this;
       self.mid = self.$route.query.mid * 1;
+      self.datetime = self.getDatetime();
       self.getWriter();
       self.getAuthorData();
       self.getPreferKeyword();
@@ -1164,6 +1168,11 @@
     position: absolute;
     top: 20px;
     right: 0;
+  }
+  .mg-text{
+    font-size: 16px;
+    font-weight: bolder;
+    color: #333;
   }
   /* 合作预估 */
   .forecast-box{

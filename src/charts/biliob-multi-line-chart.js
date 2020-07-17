@@ -1,7 +1,6 @@
 import { format } from 'date-fns';
 import formatNumber from "../utils/format-number";
-function drawChart(data, type = "line", areaStyle) {
-
+function drawChart(data, title, type = "line", areaStyle,) {
   let series = data.map(e => {
     if(e[0] !== undefined){
       e[0].map(item => {
@@ -21,8 +20,11 @@ function drawChart(data, type = "line", areaStyle) {
     }
     return data;
   });
-
   let Chart = {
+    title: {
+      text: title,
+      left: 'center'
+    },
     legend: {
       selectedMode: "single"
     },

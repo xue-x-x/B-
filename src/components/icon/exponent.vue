@@ -91,8 +91,8 @@
     background-size: 100% 100%;
   }
   .ordinary{
-    color: #f4511e !important;
-    background-color: #fbe9e7;
+    color: #ff6600 !important;
+    background-color: #ffdfc9;
   }
   .ordinary i{
     background: url("../../assets/icon/ordinary.png") no-repeat;;

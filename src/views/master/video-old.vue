@@ -81,7 +81,7 @@
               </v-tab-item>
               <!-- 热度分析 -->
               <v-tab-item>
-                <v-heat></v-heat>
+                <v-heat :aid="aid"></v-heat>
               </v-tab-item>
               <!-- 商品分析 -->
               <v-tab-item>
