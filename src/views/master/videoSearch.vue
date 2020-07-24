@@ -1,7 +1,7 @@
 <template>
   <div>
-    <search-search :title="'视频'" @goToSearch="goToSearch" @setParamsData="setParamsData"></search-search>
-    <search-video-filtrate class="d-none d-sm-block" @setParamsData="setParamsData"></search-video-filtrate>
+    <search-search ref="search" :title="'视频'" @goToSearch="goToSearch" @setParamsData="setParamsData"></search-search>
+    <search-video-filtrate ref="videoFiltrate" class="d-none d-sm-block" @setParamsData="setParamsData"></search-video-filtrate>
     <div class="video-content">
       <ul class="wrap" v-if="videoList.length > 0">
         <!--<li class="video-list">
@@ -160,6 +160,9 @@
     methods: {
       ...mapMutations(['setSearchTitle']),
       goTo (url,obj) {
+        if(url.indexOf("video") != -1){
+          self.$cookies.set("videoSearchMId",obj.aid);
+        }
         this.$router.push(
           {
             path: url,
@@ -187,6 +190,7 @@
       },
       getVideo () {
         let self = this;
+        self.$cookies.set("videoSearchParamsData",self.paramsData);
         self.axios.get(`/api/video`,{
           params: self.paramsData
         }).then(r => {
@@ -235,8 +239,20 @@
     },
     mounted() {
       let self = this;
-      self.paramsData.keyword = self.$store.state.searchValue;
-      self.getVideo();
+      let videoSearchMId = this.$cookies.get('videoSearchMId');
+      let videoMId = this.$cookies.get('videoMId');
+      let videoSearchParamsData = self.$cookies.get("videoSearchParamsData");
+      if(videoSearchMId == videoMId && videoMId && videoSearchMId){
+        self.paramsData = videoSearchParamsData;
+        self.$cookies.set("videoSearchMId",0);
+        self.$refs.search.setSearchActive(self.paramsData);
+        self.$refs.videoFiltrate.setActive(self.paramsData);
+      }else if(self.$store.state.searchValue){
+        self.paramsData.keyword = self.$store.state.searchValue;
+      }else {
+        self.getVideo();
+      }
+
       self.setSearchTitle('视频');
       window.addEventListener('scroll', self.scrollToTop);
     },

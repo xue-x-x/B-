@@ -3,7 +3,7 @@
     <v-row>
       <v-col cols="12" md="6">
         <v-card class="pa-1 pa-md-4">
-          <div>
+          <div v-if="JSON.stringify(viewerData.hotWords) != '{}'">
             <v-card-text>
               <Chart
                       class="mb-2"
@@ -12,11 +12,14 @@
               />
             </v-card-text>
           </div>
+          <div v-else="" style="height: 440px">
+            <biliob-detail-charts :options="options"></biliob-detail-charts>
+          </div>
         </v-card>
       </v-col>
       <v-col cols="12" md="6">
         <v-card class="pa-1 pa-md-4">
-          <div>
+          <div v-if="JSON.stringify(viewerData.age) != '{}'">
             <v-card-text>
               <Chart
                       class="mb-2"
@@ -25,28 +28,41 @@
               />
             </v-card-text>
           </div>
+          <div v-else="" style="height: 440px">
+            <biliob-detail-charts :options="options"></biliob-detail-charts>
+          </div>
         </v-card>
       </v-col>
       <v-col cols="12" md="6">
         <v-card class="pa-1 pa-md-4">
-          <v-card-text>
-            <Chart
-                    class="mb-2"
-                    :options="regionOption"
-                    style="width: 100%"
-            />
-          </v-card-text>
+          <div v-if="JSON.stringify(viewerData.region) != '{}'">
+            <v-card-text>
+              <Chart
+                      class="mb-2"
+                      :options="regionOption"
+                      style="width: 100%"
+              />
+            </v-card-text>
+          </div>
+          <div v-else="" style="height: 440px">
+            <biliob-detail-charts :options="options"></biliob-detail-charts>
+          </div>
         </v-card>
       </v-col>
       <v-col cols="12" md="6">
         <v-card class="pa-1 pa-md-4">
-          <v-card-text>
-            <Chart
-                    class="mb-2"
-                    :options="sexOption"
-                    style="width: 100%"
-            />
-          </v-card-text>
+          <div v-if="JSON.stringify(viewerData.sex) != '{}'">
+            <v-card-text>
+              <Chart
+                      class="mb-2"
+                      :options="sexOption"
+                      style="width: 100%"
+              />
+            </v-card-text>
+          </div>
+          <div v-else="" style="height: 440px">
+            <biliob-detail-charts :options="options"></biliob-detail-charts>
+          </div>
         </v-card>
       </v-col>
     </v-row>
@@ -56,8 +72,12 @@
 
 <script>
   import formatNumber from "@/utils/format-number";
+  import getOptions from "../../charts/cloud-charts.js";
   export default {
     name: "",
+    components: {
+      BiliobDetailCharts: () => import('@/components/biliob/DetailCharts'),
+    },
     props:{
       aid: {
         type: Number,
@@ -67,10 +87,12 @@
     },
     data() {
       return {
+        viewerData: {},
         ageOption: {},
         hotWordsOption: {},
         regionOption: {},
         sexOption: {},
+        options:{}
       }
     },
     watch:{
@@ -109,8 +131,8 @@
         };
         self.axios.get(`/api/video/${self.aid}/getViewer`).then(r => {
           let data = r.data;
-          console.log(data);
           if(data.msg == 'success'){
+            self.viewerData = data;
             for(let index in data.age){
               age.xAxisData.push(index);
               age.seriesData.push(data.age[index] * 100);
@@ -121,7 +143,6 @@
             }
             region.data = data.region;
             sex.data = data.sex;
-            console.log(hotWords);
             self.ageOption = self.setBarOpton(age);
             self.hotWordsOption = self.setBarOpton(hotWords);
             self.regionOption = self.setPieOptions(region.title,region.name,region.data,region.itemStyle);
@@ -236,6 +257,7 @@
     },
     mounted(){
       this.aid && this.getViewer();
+      this.options = getOptions([{ name: '暂无数据', value: 0 }]);
     }
   }
 </script>

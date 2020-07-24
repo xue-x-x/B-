@@ -68,12 +68,23 @@
       <div class="wrap">
         <v-row>
           <v-col>
-            <v-tabs class="elevation-3 py-0 my-2" v-model="tab" show-arrows color="#f55345">
-              <v-tab>视频详情</v-tab>
-              <v-tab>热度分析</v-tab>
-              <v-tab>商品分析</v-tab>
-              <v-tab>观众分析</v-tab>
-            </v-tabs>
+            <v-row>
+              <v-col cols="12" md="9">
+                <v-tabs class="elevation-3 py-0 my-2" v-model="tab" show-arrows color="#f55345">
+                  <v-tab>视频详情</v-tab>
+                  <v-tab>热度分析</v-tab>
+                  <v-tab>商品分析</v-tab>
+                  <v-tab>观众分析</v-tab>
+                </v-tabs>
+              </v-col>
+              <v-col cols="12" md="3" class="d-flex align-center">
+                <v-card class="fs_14" style="width: 100%;height: 48px;line-height: 48px;color: #666">
+                  <!--数据更新于{{writerData.datetime}}-->
+                  数据更新于<span class="font-weight-black ml-2 fs_16">{{datetime}}</span>
+                </v-card>
+              </v-col>
+            </v-row>
+
             <v-tabs-items v-model="tab">
               <!-- 视频详情 -->
               <v-tab-item>
@@ -152,6 +163,7 @@
         mainChart: {},
         likeRateChart: {},
         overlay: true,
+        datetime: '',// 数据更新日期
       }
     },
     methods: {
@@ -204,12 +216,18 @@
             self.likeRateChart = drawVideoPieChart(self.videoData);
           }
         });
-      }
+      },
+      getDatetime () {
+        let day1 = new Date();
+        day1.setTime(day1.getTime()-24*60*60*1000);
+        return day1.getFullYear()+"-" + (day1.getMonth()+1) + "-" + day1.getDate();
+      },
     },
     mounted() {
       let self = this;
       self.aid = self.$route.query.aid * 1;
       self.getVideo();
+      self.datetime = self.getDatetime();
     }
   }
 </script>

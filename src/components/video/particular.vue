@@ -27,14 +27,14 @@
         <v-col cols="12" md="6">
           <v-card class="pa-1 pa-md-4">
             <v-row class="text-left">
-              <v-col cols="6" md="5">
+              <v-col cols="6" md="5" class="pt-2 pb-0">
                 <span>点赞数：{{videoData.like ? videoData.newLike : '-'}}</span>
                 <span v-if="videoData.likeChange > 0" class="decline"> ↑ </span>
                 <span v-if="videoData.likeChange < 0" class="goUp"> ↓ </span>
                 <span v-if="videoData.likeChange" :class="videoData.likeChange < 0 ? 'goUp' : 'decline'">{{setNumber(videoData.likeChange)}}</span>
                 <span v-if="videoData.likeChange"  class="icon-fans"><img src="@/assets/icon/a528e954.svg" alt=""></span>
               </v-col>
-              <v-col cols="6" md="3">
+              <v-col cols="6" md="3" class="pt-2 pb-0" >
                 <span>点赞率：{{`${((videoData.like / videoData.view) * 100).toFixed(2)}%`}}</span>
               </v-col>
             </v-row>
@@ -200,7 +200,6 @@
           let data = r.data;
           if(data.success){
             self.videoRank = data.data;
-            console.log(self.videoRank);
             self.videoRank.forEach(function (value) {
               viewArr.push([value.day, value.view]);
               likeArr.push([value.day, value.like]);

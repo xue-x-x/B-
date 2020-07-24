@@ -110,6 +110,9 @@
     methods: {
       ...mapMutations(['setSearchTitle']),
       goTo (url,obj) {
+        if(url.indexOf("video") != -1){
+          self.$cookies.set("videoSearchMId",obj.aid);
+        }
         this.$router.push(
           {
             path: url,
@@ -137,6 +140,7 @@
       },
       getVideo () {
         let self = this;
+        self.$cookies.set("videoSearchParamsData",self.paramsData);
         self.axios.get(`/api/video`,{
           params: self.paramsData
         }).then(r => {
@@ -185,10 +189,22 @@
     },
     mounted() {
       let self = this;
-      self.paramsData.keyword = self.$store.state.searchValue;
-      self.paramsData.channel = decodeURIComponent(self.$route.query.channel);
+      let videoSearchMId = this.$cookies.get('videoSearchMId');
+      let videoMId = this.$cookies.get('videoMId');
+      let videoSearchParamsData = self.$cookies.get("videoSearchParamsData");
+      if(videoSearchMId == videoMId && videoMId && videoSearchMId){
+        console.log(1111);
+        self.paramsData = videoSearchParamsData;
+        self.$cookies.set("videoSearchMId",0);
+        self.$refs.search.setSearchActive(self.paramsData);
+        self.$refs.videoFiltrate.setActive(self.paramsData);
+      }else if(decodeURIComponent(self.$route.query.channel)){
+        self.paramsData.channel = decodeURIComponent(self.$route.query.channel);
+        console.log(self.paramsData);
+      }else {
+        self.getVideo();
+      }
 
-      self.getVideo();
       self.setSearchTitle('视频');
       window.addEventListener('scroll', self.scrollToTop);
     },

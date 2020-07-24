@@ -97,11 +97,12 @@
       },
     },
     methods: {
+      // 获取热门tag
       getHostTag () {
         let self = this;
         self.axios.get('/api/video/getHostTag').then(r => {
           let data = r.data;
-          if(data.success){
+          if(data.success && self.hostTagList.length < 1){
             let hostTagList = data.data;
             hostTagList.forEach(function (val) {
               let setData = {
@@ -110,10 +111,13 @@
               };
               self.hostTagList.push(setData);
             });
+
             self.hostTagList.unshift({active:true,name:'全部'});
+            self.$store.commit('setHostTagList', self.hostTagList);
           }
         });
       },
+      // 获取tag
       getTag (name) {
         let self = this;
         if(name == '全部'){
@@ -137,6 +141,7 @@
           }
         });
       },
+      // 切换分类
       changeClassify (item,index) {
         let self = this;
         let value = {
@@ -150,6 +155,7 @@
         });
         self.channels[index].active = true;
       },
+      // 切换排序选项
       changOtherOptions (item,index) {
         let self = this;
         let value = {
@@ -163,6 +169,7 @@
         });
         self.otherOptions[index].active = true;
       },
+      // 切换热门标签
       changeHostTag (item,index) {
         let self = this;
         self.getTag(item.name);
@@ -170,17 +177,42 @@
           val.active = false;
         });
         self.hostTagList[index].active = true;
-
+        self.$store.commit('setVidoeIsConfirm', false);
+        self.$store.commit('setVideoHostTagListIndex', index);
       },
+      // 查询热门标签
       searchTag (){
-        this.getTag(this.tagName);
-        this.hostTagList.forEach(function(val){
+        let self = this;
+        self.getTag(self.tagName);
+        self.hostTagList.forEach(function(val){
           val.active = false;
         });
-      }
+        self.$store.commit('setVidoeIsConfirm', true);
+        self.$store.commit('setTagName', self.tagName);
+      },
+      /* 设置选中值 */
+      setActive (data){
+        let self = this;
+        self.hostTagList = [];
+        let hostTagList = self.$store.state.hostTagList;
+        let vidoeIsConfirm = self.$store.state.vidoeIsConfirm;
+        let videoHostTagListIndex = self.$store.state.videoHostTagListIndex;
+        if(vidoeIsConfirm){
+          self.tagName = self.$store.state.tagName;
+        }
+        self.otherOptions.forEach(function (val) {
+          val.active = val.value == data.sort ? true : false
+        });
+        hostTagList.forEach(function (val,index) {
+          val.active = videoHostTagListIndex == index  && !vidoeIsConfirm? true : false;
+        });
+
+        self.hostTagList = hostTagList;
+      },
     },
     mounted () {
       let self = this;
+
       self.getHostTag();
       if (self.$store.state.channels == undefined) {
         self.$store.dispatch("getChannels");

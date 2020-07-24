@@ -18,7 +18,11 @@ export default new Vuex.Store({
     fansNumber: null,
     filterIndex: 0,
     classifyIndex: 0,
-    isConfirm: false
+    isConfirm: false,
+    hostTagList: [],
+    tagName: '',
+    vidoeIsConfirm: false,
+    videoHostTagListIndex: 0,
   },
   getters: {
     categories: state => {
@@ -84,6 +88,10 @@ export default new Vuex.Store({
     },
     setClassifyIndex: (state, info) => {state.classifyIndex = info},
     setIsConfirm: (state, info) => {state.isConfirm = info},
+    setHostTagList: (state, info) => {state.hostTagList = info},
+    setTagName: (state, info) => {state.tagName = info},
+    setVidoeIsConfirm: (state, info) => {state.vidoeIsConfirm = info},
+    setVideoHostTagListIndex: (state, info) => {state.videoHostTagListIndex = info},
   },
   actions: {
     getChannels(context) {
