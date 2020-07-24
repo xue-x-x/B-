@@ -5,6 +5,7 @@ const MasterIndex = () => import("../views/master/index.vue");
 const Versus = () => import("../views/master/versus.vue");
 const VideoRanking = () => import("../views/master/videoRanking.vue");
 const VideoSearch = () => import("../views/master/videoSearch.vue");
+const VideoSimilarity = () => import("../views/master/videoSimilarity.vue");
 const Video = () => import("../views/master/video.vue");
 const VideoOld = () => import("../views/master/video-old.vue");
 const Writer = () => import("../views/master/writer.vue");
@@ -61,6 +62,14 @@ export default new Router({
       component: VideoSearch,
       meta:{
         title:'视频查询'
+      }
+    },
+    {
+      name: "相似视频",
+      path: "/videoSimilarity",
+      component: VideoSimilarity,
+      meta:{
+        title:'相似视频'
       }
     },
     {

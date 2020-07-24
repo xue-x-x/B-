@@ -28,9 +28,14 @@
                 该指数代表视频发布时的热度等级，不会随着发布时间的推移而衰减。
               </span>
             </v-tooltip>
-            <div>
-              视频热度指数：123654
-            </div>
+            <v-card-text>
+              <Chart
+                      class="mb-2"
+                      title=""
+                      :options="reduOption"
+                      style="width: 100%"
+              />
+            </v-card-text>
           </v-card>
         </v-col>
       </v-row>
@@ -63,9 +68,14 @@
                 该指数代表视频后续的数据增长潜力，会随着发布时间的推移而衰减。
               </span>
             </v-tooltip>
-            <div>
-              视频潜力指数：123654
-            </div>
+            <v-card-text>
+              <Chart
+                      class="mb-2"
+                      title=""
+                      :options="qianliOption"
+                      style="width: 100%"
+              />
+            </v-card-text>
           </v-card>
         </v-col>
       </v-row>
@@ -87,8 +97,11 @@
     },
     data() {
       return {
+        hotData: {},
         view7backOption:{},
         view7foreOption:{},
+        reduOption: {},
+        qianliOption: {},
       }
     },
     watch:{
@@ -103,8 +116,8 @@
           let data = r.data;
           let viewback = [];
           let viewfore = [];
-          console.log(data);
           if(data.msg == 'success'){
+              self.hotData = data.data;
               for(let item in data.data.view7back){
                 viewback.push([item, data.data.view7back[item]]);
               }
@@ -113,8 +126,186 @@
               }
               self.view7backOption = getMultiChartOptions([[viewback, "", "#1e88e5"]],"前7日单日播放量变化");
               self.view7foreOption = getMultiChartOptions([[viewfore, "", "#1e88e5"]],"近7日单日播放量变化");
+              self.reduOption = self.setGauge(data.data.redu,'视频热度指数');
+              self.qianliOption = self.setGauge(data.data.qianli,'视频潜力指数');
+              console.log(self.reduOption);
           }
         });
+      },
+      setGauge (value,subtext) {
+        let option = {
+          title: {
+            text: `${value}分`,
+            subtext: subtext,
+            left: 'center',
+            top: 'center', //top待调整
+            textStyle: {
+              color: '#fff',
+              fontSize: 18,
+              fontFamily: 'DINAlternate-Bold',
+              lineHeight: 30,
+            },
+            subtextStyle: {
+              color: '#fff',
+              fontSize: 14,
+              fontFamily: 'PingFangSC-Regular',
+              top: 'center'
+            },
+            itemGap: -10 //主副标题间距
+          },
+          xAxis: {
+            splitLine: {
+              show: false
+            },
+            axisLabel: {
+              show: false
+            },
+            axisLine: {
+              show: false
+            }
+          },
+          yAxis: {
+            splitLine: {
+              show: false
+            },
+            axisLabel: {
+              show: false
+            },
+            axisLine: {
+              show: false
+            }
+          },
+          series: [
+            // 内圆
+            {
+              type: 'pie',
+              radius: ['0', '50%'],
+              center: ['50%', '50%'],
+              z: 0,
+              hoverOffset: 2,
+              itemStyle: {
+                normal: {
+                  color: '#1867c0',
+                  label: {
+                    show: false
+                  },
+                  labelLine: {
+                    show: false
+                  }
+                },
+              },
+              label: {
+                normal: {
+                  position: "center",
+
+                }
+              },
+              data: [100],
+            },
+            // 进度圈
+            {
+              type: 'pie',
+              clockWise: true,
+              radius: ["70%", "65%"],
+              hoverOffset: 2,
+              label: {
+                show: false
+              },
+              labelLine: {
+                show: false
+              },
+              data: [{
+                value: value,
+                itemStyle: {
+                  normal: {
+                    borderWidth: 10,
+                    borderColor: {
+                      colorStops: [{
+                        offset: 0,
+                        color: '#7940FE' || '#00cefc' // 0% 处的颜色
+                      }, {
+                        offset: 1,
+                        color: '#2A69EC' || '#367bec' // 100% 处的颜色
+                      }]
+                    },
+                    color: { // 完成的圆环的颜色
+                      colorStops: [{
+                        offset: 0,
+                        color: '#7940FE' || '#00cefc' // 0% 处的颜色
+                      }, {
+                        offset: 1,
+                        color: '#2A69EC' || '#367bec' // 100% 处的颜色
+                      }]
+                    },
+
+                  },
+                }
+              },
+                {
+                  name: 'gap',
+                  value: 100 - value,
+                  itemStyle: {
+                    normal: {
+                      label: {
+                        show: false
+                      },
+                      labelLine: {
+                        show: false
+                      },
+                      color: 'rgba(0, 0, 0, 0)',
+                      borderColor: 'rgba(0, 0, 0, 0)',
+                      borderWidth: 0,
+                    }
+                  },
+                }
+              ]
+            },
+            //刻度尺
+            {
+              // name: "白色圈刻度",
+              type: "gauge",
+              radius: "96%",
+              startAngle: 225, //刻度起始
+              endAngle: -134.8, //刻度结束
+              z: 4,
+              axisTick: {
+                show: true,
+                lineStyle: {
+                  width: 2,
+                  color: 'rgba(1,244,255, 0.9)'
+                }
+              },
+              splitLine: {
+                length: 14, //刻度节点线长度
+                lineStyle: {
+                  width: 2,
+                  color: 'rgba(1,244,255, 0.9)'
+                } //刻度节点线
+              },
+              axisLabel: {
+                color: 'rgba(255,255,255,0)',
+                fontSize: 12,
+              }, //刻度节点文字颜色
+              pointer: {
+                show: false
+              },
+              axisLine: {
+                lineStyle: {
+                  opacity: 0
+                }
+              },
+              detail: {
+                show: false
+              },
+              data: [{
+                value: 0,
+                name: ""
+              }]
+            },
+          ]
+        };
+
+        return option;
       },
     },
     mounted(){

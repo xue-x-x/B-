@@ -23,7 +23,7 @@
                     </div>
                   </v-col>
                   <v-col cols="12" md="2">
-                    <v-btn class="ma-2 header-btn" dark color="blue lighten-1" @click="goTo('/writerSimilarity',{tag: encodeURIComponent(writerData.tag)})">相似视频</v-btn>
+                    <v-btn class="ma-2 header-btn" dark color="blue lighten-1" @click="goTo('/videoSimilarity',{channel: encodeURIComponent(videoData.channel)})">相似视频</v-btn>
                     <v-btn class="ma-2 header-btn" dark color="green lighten-1" :href="'https://www.bilibili.com/video/av'+videoData.aid" target="view_window">前往观看</v-btn>
                   </v-col>
                 </v-row>
@@ -89,30 +89,9 @@
               </v-tab-item>
               <!-- 观众分析 -->
               <v-tab-item>
-                <v-audience></v-audience>
+                <v-audience :aid="aid"></v-audience>
               </v-tab-item>
             </v-tabs-items>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col col="12">
-            <v-card>
-              <div class="text-left">
-                <h3 class="px-5 py-1 video-title">各指标比率统计</h3>
-              </div>
-              <v-card-text>
-                <v-row>
-                  <v-card-text>
-                    <Chart
-                            class="mb-2"
-                            title="各指标比率统计"
-                            :options="likeRateChart"
-                            style="width: 100%"
-                    />
-                  </v-card-text>
-                </v-row>
-              </v-card-text>
-            </v-card>
           </v-col>
         </v-row>
       </div>
@@ -178,8 +157,6 @@
     methods: {
       // 跳转页面
       goTo (url,obj) {
-        console.log(url);
-        console.log(obj);
         this.$router.push(
           {
             path: url,
