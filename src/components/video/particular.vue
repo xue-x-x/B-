@@ -216,13 +216,45 @@
             self.coinOptions = getMultiChartOptions([[coinArr.reverse(), "", "#1e88e5"]]);
           }
         });
+
+      },
+      // 视频详情折线图chart数据
+      getVideoDeatilData () {
+        let self = this;
+        let viewArr = [];
+        let likeArr = [];
+        let danmakuArr = [];
+        let shareArr = [];
+        let favoriteArr = [];
+        let coinArr = [];
+        self.axios.get(`/api/video/${self.aid}/getVideoDeatilData`).then(r => {
+          let data = r.data;
+          if(data.msg == 'success'){
+            self.videoRank = data.data;
+            self.videoRank.forEach(function (value) {
+              viewArr.push([value.date, value.view]);
+              likeArr.push([value.date, value.like]);
+              danmakuArr.push([value.date, value.danmaku]);
+              shareArr.push([value.date, value.share]);
+              favoriteArr.push([value.date, value.favorite]);
+              coinArr.push([value.date, value.coin]);
+            });
+            self.viewOptions = getMultiChartOptions([[viewArr.reverse(), "", "#1e88e5"]]);
+            self.likeOptions = getMultiChartOptions([[likeArr.reverse(), "", "#1e88e5"]]);
+            self.danmakuOptions = getMultiChartOptions([[danmakuArr.reverse(), "", "#1e88e5"]]);
+            self.shareOptions = getMultiChartOptions([[shareArr.reverse(), "", "#1e88e5"]]);
+            self.favoriteOptions = getMultiChartOptions([[favoriteArr.reverse(), "", "#1e88e5"]]);
+            self.coinOptions = getMultiChartOptions([[coinArr.reverse(), "", "#1e88e5"]]);
+          }
+        });
       },
       setNumber (number) {
         return setNumber(number);
       }
     },
     mounted(){
-      this.getVideoRank();
+//      this.getVideoRank();
+      this.getVideoDeatilData();
     }
   }
 </script>

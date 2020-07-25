@@ -1,5 +1,4 @@
 function drawChart(data) {
-  console.log(data.view);
   let Chart = {
     title: [
       {
@@ -167,7 +166,6 @@ function drawChart(data) {
       }
     ]
   };
-  console.log(Chart);
   return Chart;
 }
 export default drawChart;

@@ -128,7 +128,6 @@
               self.view7foreOption = getMultiChartOptions([[viewfore, "", "#1e88e5"]],"前7日单日播放量变化");
               self.reduOption = self.setGauge(data.data.redu,'视频热度指数');
               self.qianliOption = self.setGauge(data.data.qianli,'视频潜力指数');
-              console.log(self.reduOption);
           }
         });
       },

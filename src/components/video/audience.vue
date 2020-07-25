@@ -142,7 +142,6 @@
               hotWords.seriesData.push(data.hotWords[index]);
             }
             region.data = data.region;
-            console.log(data.sex);
             sex.data = data.sex;
             self.ageOption = self.setBarOpton(age);
             self.hotWordsOption = self.setBarOpton(hotWords);

@@ -25,7 +25,6 @@ function drawChart(data) {
       new Date(b.day.replace("+0000", ""))
     );
   });
-  console.log(data.data);
   let Chart = {
     title: {
       left: "center",
