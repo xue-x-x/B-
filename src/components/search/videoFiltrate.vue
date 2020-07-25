@@ -55,14 +55,8 @@
         tagName: '',
         otherOptions: [
           {
-            value: 0,
-            active: true,
-            icon: 'date_range',
-            name: '日期',
-          },
-          {
             value: 1,
-            active: false,
+            active: true,
             icon: 'mdi-play-circle-outline',
             name: '播放',
           },
@@ -83,6 +77,12 @@
             active: false,
             icon: 'mdi-message-bulleted',
             name: '弹幕',
+          },
+          {
+            value: 0,
+            active: false,
+            icon: 'date_range',
+            name: '日期',
           },
         ],
         hostTagList: [],
@@ -105,20 +105,16 @@
           if(data.success && self.hostTagList.length < 1){
             let hostTagList = data.data;
             hostTagList.forEach(function (val) {
-              let setData = {
-                active:false,
-                name:val,
-              };
-              self.hostTagList.push(setData);
+              val['active'] = false;
             });
-
-            self.hostTagList.unshift({active:true,name:'全部'});
+            self.hostTagList = hostTagList;
+            self.hostTagList.unshift({active:true,name:'全部',tag: ''});
             self.$store.commit('setHostTagList', self.hostTagList);
           }
         });
       },
       // 获取tag
-      getTag (name) {
+      getTag (name,index) {
         let self = this;
         if(name == '全部'){
           let value = {
@@ -129,9 +125,11 @@
           this.$emit('setParamsData', value);
           return false
         }
+        self.$parent.overlay = true;
         self.axios.get('/api/video/getTag?tagName='+name).then(r => {
           let data = r.data;
           if(data.success && data.data){
+            self.$parent.overlay = false;
             let value = {
               type:'tag',
               key:'tag',
@@ -172,11 +170,16 @@
       // 切换热门标签
       changeHostTag (item,index) {
         let self = this;
-        self.getTag(item.name);
         self.hostTagList.forEach(function(val){
           val.active = false;
         });
         self.hostTagList[index].active = true;
+        let value = {
+          type:'tag',
+          key:'tag',
+          value: item.tag
+        };
+        this.$emit('setParamsData', value);
         self.$store.commit('setVidoeIsConfirm', false);
         self.$store.commit('setVideoHostTagListIndex', index);
       },

@@ -140,7 +140,7 @@
           current: 1,
           keyword: '',
           size: 10,
-          sort: 0,
+          sort: 1,
           tag: ''
         },
         videoListData: {},

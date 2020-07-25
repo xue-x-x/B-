@@ -211,7 +211,6 @@
           legendData.push(item);
           seriesData.push({value: value, name: item});
         }
-        console.log(seriesData);
         let option = {
           title: {
             text: title,
