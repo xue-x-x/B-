@@ -8,7 +8,7 @@
               <Chart
                       class="mb-2"
                       title=""
-                      :options="view7backOption"
+                      :options="view7foreOption"
                       style="width: 100%"
               />
             </v-card-text>
@@ -48,7 +48,7 @@
               <Chart
                       class="mb-2"
                       title=""
-                      :options="view7foreOption"
+                      :options="view7backOption"
                       style="width: 100%"
               />
             </v-card-text>
@@ -124,8 +124,8 @@
               for(let item in data.data.view7fore){
                 viewfore.push([item, data.data.view7fore[item]]);
               }
-              self.view7backOption = getMultiChartOptions([[viewback, "", "#1e88e5"]],"前7日单日播放量变化");
-              self.view7foreOption = getMultiChartOptions([[viewfore, "", "#1e88e5"]],"近7日单日播放量变化");
+              self.view7backOption = getMultiChartOptions([[viewback, "", "#1e88e5"]],"近7日单日播放量变化");
+              self.view7foreOption = getMultiChartOptions([[viewfore, "", "#1e88e5"]],"前7日单日播放量变化");
               self.reduOption = self.setGauge(data.data.redu,'视频热度指数');
               self.qianliOption = self.setGauge(data.data.qianli,'视频潜力指数');
               console.log(self.reduOption);

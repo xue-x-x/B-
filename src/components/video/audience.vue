@@ -142,6 +142,7 @@
               hotWords.seriesData.push(data.hotWords[index]);
             }
             region.data = data.region;
+            console.log(data.sex);
             sex.data = data.sex;
             self.ageOption = self.setBarOpton(age);
             self.hotWordsOption = self.setBarOpton(hotWords);
@@ -202,14 +203,15 @@
         let seriesData = [];
         for (let item in data){
           let value;
-          if(data[item] > 1){
+          if(data[item] >= 1){
             value = Number(data[item]).toFixed(3);
           }else {
-            value = (data[item] * 100).toFixed(3);
+            value = (data[item] * 100).toFixed(2);
           }
           legendData.push(item);
           seriesData.push({value: value, name: item});
         }
+        console.log(seriesData);
         let option = {
           title: {
             text: title,
