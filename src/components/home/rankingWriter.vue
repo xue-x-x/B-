@@ -1,6 +1,6 @@
 <template>
   <div class="wrap">
-    <div class="section-title">{{title}}</div>
+    <div v-if="writerList.length" class="section-title">{{title}}</div>
     <v-row>
       <v-col>
         <v-sheet class="mx-auto">

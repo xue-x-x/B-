@@ -8,8 +8,8 @@
               <span>播放量：{{videoData.view ? videoData.newView : '-'}}</span>
               <span v-if="videoData.viewChange > 0" class="decline"> ↑ </span>
               <span v-if="videoData.viewChange < 0" class="goUp"> ↓ </span>
-              <span v-if="videoData.viewChange" :class="videoData.viewChange < 0 ? 'goUp' : 'decline'">{{setNumber(videoData.viewChange)}}</span>
-              <span v-if="videoData.viewChange" class="icon-fans"><img src="@/assets/icon/a528e954.svg" alt=""></span>
+              <span v-if="Number(videoData.viewChange)" :class="videoData.viewChange < 0 ? 'goUp' : 'decline'">{{setNumber(videoData.viewChange)}}</span>
+              <span v-if="Number(videoData.viewChange)" class="icon-fans"><img src="@/assets/icon/a528e954.svg" alt=""></span>
             </div>
             <div>
               <v-card-text>
@@ -31,10 +31,10 @@
                 <span>点赞数：{{videoData.like ? videoData.newLike : '-'}}</span>
                 <span v-if="videoData.likeChange > 0" class="decline"> ↑ </span>
                 <span v-if="videoData.likeChange < 0" class="goUp"> ↓ </span>
-                <span v-if="videoData.likeChange" :class="videoData.likeChange < 0 ? 'goUp' : 'decline'">{{setNumber(videoData.likeChange)}}</span>
-                <span v-if="videoData.likeChange"  class="icon-fans"><img src="@/assets/icon/a528e954.svg" alt=""></span>
+                <span v-if="Number(videoData.likeChange)" :class="videoData.likeChange < 0 ? 'goUp' : 'decline'">{{setNumber(videoData.likeChange)}}</span>
+                <span v-if="Number(videoData.likeChange)"  class="icon-fans"><img src="@/assets/icon/a528e954.svg" alt=""></span>
               </v-col>
-              <v-col cols="6" md="3" class="pt-2 pb-0" >
+              <v-col cols="6" md="4" class="pt-2 pb-0" >
                 <span>点赞率：{{`${((videoData.like / videoData.view) * 100).toFixed(2)}%`}}</span>
               </v-col>
             </v-row>
@@ -58,10 +58,10 @@
                 <span>弹幕数：{{videoData.danmaku ? videoData.newDanmaku : '-'}}</span>
                 <span v-if="videoData.danmakuChange > 0" class="decline"> ↑ </span>
                 <span v-if="videoData.danmakuChange < 0" class="goUp"> ↓ </span>
-                <span v-if="videoData.danmakuChange" :class="videoData.danmakuChange < 0 ? 'goUp' : 'decline'">{{setNumber(videoData.danmakuChange)}}</span>
-                <span v-if="videoData.danmakuChange" class="icon-fans"><img src="@/assets/icon/a528e954.svg" alt=""></span>
+                <span v-if="Number(videoData.danmakuChange)" :class="videoData.danmakuChange < 0 ? 'goUp' : 'decline'">{{setNumber(videoData.danmakuChange)}}</span>
+                <span v-if="Number(videoData.danmakuChange)" class="icon-fans"><img src="@/assets/icon/a528e954.svg" alt=""></span>
               </v-col>
-              <v-col cols="6" md="3">
+              <v-col cols="6" md="4">
                 <span>弹幕率：{{`${((videoData.danmaku / videoData.view) * 100).toFixed(2)}%`}}</span>
               </v-col>
             </v-row>
@@ -85,10 +85,10 @@
                 <span>分享数：{{videoData.share ? videoData.newShare : '-'}}</span>
                 <span v-if="videoData.shareChange > 0" class="decline"> ↑ </span>
                 <span v-if="videoData.shareChange < 0" class="goUp"> ↓ </span>
-                <span v-if="videoData.shareChange" :class="videoData.shareChange < 0 ? 'goUp' : 'decline'">{{setNumber(videoData.shareChange)}}</span>
-                <span v-if="videoData.shareChange" class="icon-fans"><img src="@/assets/icon/a528e954.svg" alt=""></span>
+                <span v-if="Number(videoData.shareChange)" :class="videoData.shareChange < 0 ? 'goUp' : 'decline'">{{setNumber(videoData.shareChange)}}</span>
+                <span v-if="Number(videoData.shareChange)" class="icon-fans"><img src="@/assets/icon/a528e954.svg" alt=""></span>
               </v-col>
-              <v-col cols="6" md="3">
+              <v-col cols="6" md="4">
                 <span>分享率：{{`${((videoData.share / videoData.view) * 100).toFixed(2)}%`}}</span>
               </v-col>
             </v-row>
@@ -112,11 +112,11 @@
                 <span>收藏数：{{videoData.favorite ? videoData.newFavorite : '-'}}</span>
                 <span v-if="videoData.favoriteChange > 0" class="decline"> ↑ </span>
                 <span v-if="videoData.favoriteChange < 0" class="goUp"> ↓ </span>
-                <span v-if="videoData.favoriteChange" :class="videoData.favoriteChange < 0 ? 'goUp' : 'decline'">{{setNumber(videoData.favoriteChange)}}</span>
-                <span v-if="videoData.favoriteChange" class="icon-fans"><img src="@/assets/icon/a528e954.svg" alt=""></span>
+                <span v-if="Number(videoData.favoriteChange)" :class="videoData.favoriteChange < 0 ? 'goUp' : 'decline'">{{setNumber(videoData.favoriteChange)}}</span>
+                <span v-if="Number(videoData.favoriteChange)" class="icon-fans"><img src="@/assets/icon/a528e954.svg" alt=""></span>
               </v-col>
-              <v-col cols="6" md="3">
-                <span>收藏率：{{`${((videoData.favorite / videoData.view) * 100).toFixed(2)}%`}}</span>
+              <v-col cols="6" md="4">
+                <span>收藏率：{{`${((videoData.favorite / videoData.view) * 100).toFixed(5)}%`}}</span>
               </v-col>
             </v-row>
             <div>
@@ -139,10 +139,10 @@
                 <span>投币数：{{videoData.coin ? videoData.newCoin : '-'}}</span>
                 <span v-if="videoData.coinChange > 0" class="decline"> ↑ </span>
                 <span v-if="videoData.coinChange < 0" class="goUp"> ↓ </span>
-                <span v-if="videoData.coinChange" :class="videoData.coinChange < 0 ? 'goUp' : 'decline'">{{setNumber(videoData.coinChange)}}</span>
-                <span v-if="videoData.coinChange" class="icon-fans"><img src="@/assets/icon/a528e954.svg" alt=""></span>
+                <span v-if="Number(videoData.coinChange)" :class="videoData.coinChange < 0 ? 'goUp' : 'decline'">{{setNumber(videoData.coinChange)}}</span>
+                <span v-if="Number(videoData.coinChange)" class="icon-fans"><img src="@/assets/icon/a528e954.svg" alt=""></span>
               </v-col>
-              <v-col cols="6" md="3">
+              <v-col cols="6" md="4">
                 <span>投币率：{{`${((videoData.coin / videoData.view) * 100).toFixed(2)}%`}}</span>
               </v-col>
             </v-row>

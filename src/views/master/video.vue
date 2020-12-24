@@ -19,6 +19,7 @@
                         <span class="mr-2" v-if="videoData.share">分享数：{{videoData.newShare}}</span>
                         <span class="mr-2" v-if="videoData.coin">投币数：{{videoData.newCoin}}</span>
                       </div>
+                      <div class="video-grade mt-1" v-if="videoData.score">综合评分：{{videoData.newScore}}</div>
                       <div class="video-tag-list text-truncate mt-1">{{videoData.datetime}}</div>
                     </div>
                   </v-col>
@@ -201,6 +202,7 @@
         self.videoData["newDanmaku"] = setNumber(self.videoData.danmaku);
         self.videoData["newShare"] = setNumber(self.videoData.share);
         self.videoData["newViewRankw"] = setNumber(self.videoData.viewRank);
+        self.videoData["newScore"] = setNumber(self.videoData.score);
         self.writerData["newArchiveView"] = setNumber(self.writerData.archiveView);
         self.writerData["newFans"] = setNumber(self.writerData.fans);
         self.writerData["newLike"] = setNumber(self.writerData.like);
@@ -244,6 +246,15 @@
       // 取消监听返回按钮
       window.removeEventListener('popstate', this.goBack, false);
     },
+    beforeRouteUpdate(to,from,next){
+      let self = this;
+      if(to.path.indexOf("video") != -1){
+        next();
+        self.aid = to.query.aid * 1;
+        self.getVideo();
+        self.tab = 0;
+      }
+    }
   }
 </script>
 
@@ -264,6 +275,9 @@
     width:140px;
     height: 80px;
     border-radius: 5px !important;
+  }
+  .video-grade{
+    color: #f55345;
   }
   .video-introduce{
     width: calc(100% - 160px);

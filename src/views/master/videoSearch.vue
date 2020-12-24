@@ -105,14 +105,25 @@
         <div>暂无数据</div>
       </div>
       <div class="wrap clearfix" v-if="Number(videoListData.totalpage) > 1">
-        <v-pagination
-                v-model="paramsData.current"
-                :length="Number(videoListData.totalpage)"
-                :total-visible="7"
-                color="#f55345"
-                class="fr"
-                @input="changPaging"
-        ></v-pagination>
+        <v-row>
+          <v-col cols="8">
+            <v-pagination
+                    v-model="paramsData.current"
+                    :length="Number(videoListData.totalpage)"
+                    :total-visible="7"
+                    color="#f55345"
+                    class="fr"
+                    @input="changPaging"
+            ></v-pagination>
+          </v-col>
+          <v-col cols="4">
+            <div class="jump-box">
+              <span class="jump-title">前往：</span>
+              <input class="jump-input" type="text" @input="jumpValue=jumpValue.replace(/[^\d]/g,'')" v-model="jumpValue" @keyup.enter="setJumpValue">
+              <span class="go-btn v-pagination__item" @click="setJumpValue">确定</span>
+            </div>
+          </v-col>
+        </v-row>
       </div>
     </div>
     <v-overlay :value="overlay" color="#fff" opacity="0.3">
@@ -145,7 +156,8 @@
         },
         videoListData: {},
         videoList: [],
-        overlay: true
+        overlay: true,
+        jumpValue: 1
       }
     },
     watch:{
@@ -236,6 +248,15 @@
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
         self.scrollTop = scrollTop;
       },
+      // 跳转分页
+      setJumpValue() {
+        let self = this;
+        if(self.jumpValue > Number(self.videoListData.totalpage) || self.jumpValue < 1){
+          self.getVideo();
+        }else {
+          self.paramsData.current= Number(self.jumpValue);
+        }
+      },
     },
     mounted() {
       let self = this;
@@ -264,6 +285,9 @@
 </script>
 
 <style scoped>
+  .v-pagination{
+    justify-content: flex-end !important;
+  }
   .cursorP{
     cursor: pointer;
   }
@@ -346,6 +370,29 @@
     background: url("../../assets/icon/level.png") no-repeat;
     background-size: 100% 100%;
     vertical-align: middle;
+  }
+  /* 分页跳转 */
+  .jump-box{
+    text-align: left;
+    line-height: 43px;
+  }
+  .jump-input{
+    width: 55px;
+    height: 26px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+  }
+  .go-btn{
+    margin-left: 10px;
+    padding: 6px 14px;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #fff;
   }
   @media screen and (max-width:768px) {
     .video-list{
