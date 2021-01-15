@@ -80,9 +80,9 @@
         <home-ranking :title="'排行榜'" :options="siteInfo"></home-ranking>
       </div>
     </section>
-    <section class="information section">
-      <home-information :title="'B站全部信息'" :options="siteInfo"></home-information>
-    </section>
+    <!--<section class="information section">-->
+      <!--<home-information :title="'B站全部信息'" :options="siteInfo"></home-information>-->
+    <!--</section>-->
     <section class="antistop section">
       <home-antistop :title="'全站飙升关键词'"></home-antistop>
     </section>

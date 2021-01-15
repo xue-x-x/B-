@@ -4,13 +4,21 @@
         <!-- 播放量 折线图 -->
         <v-col cols="12" md="6">
           <v-card class="pa-1 pa-md-4">
-            <div class="pt-2 text-left">
-              <span>播放量：{{videoData.view ? videoData.newView : '-'}}</span>
-              <span v-if="videoData.viewChange > 0" class="decline"> ↑ </span>
-              <span v-if="videoData.viewChange < 0" class="goUp"> ↓ </span>
-              <span v-if="Number(videoData.viewChange)" :class="videoData.viewChange < 0 ? 'goUp' : 'decline'">{{setNumber(videoData.viewChange)}}</span>
-              <span v-if="Number(videoData.viewChange)" class="icon-fans"><img src="@/assets/icon/a528e954.svg" alt=""></span>
-            </div>
+            <v-row class="text-left">
+              <v-col cols="6" md="6" class="pt-2 text-left">
+                <span>播放量：{{videoData.view ? videoData.newView : '-'}}</span>
+                <span v-if="videoData.viewChange > 0" class="decline"> ↑ </span>
+                <span v-if="videoData.viewChange < 0" class="goUp"> ↓ </span>
+                <span v-if="Number(videoData.viewChange)" :class="videoData.viewChange < 0 ? 'goUp' : 'decline'">{{setNumber(videoData.viewChange)}}</span>
+                <span v-if="Number(videoData.viewChange)" class="icon-fans"><img src="@/assets/icon/a528e954.svg" alt=""></span>
+              </v-col>
+              <v-col v-if="videoData.over_ratio" cols="6" md="3" class="pt-2 pb-0" >
+                <span>完播率：{{(videoData.over_ratio * 100).toFixed(2)}}%</span>
+              </v-col>
+              <v-col v-if="videoData.fans_ratio" cols="6" md="3" class="pt-2 pb-0" >
+                <span>粉丝渗透率：{{(videoData.fans_ratio * 100).toFixed(2)}}%</span>
+              </v-col>
+            </v-row>
             <div>
               <v-card-text>
                 <Chart
@@ -27,7 +35,7 @@
         <v-col cols="12" md="6">
           <v-card class="pa-1 pa-md-4">
             <v-row class="text-left">
-              <v-col cols="6" md="5" class="pt-2 pb-0">
+              <v-col cols="6" md="6" class="pt-2 pb-0">
                 <span>点赞数：{{videoData.like ? videoData.newLike : '-'}}</span>
                 <span v-if="videoData.likeChange > 0" class="decline"> ↑ </span>
                 <span v-if="videoData.likeChange < 0" class="goUp"> ↓ </span>
@@ -54,7 +62,7 @@
         <v-col cols="12" md="6">
           <v-card class="pa-1 pa-md-4">
             <v-row class="text-left">
-              <v-col cols="6" md="5">
+              <v-col cols="6" md="6">
                 <span>弹幕数：{{videoData.danmaku ? videoData.newDanmaku : '-'}}</span>
                 <span v-if="videoData.danmakuChange > 0" class="decline"> ↑ </span>
                 <span v-if="videoData.danmakuChange < 0" class="goUp"> ↓ </span>
@@ -81,7 +89,7 @@
         <v-col cols="12" md="6">
           <v-card class="pa-1 pa-md-4">
             <v-row class="text-left">
-              <v-col cols="6" md="5">
+              <v-col cols="6" md="6">
                 <span>分享数：{{videoData.share ? videoData.newShare : '-'}}</span>
                 <span v-if="videoData.shareChange > 0" class="decline"> ↑ </span>
                 <span v-if="videoData.shareChange < 0" class="goUp"> ↓ </span>
@@ -108,7 +116,7 @@
         <v-col cols="12" md="6">
           <v-card class="pa-1 pa-md-4">
             <v-row class="text-left">
-              <v-col cols="6" md="5">
+              <v-col cols="6" md="6">
                 <span>收藏数：{{videoData.favorite ? videoData.newFavorite : '-'}}</span>
                 <span v-if="videoData.favoriteChange > 0" class="decline"> ↑ </span>
                 <span v-if="videoData.favoriteChange < 0" class="goUp"> ↓ </span>
@@ -135,7 +143,7 @@
         <v-col cols="12" md="6">
           <v-card class="pa-1 pa-md-4">
             <v-row class="text-left">
-              <v-col cols="6" md="5">
+              <v-col cols="6" md="6">
                 <span>投币数：{{videoData.coin ? videoData.newCoin : '-'}}</span>
                 <span v-if="videoData.coinChange > 0" class="decline"> ↑ </span>
                 <span v-if="videoData.coinChange < 0" class="goUp"> ↓ </span>
@@ -260,6 +268,9 @@
 </script>
 
 <style scoped>
+  .col-6 span{
+    font-size: 15px;
+  }
   .decline{
     color: #41ba47
   }
@@ -274,5 +285,8 @@
   .icon-fans img{
     display: block;
     width: 100%;
+  }
+  .col-md-3,.col-md-4{
+    padding: 12px 6px 0 6px;
   }
 </style>

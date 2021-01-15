@@ -19,7 +19,9 @@
                         <span class="mr-2" v-if="videoData.share">分享数：{{videoData.newShare}}</span>
                         <span class="mr-2" v-if="videoData.coin">投币数：{{videoData.newCoin}}</span>
                       </div>
-                      <div class="video-grade mt-1" v-if="videoData.score">综合评分：{{videoData.newScore}}</div>
+                      <div class="video-grade mt-1">
+                        <span class="mr-2" v-if="videoData.score">综合评分：{{videoData.newScore}}</span>
+                      </div>
                       <div class="video-tag-list text-truncate mt-1">{{videoData.datetime}}</div>
                     </div>
                   </v-col>
