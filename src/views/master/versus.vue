@@ -119,6 +119,7 @@
               <Chart
                       class="mb-2"
                       title="达人数据对比"
+                      :autoresize="true"
                       :options="contrastDataOptions"
                       style="width: 100%"
               />
@@ -136,6 +137,7 @@
               <Chart
                       class="mb-2"
                       title="达人收益对比"
+                      :autoresize="true"
                       :options="profitDataOptions"
                       style="width: 100%"
               />

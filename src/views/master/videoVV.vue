@@ -120,6 +120,7 @@
                     <Chart
                             class="mb-2"
                             title="视频详细历史数据"
+                            :autoresize="true"
                             :options="mainChart"
                             style="width: 100%"
                     />
@@ -141,6 +142,7 @@
                     <Chart
                             class="mb-2"
                             title="各指标比率统计"
+                            :autoresize="true"
                             :options="likeRateChart"
                             style="width: 100%"
                     />

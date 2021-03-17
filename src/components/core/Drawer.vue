@@ -31,6 +31,24 @@
         </v-list-item-icon>
         <v-list-item-title>视频查询</v-list-item-title>
       </v-list-item>
+      <v-list-item class="text-left" @click="onClick($event)" to="/analysisVideo">
+        <v-list-item-icon>
+          <v-icon>timeline</v-icon>
+        </v-list-item-icon>
+        <v-list-item-title>视频数据分析</v-list-item-title>
+      </v-list-item>
+      <v-list-item class="text-left" @click="onClick($event)" to="/analysisWriter">
+        <v-list-item-icon>
+          <v-icon>bubble_chart</v-icon>
+        </v-list-item-icon>
+        <v-list-item-title>达人数据分析</v-list-item-title>
+      </v-list-item>
+      <v-list-item class="text-left" @click="onClick($event)" to="/analysisCommodity">
+        <v-list-item-icon>
+          <v-icon>data_usage</v-icon>
+        </v-list-item-icon>
+        <v-list-item-title>品牌数据分析</v-list-item-title>
+      </v-list-item>
     </v-list>
   </v-navigation-drawer>
 </template>

@@ -1,5 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+const AnalysisCommodity = () => import("../views/master/analysisCommodity.vue");
+const AnalysisVideo = () => import("../views/master/analysisVideo.vue");
+const AnalysisWriter = () => import("../views/master/analysisWriter.vue");
 const Cooperation = () => import("../views/master/cooperation.vue");
 const MasterIndex = () => import("../views/master/index.vue");
 const Versus = () => import("../views/master/versus.vue");
@@ -135,6 +138,27 @@ export default new Router({
       meta:{
         title:'测试'
       }
-    },
+    },{
+      name: "品牌数据分析",
+      path: "/analysisCommodity",
+      component: AnalysisCommodity,
+      meta:{
+        title:'品牌数据分析'
+      }
+    },{
+      name: "视频数据分析",
+      path: "/analysisVideo",
+      component: AnalysisVideo,
+      meta:{
+        title:'视频数据分析'
+      }
+    },{
+      name: "作者数据分析",
+      path: "/analysisWriter",
+      component: AnalysisWriter,
+      meta:{
+        title:'作者数据分析'
+      }
+    }
   ]
 })

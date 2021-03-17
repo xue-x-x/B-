@@ -7,6 +7,7 @@
             <v-card-text>
               <Chart
                       class="mb-2"
+                      :autoresize="true"
                       :options="hotWordsOption"
                       style="width: 100%"
               />
@@ -23,6 +24,7 @@
             <v-card-text>
               <Chart
                       class="mb-2"
+                      :autoresize="true"
                       :options="ageOption"
                       style="width: 100%"
               />
@@ -39,6 +41,7 @@
             <v-card-text>
               <Chart
                       class="mb-2"
+                      :autoresize="true"
                       :options="regionOption"
                       style="width: 100%"
               />
@@ -55,6 +58,7 @@
             <v-card-text>
               <Chart
                       class="mb-2"
+                      :autoresize="true"
                       :options="sexOption"
                       style="width: 100%"
               />

@@ -1,5 +1,6 @@
 import { format } from 'date-fns';
 import formatNumber from "../utils/format-number";
+import { setNumber} from '../utils/chatUtils';
 function drawChart(data, title, type = "line", areaStyle,) {
   let series = data.map(e => {
     if(e[0] !== undefined){
@@ -37,12 +38,10 @@ function drawChart(data, title, type = "line", areaStyle,) {
     tooltip: {
       trigger: "axis",
       confine: true,
-      axisPointer: {
-        label: {
-          formatter: function(params) {
-            return Math.round(params.value);
-          }
-        }
+      formatter: function (params) {
+        let tar = params[0];
+        return tar.data[0] + ' : ' + setNumber(tar.data[1]);
+
       }
     },
     xAxis: {
@@ -55,15 +54,13 @@ function drawChart(data, title, type = "line", areaStyle,) {
         }
       }
     },
-    yAxis: [
-      {
-        type: "value",
-        min: "dataMin",
-        axisLabel: {
-          formatter: formatNumber
-        }
+    yAxis: {
+      type: "value",
+      min: "dataMin",
+      axisLabel: {
+        formatter: formatNumber
       }
-    ],
+    },
     series: series
   };
   return Chart;

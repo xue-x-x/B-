@@ -22,8 +22,10 @@
             <div>
               <v-card-text>
                 <Chart
+                        v-if="viewOptions"
                         class="mb-2"
                         title="播放量"
+                        :autoresize="true"
                         :options="viewOptions"
                         style="width: 100%"
                 />
@@ -42,15 +44,17 @@
                 <span v-if="Number(videoData.likeChange)" :class="videoData.likeChange < 0 ? 'goUp' : 'decline'">{{setNumber(videoData.likeChange)}}</span>
                 <span v-if="Number(videoData.likeChange)"  class="icon-fans"><img src="@/assets/icon/a528e954.svg" alt=""></span>
               </v-col>
-              <v-col cols="6" md="4" class="pt-2 pb-0" >
+              <v-col v-if="videoData.like" cols="6" md="4" class="pt-2 pb-0" >
                 <span>点赞率：{{`${((videoData.like / videoData.view) * 100).toFixed(2)}%`}}</span>
               </v-col>
             </v-row>
             <div>
               <v-card-text>
                 <Chart
+                        v-if="likeOptions"
                         class="mb-2"
                         title="点赞数"
+                        :autoresize="true"
                         :options="likeOptions"
                         style="width: 100%"
                 />
@@ -69,15 +73,17 @@
                 <span v-if="Number(videoData.danmakuChange)" :class="videoData.danmakuChange < 0 ? 'goUp' : 'decline'">{{setNumber(videoData.danmakuChange)}}</span>
                 <span v-if="Number(videoData.danmakuChange)" class="icon-fans"><img src="@/assets/icon/a528e954.svg" alt=""></span>
               </v-col>
-              <v-col cols="6" md="4">
+              <v-col v-if="videoData.danmaku" cols="6" md="4">
                 <span>弹幕率：{{`${((videoData.danmaku / videoData.view) * 100).toFixed(2)}%`}}</span>
               </v-col>
             </v-row>
             <div>
               <v-card-text>
                 <Chart
+                        v-if="danmakuOptions"
                         class="mb-2"
                         title="弹幕数"
+                        :autoresize="true"
                         :options="danmakuOptions"
                         style="width: 100%"
                 />
@@ -96,15 +102,17 @@
                 <span v-if="Number(videoData.shareChange)" :class="videoData.shareChange < 0 ? 'goUp' : 'decline'">{{setNumber(videoData.shareChange)}}</span>
                 <span v-if="Number(videoData.shareChange)" class="icon-fans"><img src="@/assets/icon/a528e954.svg" alt=""></span>
               </v-col>
-              <v-col cols="6" md="4">
+              <v-col v-if="videoData.share" cols="6" md="4">
                 <span>分享率：{{`${((videoData.share / videoData.view) * 100).toFixed(2)}%`}}</span>
               </v-col>
             </v-row>
             <div>
               <v-card-text>
                 <Chart
+                        v-if="shareOptions"
                         class="mb-2"
                         title="分享数"
+                        :autoresize="true"
                         :options="shareOptions"
                         style="width: 100%"
                 />
@@ -123,15 +131,17 @@
                 <span v-if="Number(videoData.favoriteChange)" :class="videoData.favoriteChange < 0 ? 'goUp' : 'decline'">{{setNumber(videoData.favoriteChange)}}</span>
                 <span v-if="Number(videoData.favoriteChange)" class="icon-fans"><img src="@/assets/icon/a528e954.svg" alt=""></span>
               </v-col>
-              <v-col cols="6" md="4">
+              <v-col v-if="videoData.favorite" cols="6" md="4">
                 <span>收藏率：{{`${((videoData.favorite / videoData.view) * 100).toFixed(5)}%`}}</span>
               </v-col>
             </v-row>
             <div>
               <v-card-text>
                 <Chart
+                        v-if="favoriteOptions"
                         class="mb-2"
                         title="收藏数"
+                        :autoresize="true"
                         :options="favoriteOptions"
                         style="width: 100%"
                 />
@@ -150,7 +160,7 @@
                 <span v-if="Number(videoData.coinChange)" :class="videoData.coinChange < 0 ? 'goUp' : 'decline'">{{setNumber(videoData.coinChange)}}</span>
                 <span v-if="Number(videoData.coinChange)" class="icon-fans"><img src="@/assets/icon/a528e954.svg" alt=""></span>
               </v-col>
-              <v-col cols="6" md="4">
+              <v-col v-if="videoData.coin" cols="6" md="4">
                 <span>投币率：{{`${((videoData.coin / videoData.view) * 100).toFixed(2)}%`}}</span>
               </v-col>
             </v-row>
@@ -159,6 +169,8 @@
                 <Chart
                         class="mb-2"
                         title="投币数"
+                        v-if="coinOptions"
+                        :autoresize="true"
                         :options="coinOptions"
                         style="width: 100%"
                 />
@@ -173,6 +185,7 @@
 <script>
   import getMultiChartOptions from "@/charts/biliob-multi-line-chart.js";
   import { setNumber} from '../../utils/chatUtils';
+  import getOptions from "../../charts/cloud-charts.js";
   export default {
     name: "",
     props:{
@@ -195,37 +208,6 @@
       }
     },
     methods: {
-      // 获取视频每日数据
-      getVideoRank () {
-        let self = this;
-        let viewArr = [];
-        let likeArr = [];
-        let danmakuArr = [];
-        let shareArr = [];
-        let favoriteArr = [];
-        let coinArr = [];
-        self.axios.get(`/api/video/${self.aid}/data`).then(r => {
-          let data = r.data;
-          if(data.success){
-            self.videoRank = data.data;
-            self.videoRank.forEach(function (value) {
-              viewArr.push([value.day, value.view]);
-              likeArr.push([value.day, value.like]);
-              danmakuArr.push([value.day, value.danmaku]);
-              shareArr.push([value.day, value.share]);
-              favoriteArr.push([value.day, value.favorite]);
-              coinArr.push([value.day, value.coin]);
-            });
-            self.viewOptions = getMultiChartOptions([[viewArr.reverse(), "", "#1e88e5"]]);
-            self.likeOptions = getMultiChartOptions([[likeArr.reverse(), "", "#1e88e5"]]);
-            self.danmakuOptions = getMultiChartOptions([[danmakuArr.reverse(), "", "#1e88e5"]]);
-            self.shareOptions = getMultiChartOptions([[shareArr.reverse(), "", "#1e88e5"]]);
-            self.favoriteOptions = getMultiChartOptions([[favoriteArr.reverse(), "", "#1e88e5"]]);
-            self.coinOptions = getMultiChartOptions([[coinArr.reverse(), "", "#1e88e5"]]);
-          }
-        });
-
-      },
       // 视频详情折线图chart数据
       getVideoDeatilData () {
         let self = this;
@@ -237,7 +219,7 @@
         let coinArr = [];
         self.axios.get(`/api/video/${self.aid}/getVideoDeatilData`).then(r => {
           let data = r.data;
-          if(data.msg == 'success'){
+          if(data.msg == 'success' && data.data && data.data.length){
             self.videoRank = data.data;
             self.videoRank.forEach(function (value) {
               viewArr.push([value.date, value.view]);
@@ -261,8 +243,14 @@
       }
     },
     mounted(){
-//      this.getVideoRank();
-      this.getVideoDeatilData();
+      let self = this;
+      self.getVideoDeatilData();
+//      self.viewOptions = getOptions([{ name: '暂无数据', value: 0 }]);
+//      self.likeOptions = getOptions([{ name: '暂无数据', value: 0 }]);
+//      self.danmakuOptions = getOptions([{ name: '暂无数据', value: 0 }]);
+//      self.shareOptions = getOptions([{ name: '暂无数据', value: 0 }]);
+//      self.favoriteOptions = getOptions([{ name: '暂无数据', value: 0 }]);
+//      self.coinOptions = getMultiChartOptions([[coinArr.reverse(), "", "#1e88e5"]]);
     }
   }
 </script>

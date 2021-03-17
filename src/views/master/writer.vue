@@ -74,6 +74,7 @@
                         <Chart
                                 class="mb-2"
                                 title="粉丝数"
+                                :autoresize="true"
                                 :options="fansDataOptions"
                                 style="width: 100%"
                         />
@@ -96,6 +97,7 @@
                         <Chart
                                 class="mb-2"
                                 title="播放量"
+                                :autoresize="true"
                                 :options="viewDataOptions"
                                 style="width: 100%"
                         />
@@ -118,6 +120,7 @@
                         <Chart
                                 class="mb-2"
                                 title="获赞数"
+                                :autoresize="true"
                                 :options="likeDataOptions"
                                 style="width: 100%"
                         />
@@ -140,6 +143,7 @@
                         <Chart
                                 class="mb-2"
                                 title="投稿数"
+                                :autoresize="true"
                                 :options="videoNumByMonthOptions"
                                 style="width: 100%"
                         />
@@ -167,6 +171,7 @@
                     <v-card-text>
                       <Chart
                               class="mb-2"
+                              :autoresize="true"
                               :options="viewListOptions"
                               style="width: 100%"
                       />
@@ -198,6 +203,7 @@
                       <Chart
                               class="mb-2"
                               title="互动数据分析"
+                              :autoresize="true"
                               :options="interactListOptions"
                               style="width: 100%"
                       />
@@ -216,6 +222,7 @@
                       <v-card-text>
                         <Chart
                                 class="mb-2"
+                                :autoresize="true"
                                 :options="fansLis.fansAgeOptions"
                                 style="width: 100%"
                         />
@@ -230,6 +237,7 @@
                       <v-card-text>
                         <Chart
                                 class="mb-2"
+                                :autoresize="true"
                                 :options="fansLis.fansGenderOptions"
                                 style="width: 100%"
                         />
@@ -244,6 +252,7 @@
                       <v-card-text>
                         <Chart
                                 class="mb-2"
+                                :autoresize="true"
                                 :options="fansLis.fansRegionOptions"
                                 style="width: 100%"
                         />
@@ -258,6 +267,7 @@
                       <v-card-text>
                         <Chart
                                 class="mb-2"
+                                :autoresize="true"
                                 :options="fansLis.fansLivefansOptions"
                                 style="width: 100%"
                         />
@@ -288,6 +298,7 @@
                             <Chart
                                     class="mb-2"
                                     title="达人价值分析"
+                                    :autoresize="true"
                                     :options="valueAnalysisOptions"
                                     style="width: 100%;"
                             />
@@ -535,9 +546,8 @@
         self.axios.get(`/api/author/${self.mid}`).then(r => {
           let data = r.data;
           self.loadTime = data.time;
-          if(data.success){
+          if(data.success && data.data){
             self.writerData = data.data;
-            console.log(self.writerData);
             self.setWriter();
             // effect=>影响力;interact=>互动性;profession=>专业度;show=>表现力;cost=>性价比
             let tadarArray = [data.data.effect,data.data.interact,data.data.profession,data.data.show,data.data.cost,];
@@ -551,7 +561,7 @@
         let parameter = ["archiveView","archiveAlike","like","fansRank","archiveViewRank","likeRank","estimate"];
         parameter.forEach(function (item) {
           if(self.writerData[item] != null&& item != "estimate"){
-            self.writerData[item] = setNumber(self.writerData[item]);
+            self.writerData[item] = setNumber(self .writerData[item]);
           }else if(self.writerData[item] != null && item == "estimate"){
             self.writerData[item].like = setNumber(self.writerData[item].like);
             self.writerData[item].view = setNumber(self.writerData[item].view);
@@ -733,7 +743,7 @@
             },
             {
               title: '粉丝地域分布',
-              name: '粉丝性别',
+              name: '粉丝地域',
               data: self.fansDataByMid.region,
               optionName: 'fansRegionOptions',
               itemStyle: {},
@@ -768,7 +778,6 @@
           }
         }).then(r => {
           let data = r.data;
-          console.log(data);
           if(data.msg == 'success'){
             self.overlay = false;
             self.yuguData.yuguViews = data.yuguViews;

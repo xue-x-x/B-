@@ -64,3 +64,30 @@ export const HtmlDecode = (str) => {
   s = s.replace(/&radic;/g, '√');
   return s;
 };
+/*
+ * 数字转换
+ */
+export const setNum = (nums) => {
+  let strs, number, numMin, numMax;
+  let num= nums.replace(/[^0-9]/ig,"");
+
+  if(nums.indexOf('k') > 0){
+    number = 1000;
+  }else if(nums.indexOf('w') !== -1){
+    number = 10000;
+  }
+  if(nums.indexOf('小于') !== -1){
+    numMin = 0;
+    numMax = num * number;
+  }else if(nums.indexOf('-') !== -1){
+    strs = nums.split("-");
+    numMin = parseInt(strs[0]) * number;
+    numMax = parseInt(strs[1]) * number;
+  }else if(nums.indexOf('大于')  !== -1){
+    numMin = num * number;
+  }
+  return {
+    viewsMin: numMin,
+    viewsMax: numMax,
+  };
+};

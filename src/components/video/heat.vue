@@ -8,6 +8,7 @@
               <Chart
                       class="mb-2"
                       title=""
+                      :autoresize="true"
                       :options="view7foreOption"
                       style="width: 100%"
               />
@@ -32,6 +33,7 @@
               <Chart
                       class="mb-2"
                       title=""
+                      :autoresize="true"
                       :options="reduOption"
                       style="width: 100%"
               />
@@ -48,6 +50,7 @@
               <Chart
                       class="mb-2"
                       title=""
+                      :autoresize="true"
                       :options="view7backOption"
                       style="width: 100%"
               />
@@ -72,6 +75,7 @@
               <Chart
                       class="mb-2"
                       title=""
+                      :autoresize="true"
                       :options="qianliOption"
                       style="width: 100%"
               />
@@ -86,6 +90,7 @@
 <script>
   import getMultiChartOptions from "@/charts/biliob-multi-line-chart.js";
   import { setNumber} from '../../utils/chatUtils';
+  import getOptions from "../../charts/cloud-charts.js";
   export default {
     name: "",
     props:{
@@ -116,7 +121,7 @@
           let data = r.data;
           let viewback = [];
           let viewfore = [];
-          if(data.msg == 'success'){
+          if(data.msg == 'success' && data.data){
               self.hotData = data.data;
               for(let item in data.data.view7back){
                 viewback.push([item, data.data.view7back[item]]);
@@ -128,6 +133,11 @@
               self.view7foreOption = getMultiChartOptions([[viewfore, "", "#1e88e5"]],"前7日单日播放量变化");
               self.reduOption = self.setGauge(data.data.redu,'视频热度指数');
               self.qianliOption = self.setGauge(data.data.qianli,'视频潜力指数');
+          }else if(data.msg == 'success' && !data.data){
+            self.view7backOption = getOptions([{ name: '暂无数据', value: 0 }]);
+            self.view7foreOption = getOptions([{ name: '暂无数据', value: 0 }]);
+            self.reduOption = getOptions([{ name: '暂无数据', value: 0 }]);
+            self.qianliOption = getOptions([{ name: '暂无数据', value: 0 }]);
           }
         });
       },
